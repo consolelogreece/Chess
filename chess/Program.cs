@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using chess.pieces;
+
+// make move, see if king now in check, if it is, the move is illegal.
+// redesign. have a board that keeps track of what pieces can move where. i.e. each square has a list of pieces where it can move, and a piece that currently occupies the square.
 
 namespace chess
 {
@@ -44,7 +49,7 @@ namespace chess
                     // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
                     PiecePosition movePosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
 
-                    if (selectedPiece.Move(movePosition))
+                    if (selectedPiece.Move(selectedPosition, movePosition))
                     {
                         board[movePosition] = selectedPiece;
 
@@ -87,41 +92,41 @@ public class Board
 
         var owner2 = new Player(Guid.NewGuid().ToString(), ConsoleColor.DarkRed);
 
-        this[new PiecePosition(0, 0)] = new Rook(owner1, this);
-        this[new PiecePosition(0, 1)] = new Knight(owner1, this);
-        this[new PiecePosition(0, 2)] = new Bishop(owner1, this);
-        this[new PiecePosition(0, 3)] = new Queen(owner1, this);
-        this[new PiecePosition(0, 4)] = new King(owner1, this);
-        this[new PiecePosition(0, 5)] = new Bishop(owner1, this);  
-        this[new PiecePosition(0, 6)] = new Knight(owner1, this);
-        this[new PiecePosition(0, 7)] = new Rook(owner1, this);
-        this[new PiecePosition(1, 0)] = new Pawn(owner1, this);
+        // this[new PiecePosition(0, 0)] = new Rook(owner1, this);
+        // this[new PiecePosition(0, 1)] = new Knight(owner1, this);
+        // this[new PiecePosition(0, 2)] = new Bishop(owner1, this);
+        // this[new PiecePosition(0, 3)] = new Queen(owner1, this);
+        this[new PiecePosition(4, 4)] = new King(owner1, this);
+        // this[new PiecePosition(0, 5)] = new Bishop(owner1, this);  
+        // this[new PiecePosition(0, 6)] = new Knight(owner1, this);
+        // this[new PiecePosition(0, 7)] = new Rook(owner1, this);
+        //this[new PiecePosition(1, 0)] = new Pawn(owner1, this);
         this[new PiecePosition(1, 1)] = new Pawn(owner1, this);
-        this[new PiecePosition(1, 2)] = new Pawn(owner1, this);
-        this[new PiecePosition(1, 3)] = new Pawn(owner1, this);
-        this[new PiecePosition(1, 4)] = new Pawn(owner1, this);
+        // this[new PiecePosition(1, 2)] = new Pawn(owner1, this);
+        // this[new PiecePosition(1, 3)] = new Pawn(owner1, this);
+        // this[new PiecePosition(1, 4)] = new Pawn(owner1, this);
         this[new PiecePosition(1, 5)] = new Pawn(owner1, this);
-        this[new PiecePosition(1, 6)] = new Pawn(owner1, this);
-        this[new PiecePosition(1, 7)] = new Pawn(owner1, this);
+        // this[new PiecePosition(1, 6)] = new Pawn(owner1, this);
+        // this[new PiecePosition(1, 7)] = new Pawn(owner1, this);
 
-        this[new PiecePosition(4, 3)] = new Knight(owner1, this);
+        // this[new PiecePosition(4, 3)] = new Knight(owner1, this);
 
-        this[new PiecePosition(7, 0)] = new Rook(owner2, this);
-        this[new PiecePosition(7, 1)] = new Knight(owner2, this);
-        this[new PiecePosition(7, 2)] = new Bishop(owner2, this);
-        this[new PiecePosition(7, 3)] = new Queen(owner2, this);
-        this[new PiecePosition(7, 4)] = new King(owner2, this);
-        this[new PiecePosition(7, 5)] = new Bishop(owner2, this);
-        this[new PiecePosition(7, 6)] = new Knight(owner2, this);
-        this[new PiecePosition(7, 7)] = new Rook(owner2, this);
+        this[new PiecePosition(3, 0)] = new Rook(owner2, this);
+        // this[new PiecePosition(7, 1)] = new Knight(owner2, this);
+        // this[new PiecePosition(7, 2)] = new Bishop(owner2, this);
+        // this[new PiecePosition(7, 3)] = new Queen(owner2, this);
+        // this[new PiecePosition(7, 4)] = new King(owner2, this);
+        this[new PiecePosition(6,3 )] = new Bishop(owner2, this);
+        // this[new PiecePosition(7, 6)] = new Knight(owner2, this);
+        // this[new PiecePosition(7, 7)] = new Rook(owner2, this);
         this[new PiecePosition(6, 0)] = new Pawn(owner2, this);
-        this[new PiecePosition(6, 1)] = new Pawn(owner2, this);
-        this[new PiecePosition(6, 2)] = new Pawn(owner2, this);
-        this[new PiecePosition(6, 3)] = new Pawn(owner2, this);
-        this[new PiecePosition(6, 4)] = new Pawn(owner2, this);
-        this[new PiecePosition(6, 5)] = new Pawn(owner2, this);
-        this[new PiecePosition(6, 6)] = new Pawn(owner2, this);
-        this[new PiecePosition(6, 7)] = new Pawn(owner2, this);
+        // this[new PiecePosition(6, 1)] = new Pawn(owner2, this);
+        // this[new PiecePosition(6, 2)] = new Pawn(owner2, this);
+        // this[new PiecePosition(6, 3)] = new Pawn(owner2, this);
+        // this[new PiecePosition(6, 4)] = new Pawn(owner2, this);
+        // this[new PiecePosition(6, 5)] = new Pawn(owner2, this);
+        // this[new PiecePosition(6, 6)] = new Pawn(owner2, this);
+        // this[new PiecePosition(6, 7)] = new Pawn(owner2, this);
 
     }
 
@@ -159,7 +164,7 @@ public class Board
                 if (piece == null)
                 {
                     Console.ForegroundColor = ConsoleColor.Black;
-                    Console.Write("  E  ");
+                    Console.Write("     ");
                     continue;
                 }
 
@@ -198,20 +203,19 @@ public class Board
                 }
             }
         }
+        for (int i = 0; i < _board.GetLength(0); i++)
+        {
+            for (int j = 0; j < _board.GetLength(1); j++)
+            {
+                var pos = new PiecePosition(i, j);
+
+                if (_board[i, j] != null)
+                {
+                    _board[i, j].EliminateIllegalMoves(pos);
+                }
+            }
+        }
     }
-}
-
-public struct PiecePosition
-{
-    public PiecePosition(int row, int col)
-    {
-        this.row = row;
-
-        this.col = col;
-    }
-
-    public int row;
-    public int col;
 }
 
 public struct Player
@@ -225,600 +229,4 @@ public struct Player
 
     public string Id;
     public ConsoleColor color;
-}
-
-public abstract class Piece
-{
-    public Player PieceOwner { get; private set; }
-
-    public readonly string PieceName;
-
-    public List<PiecePosition> PossibleMoves { get; protected set; } = new List<PiecePosition>();
-
-    protected readonly Board _board;
-
-    public Piece(Player pieceOwner, Board board, string pieceName = "Piece")
-    {
-        PieceOwner = pieceOwner;
-
-        _board = board;
-
-        PieceName = pieceName;
-    }
-
-    public virtual bool CalculateMoves(PiecePosition move)
-    {
-        return false;
-    }
-
-    public virtual bool Move(PiecePosition move)
-    {
-        return PossibleMoves.Contains(move);
-    }
-}
-
-public class Pawn : Piece
-{
-    private bool _hasMoved = false;
-
-    private int _direction;
-
-    // this is multiplier for first move
-    private int _moveMultiplier = 2;
-
-    public Pawn(Player pieceOwner, Board board) 
-        : base(pieceOwner, board)
-    {
-        _direction = pieceOwner.color == ConsoleColor.DarkRed ? -1 : 1;
-    }
-
-    public override bool Move(PiecePosition move)
-    {
-        _hasMoved = true;
-        return base.Move(move);
-    }
-
-    public override bool CalculateMoves(PiecePosition piecePosition)
-    {
-        var possibleMoves = new List<PiecePosition>();
-
-        var copy = piecePosition;
-
-        copy.row += _direction;
-
-        if (_board[copy] == null)
-        {
-            possibleMoves.Add(copy);
-
-            if (!_hasMoved)
-            {
-                copy.row += _direction;
-
-                if (_board[copy] == null)
-                {
-                    possibleMoves.Add(copy);
-                }
-            }
-        }
-
-        //reset
-        copy = piecePosition;
-
-        copy.row++;
-
-        if (copy.row < _board.RowColLen)
-        {
-            if (copy.col + 1 < _board.RowColLen && _board[new PiecePosition(copy.row, copy.col + 1)] != null && _board[new PiecePosition(copy.row, copy.col + 1)].PieceOwner.Id != this.PieceOwner.Id)
-                possibleMoves.Add(new PiecePosition(copy.row, copy.col + 1));
-
-            if (copy.col - 1 >= 0 && _board[new PiecePosition(copy.row, copy.col - 1)] != null && _board[new PiecePosition(copy.row, copy.col - 1)].PieceOwner.Id != this.PieceOwner.Id)
-                possibleMoves.Add(new PiecePosition(copy.row, copy.col - 1));
-        }
-
-        PossibleMoves = possibleMoves;
-
-        return true;
-    }
-}
-
-public class Rook : Piece
-{
-    public Rook(Player pieceOwner, Board board)
-        : base(pieceOwner, board, "Rook")
-    {
-    }
-
-    public override bool CalculateMoves(PiecePosition piecePosition)
-    {
-        var possibleMoves = new List<PiecePosition>();
-
-        var copy = piecePosition;
-
-        while (++copy.col < _board.RowColLen)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (--copy.col >= 0)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (--copy.row >= 0)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (++copy.row < _board.RowColLen)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        PossibleMoves = possibleMoves;
-
-        return true;
-    }
-}
-
-
-
-public class Knight : Piece
-{
-    public Knight(Player pieceOwner, Board board)
-        : base(pieceOwner, board, "knight")
-    {
-    }
-
-    public override bool CalculateMoves(PiecePosition piecePosition)
-    {
-        var possibleMoves = new List<PiecePosition>();
-
-        var copy = piecePosition;
-
-        copy.row += 2;
-
-        if (copy.row < _board.RowColLen)
-        {
-            copy.col += 1;
-
-            if (copy.col < _board.RowColLen)
-            {
-                possibleMoves.Add(copy);
-            }
-
-            copy.col -= 2;
-
-            if (copy.col >= 0)
-            {
-                possibleMoves.Add(copy);
-            }
-        }
-
-        //reset
-        copy = piecePosition;
-
-        copy.row -= 2;
-
-        if (copy.row >= 0)
-        {
-            copy.col += 1;
-
-            if (copy.col < _board.RowColLen)
-            {
-                possibleMoves.Add(copy);
-            }
-
-            copy.col -= 2;
-
-            if (copy.col >= 0)
-            {
-                possibleMoves.Add(copy);
-            }
-        }
-
-        //reset
-        copy = piecePosition;
-
-        copy.col -= 2;
-
-        if (copy.col >= 0)
-        {
-            copy.row += 1;
-
-            if (copy.row < _board.RowColLen)
-            {
-                possibleMoves.Add(copy);
-            }
-
-            copy.row -= 2;
-
-            if (copy.row >= 0)
-            {
-                possibleMoves.Add(copy);
-            }
-        }
-
-        //reset
-        copy = piecePosition;
-
-        copy.col += 2;
-
-        if (copy.col < _board.RowColLen)
-        {
-            copy.row += 1;
-
-            if (copy.row < _board.RowColLen)
-            {
-                possibleMoves.Add(copy);
-            }
-
-            copy.row -= 2;
-
-            if (copy.row >= 0)
-            {
-                possibleMoves.Add(copy);
-            }
-        }
-
-        PossibleMoves = possibleMoves;
-
-        return true;
-    }
-}
-
-public class Bishop : Piece
-{
-    public Bishop(Player pieceOwner, Board board)
-       : base(pieceOwner, board, "Bishop")
-    {
-
-    }
-
-    public override bool CalculateMoves(PiecePosition piecePosition)
-    {
-        var possibleMoves = new List<PiecePosition>();
-
-        var copy = piecePosition;
-
-        while (++copy.row < _board.RowColLen && --copy.col >= 0)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (--copy.row >= 0 && --copy.col >= 0)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (--copy.row >= 0 && ++copy.col < _board.RowColLen)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (++copy.row < _board.RowColLen && ++copy.col < _board.RowColLen)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        PossibleMoves = possibleMoves;
-
-        return true;
-    }
-}
-
-public class King : Piece
-{
-    public King(Player pieceOwner, Board board)
-      : base(pieceOwner, board, "King")
-    {
-    }
-
-    public override bool CalculateMoves(PiecePosition move)
-    {
-        var possibleMoves = new List<PiecePosition>();
-
-        if (move.row + 1 < _board.RowColLen && (_board[new PiecePosition(move.row + 1, move.col)] == null || _board[new PiecePosition(move.row + 1, move.col)].PieceOwner.Id != this.PieceOwner.Id))
-            possibleMoves.Add(new PiecePosition(move.row + 1, move.col));
-
-        if (move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row , move.col + 1)] == null || _board[new PiecePosition(move.row, move.col + 1)].PieceOwner.Id != this.PieceOwner.Id))
-            possibleMoves.Add(new PiecePosition(move.row, move.col + 1));
-
-        if (move.col - 1 >= 0 && (_board[new PiecePosition(move.row, move.col - 1)] == null || _board[new PiecePosition(move.row, move.col - 1)].PieceOwner.Id != this.PieceOwner.Id))
-            possibleMoves.Add(new PiecePosition(move.row, move.col - 1));
-
-        if (move.row - 1 >= 0 && (_board[new PiecePosition(move.row - 1, move.col)] == null || _board[new PiecePosition(move.row - 1, move.col)].PieceOwner.Id != this.PieceOwner.Id))
-            possibleMoves.Add(new PiecePosition(move.row - 1, move.col));
-
-        if (move.row + 1 < _board.RowColLen && move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row + 1, move.col + 1)] == null || _board[new PiecePosition(move.row + 1, move.col + 1)].PieceOwner.Id != this.PieceOwner.Id))
-            possibleMoves.Add(new PiecePosition(move.row + 1, move.col + 1));
-
-        if (move.row + 1 < _board.RowColLen && move.col - 1 >= 0 && (_board[new PiecePosition(move.row + 1, move.col - 1)] == null || _board[new PiecePosition(move.row + 1, move.col - 1)].PieceOwner.Id != this.PieceOwner.Id))
-            possibleMoves.Add(new PiecePosition(move.row + 1, move.col - 1));
-
-        if (move.row - 1 >= 0 && move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row - 1, move.col + 1)] == null || _board[new PiecePosition(move.row - 1, move.col + 1)].PieceOwner.Id != this.PieceOwner.Id))
-            possibleMoves.Add(new PiecePosition(move.row - 1, move.col + 1));
-
-        if (move.row - 1 >= 0 && move.col - 1 >= 0 && (_board[new PiecePosition(move.row - 1, move.col - 1)] == null || _board[new PiecePosition(move.row - 1, move.col - 1)].PieceOwner.Id != this.PieceOwner.Id))
-            possibleMoves.Add(new PiecePosition(move.row - 1, move.col - 1));
-
-        PossibleMoves = possibleMoves;
-
-        return true;
-    }
-}
-
-public class Queen : Piece
-{
-
-    public Queen(Player pieceOwner, Board board)
-      : base(pieceOwner, board, "Queen")
-    {
-
-    }
-
-    public override bool CalculateMoves(PiecePosition piecePosition)
-    {
-        var possibleMoves = new List<PiecePosition>();
-
-        var copy = piecePosition;
-
-        while (++copy.row < _board.RowColLen && --copy.col >= 0)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (--copy.row >= 0 && --copy.col >= 0)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (--copy.row >= 0 && ++copy.col < _board.RowColLen)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (++copy.row < _board.RowColLen && ++copy.col < _board.RowColLen)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (++copy.col < _board.RowColLen)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (--copy.col >= 0)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (--copy.row >= 0)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        //reset
-        copy = piecePosition;
-
-        while (++copy.row < _board.RowColLen)
-        {
-            if (_board[copy] != null)
-            {
-                if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
-                {
-                    // player can take this piece, so it is therefore a possible move.
-                    possibleMoves.Add(copy);
-                }
-
-                break;
-            }
-
-            possibleMoves.Add(copy);
-        }
-
-        PossibleMoves = possibleMoves;
-
-        return true;
-    }
 }
