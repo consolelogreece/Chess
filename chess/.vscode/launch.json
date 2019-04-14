@@ -29,7 +29,7 @@
             "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/chess.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
+            "console": "externalTerminal",
             "stopAtEntry": false
         },
         {

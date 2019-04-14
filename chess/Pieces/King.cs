@@ -6,8 +6,8 @@ namespace chess.pieces
 {
     public class King : Piece
     {
-        public King(Player pieceOwner, Board board)
-        : base(pieceOwner, board, "King")
+        public King(Player pieceOwner, Board board, PiecePosition startingPosition)
+            : base(pieceOwner, board, startingPosition, "King")
         {
         }
 
@@ -15,48 +15,38 @@ namespace chess.pieces
         {
             var possibleMoves = new List<PiecePosition>();
 
-            if (move.row + 1 < _board.RowColLen && (_board[new PiecePosition(move.row + 1, move.col)] == null || _board[new PiecePosition(move.row + 1, move.col)].PieceOwner.Id != this.PieceOwner.Id))
+            if (move.row + 1 < _board.RowColLen && (_board[new PiecePosition(move.row + 1, move.col)].OccupyingPiece == null || _board[new PiecePosition(move.row + 1, move.col)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new PiecePosition(move.row + 1, move.col));
 
-            if (move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row , move.col + 1)] == null || _board[new PiecePosition(move.row, move.col + 1)].PieceOwner.Id != this.PieceOwner.Id))
+            if (move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row , move.col + 1)].OccupyingPiece == null || _board[new PiecePosition(move.row, move.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new PiecePosition(move.row, move.col + 1));
 
-            if (move.col - 1 >= 0 && (_board[new PiecePosition(move.row, move.col - 1)] == null || _board[new PiecePosition(move.row, move.col - 1)].PieceOwner.Id != this.PieceOwner.Id))
+            if (move.col - 1 >= 0 && (_board[new PiecePosition(move.row, move.col - 1)].OccupyingPiece == null || _board[new PiecePosition(move.row, move.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new PiecePosition(move.row, move.col - 1));
 
-            if (move.row - 1 >= 0 && (_board[new PiecePosition(move.row - 1, move.col)] == null || _board[new PiecePosition(move.row - 1, move.col)].PieceOwner.Id != this.PieceOwner.Id))
+            if (move.row - 1 >= 0 && (_board[new PiecePosition(move.row - 1, move.col)].OccupyingPiece == null || _board[new PiecePosition(move.row - 1, move.col)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new PiecePosition(move.row - 1, move.col));
 
-            if (move.row + 1 < _board.RowColLen && move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row + 1, move.col + 1)] == null || _board[new PiecePosition(move.row + 1, move.col + 1)].PieceOwner.Id != this.PieceOwner.Id))
+            if (move.row + 1 < _board.RowColLen && move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row + 1, move.col + 1)].OccupyingPiece == null || _board[new PiecePosition(move.row + 1, move.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new PiecePosition(move.row + 1, move.col + 1));
 
-            if (move.row + 1 < _board.RowColLen && move.col - 1 >= 0 && (_board[new PiecePosition(move.row + 1, move.col - 1)] == null || _board[new PiecePosition(move.row + 1, move.col - 1)].PieceOwner.Id != this.PieceOwner.Id))
+            if (move.row + 1 < _board.RowColLen && move.col - 1 >= 0 && (_board[new PiecePosition(move.row + 1, move.col - 1)].OccupyingPiece == null || _board[new PiecePosition(move.row + 1, move.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new PiecePosition(move.row + 1, move.col - 1));
 
-            if (move.row - 1 >= 0 && move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row - 1, move.col + 1)] == null || _board[new PiecePosition(move.row - 1, move.col + 1)].PieceOwner.Id != this.PieceOwner.Id))
+            if (move.row - 1 >= 0 && move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row - 1, move.col + 1)].OccupyingPiece == null || _board[new PiecePosition(move.row - 1, move.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new PiecePosition(move.row - 1, move.col + 1));
 
-            if (move.row - 1 >= 0 && move.col - 1 >= 0 && (_board[new PiecePosition(move.row - 1, move.col - 1)] == null || _board[new PiecePosition(move.row - 1, move.col - 1)].PieceOwner.Id != this.PieceOwner.Id))
+            if (move.row - 1 >= 0 && move.col - 1 >= 0 && (_board[new PiecePosition(move.row - 1, move.col - 1)].OccupyingPiece == null || _board[new PiecePosition(move.row - 1, move.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new PiecePosition(move.row - 1, move.col - 1));
 
             PossibleMoves = possibleMoves;
 
-            return true;
+            return base.CalculateMoves(move);
         }
 
-        public override void EliminateIllegalMoves(PiecePosition move)
+        public override void EliminateIllegalMoves()
         {
-            for(int i = 0; i < _board.RowColLen; i++)
-            { 
-                for(int j = 0; j < _board.RowColLen; j++)
-                {
-                    var piece = _board[new PiecePosition(i,j)];
-                    if (piece != null && piece.PieceOwner.Id != this.PieceOwner.Id)
-                    {
-                        PossibleMoves.RemoveAll(m => piece.PossibleMoves.Contains(m));
-                    }
-                }
-            }
+            PossibleMoves.RemoveAll(m => _board[new PiecePosition(m.row, m.col)].ThreateningPieces.Any(p => p.PieceOwner.Id != this.PieceOwner.Id));
         }
     }
 }

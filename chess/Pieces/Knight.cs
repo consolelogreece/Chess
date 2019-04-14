@@ -6,8 +6,8 @@ namespace chess.pieces
 {
     public class Knight : Piece
     {
-        public Knight(Player pieceOwner, Board board)
-            : base(pieceOwner, board, "knight")
+        public Knight(Player pieceOwner, Board board, PiecePosition startingPosition)
+            : base(pieceOwner, board, startingPosition, "knight")
         {
         }
 
@@ -25,14 +25,40 @@ namespace chess.pieces
 
                 if (copy.col < _board.RowColLen)
                 {
-                    possibleMoves.Add(copy);
+                    if (_board[copy].OccupyingPiece != null)
+                    {
+                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        {
+                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            possibleMoves.Add(copy);
+                        } 
+                        
+                        
+                    }
+                    else
+                    {
+                       possibleMoves.Add(copy); 
+                    }    
                 }
 
                 copy.col -= 2;
 
                 if (copy.col >= 0)
                 {
-                    possibleMoves.Add(copy);
+                    if (_board[copy].OccupyingPiece != null)
+                    {
+                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        {
+                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            possibleMoves.Add(copy);
+                        } 
+                        
+                        
+                    }
+                    else
+                    {
+                       possibleMoves.Add(copy); 
+                    }    
                 }
             }
 
@@ -47,14 +73,40 @@ namespace chess.pieces
 
                 if (copy.col < _board.RowColLen)
                 {
-                    possibleMoves.Add(copy);
+                    if (_board[copy].OccupyingPiece != null)
+                    {
+                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        {
+                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            possibleMoves.Add(copy);
+                        } 
+                        
+                        
+                    }
+                    else
+                    {
+                       possibleMoves.Add(copy); 
+                    }    
                 }
 
                 copy.col -= 2;
 
                 if (copy.col >= 0)
                 {
-                    possibleMoves.Add(copy);
+                    if (_board[copy].OccupyingPiece != null)
+                    {
+                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        {
+                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            possibleMoves.Add(copy);
+                        } 
+                        
+                        
+                    }
+                    else
+                    {
+                       possibleMoves.Add(copy); 
+                    }    
                 }
             }
 
@@ -69,14 +121,40 @@ namespace chess.pieces
 
                 if (copy.row < _board.RowColLen)
                 {
-                    possibleMoves.Add(copy);
+                   if (_board[copy].OccupyingPiece != null)
+                    {
+                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        {
+                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            possibleMoves.Add(copy);
+                        } 
+                        
+                        
+                    }
+                    else
+                    {
+                       possibleMoves.Add(copy); 
+                    }    
                 }
 
                 copy.row -= 2;
 
                 if (copy.row >= 0)
                 {
-                    possibleMoves.Add(copy);
+                    if (_board[copy].OccupyingPiece != null)
+                    {
+                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        {
+                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            possibleMoves.Add(copy);
+                        } 
+                        
+                        
+                    }
+                    else
+                    {
+                       possibleMoves.Add(copy); 
+                    }    
                 }
             }
 
@@ -91,20 +169,46 @@ namespace chess.pieces
 
                 if (copy.row < _board.RowColLen)
                 {
-                    possibleMoves.Add(copy);
+                    if (_board[copy].OccupyingPiece != null)
+                    {
+                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        {
+                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            possibleMoves.Add(copy);
+                        } 
+                        
+                        
+                    }
+                    else
+                    {
+                       possibleMoves.Add(copy); 
+                    }    
                 }
 
                 copy.row -= 2;
 
                 if (copy.row >= 0)
                 {
-                    possibleMoves.Add(copy);
+                    if (_board[copy].OccupyingPiece != null)
+                    {
+                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        {
+                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            possibleMoves.Add(copy);
+                        } 
+                        
+                        
+                    }
+                    else
+                    {
+                       possibleMoves.Add(copy); 
+                    }    
                 }
             }
 
             PossibleMoves = possibleMoves;
 
-            return true;
+            return base.CalculateMoves(piecePosition);
         }
     }
 }

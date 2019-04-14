@@ -6,6 +6,9 @@ using chess.pieces;
 // make move, see if king now in check, if it is, the move is illegal.
 // redesign. have a board that keeps track of what pieces can move where. i.e. each square has a list of pieces where it can move, and a piece that currently occupies the square.
 
+// TODO, ON MOVE UPDATE BOARD TILES AND STUFF/SET APPROPRAITE NULLS.
+// ON MOVE, MAKE SURE TO CLEAR THREATENING PIECES ON ALL TILES AS TEHY ARE RECALCULATED.
+
 namespace chess
 {
     class Program
@@ -36,7 +39,7 @@ namespace chess
                     // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
                     PiecePosition selectedPosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
 
-                    Piece selectedPiece = board[selectedPosition];
+                    Piece selectedPiece = board[selectedPosition].OccupyingPiece;
 
                     board.PrintBoard(selectedPiece);
 
@@ -49,14 +52,9 @@ namespace chess
                     // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
                     PiecePosition movePosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
 
-                    if (selectedPiece.Move(selectedPosition, movePosition))
-                    {
-                        board[movePosition] = selectedPiece;
+                    selectedPiece.Move(movePosition);
 
-                        board[selectedPosition] = null;
-
-                        board.CalculatePieceMoves();
-                    }
+                    board.CalculatePieceMoves();
                 }
                 catch(Exception ex)
                 {
@@ -71,24 +69,31 @@ namespace chess
 
 public class Board
 {
-    private Piece[,] _board;
+    private BoardTile[,] _board;
 
-    public Piece this[PiecePosition p]
+    public Board()
+    {
+        _board = new BoardTile[RowColLen, RowColLen];
+        for(int i = 0; i < RowColLen; i++)
+        {
+            for(int j = 0; j < RowColLen; j++)
+            {
+                _board[i,j] = new BoardTile();
+            }
+        }
+    }
+
+    public BoardTile this[PiecePosition p]
     {
         get { return _board[p.row, p.col]; }
         set { _board[p.row, p.col] = value; }
     }
 
-    public int RowColLen { get; private set; } = 8;
-
-    public Board()
-    {
-        _board = new Piece[RowColLen, RowColLen];
-    }
+    public readonly int RowColLen = 8;
 
     public void Setup()
     {
-        var owner1 = new Player(Guid.NewGuid().ToString(), ConsoleColor.DarkBlue);
+        var owner1 = new Player(Guid.NewGuid().ToString(), ConsoleColor.Green);
 
         var owner2 = new Player(Guid.NewGuid().ToString(), ConsoleColor.DarkRed);
 
@@ -96,30 +101,30 @@ public class Board
         // this[new PiecePosition(0, 1)] = new Knight(owner1, this);
         // this[new PiecePosition(0, 2)] = new Bishop(owner1, this);
         // this[new PiecePosition(0, 3)] = new Queen(owner1, this);
-        this[new PiecePosition(4, 4)] = new King(owner1, this);
+        this[new PiecePosition(4, 4)].OccupyingPiece = new King(owner1, this, new PiecePosition(4, 4));
         // this[new PiecePosition(0, 5)] = new Bishop(owner1, this);  
         // this[new PiecePosition(0, 6)] = new Knight(owner1, this);
         // this[new PiecePosition(0, 7)] = new Rook(owner1, this);
         //this[new PiecePosition(1, 0)] = new Pawn(owner1, this);
-        this[new PiecePosition(1, 1)] = new Pawn(owner1, this);
-        // this[new PiecePosition(1, 2)] = new Pawn(owner1, this);
-        // this[new PiecePosition(1, 3)] = new Pawn(owner1, this);
-        // this[new PiecePosition(1, 4)] = new Pawn(owner1, this);
-        this[new PiecePosition(1, 5)] = new Pawn(owner1, this);
-        // this[new PiecePosition(1, 6)] = new Pawn(owner1, this);
-        // this[new PiecePosition(1, 7)] = new Pawn(owner1, this);
+        // this[new PiecePosition(1, 1)] = new Pawn(owner1, this, new PiecePosition(1,1));
+        // // this[new PiecePosition(1, 2)] = new Pawn(owner1, this);
+        // // this[new PiecePosition(1, 3)] = new Pawn(owner1, this);
+        // // this[new PiecePosition(1, 4)] = new Pawn(owner1, this);
+        // this[new PiecePosition(1, 5)] = new Pawn(owner1, this, new PiecePosition(1,5));
+        // // this[new PiecePosition(1, 6)] = new Pawn(owner1, this);
+        // // this[new PiecePosition(1, 7)] = new Pawn(owner1, this);
 
-        // this[new PiecePosition(4, 3)] = new Knight(owner1, this);
+        // // this[new PiecePosition(4, 3)] = new Knight(owner1, this);
 
-        this[new PiecePosition(3, 0)] = new Rook(owner2, this);
-        // this[new PiecePosition(7, 1)] = new Knight(owner2, this);
-        // this[new PiecePosition(7, 2)] = new Bishop(owner2, this);
-        // this[new PiecePosition(7, 3)] = new Queen(owner2, this);
-        // this[new PiecePosition(7, 4)] = new King(owner2, this);
-        this[new PiecePosition(6,3 )] = new Bishop(owner2, this);
-        // this[new PiecePosition(7, 6)] = new Knight(owner2, this);
-        // this[new PiecePosition(7, 7)] = new Rook(owner2, this);
-        this[new PiecePosition(6, 0)] = new Pawn(owner2, this);
+        // this[new PiecePosition(3, 0)] = new Rook(owner2, this, new PiecePosition(3, 0));
+        // // this[new PiecePosition(7, 1)] = new Knight(owner2, this);
+        // // this[new PiecePosition(7, 2)] = new Bishop(owner2, this);
+        // // this[new PiecePosition(7, 3)] = new Queen(owner2, this);
+        // // this[new PiecePosition(7, 4)] = new King(owner2, this);
+        this[new PiecePosition(6,4 )].OccupyingPiece = new Bishop(owner2, this, new PiecePosition(6,4));
+        // this[new PiecePosition(7, 6)] = new Knight(owner2, this, new PiecePosition(7,6));
+        // // this[new PiecePosition(7, 7)] = new Rook(owner2, this);
+        // this[new PiecePosition(6, 0)] = new Pawn(owner2, this, new PiecePosition(6, 0));
         // this[new PiecePosition(6, 1)] = new Pawn(owner2, this);
         // this[new PiecePosition(6, 2)] = new Pawn(owner2, this);
         // this[new PiecePosition(6, 3)] = new Pawn(owner2, this);
@@ -140,7 +145,7 @@ public class Board
             Console.Write($"  {i + 1} |");
             for (int j = 0; j < _board.GetLength(1); j++)
             {
-                var piece = _board[i, j];
+                var piece = _board[i, j].OccupyingPiece;
 
                 var pos = new PiecePosition(i, j);
 
@@ -189,17 +194,29 @@ public class Board
         Console.WriteLine("\n---------------------------------------------");
     }
 
+    public void ClearMeta()
+    {
+        for(var i = 0; i < RowColLen; i++)
+        {
+            for(var j = 0; j < RowColLen; j++)
+            {
+                _board[i,j].ThreateningPieces = new List<Piece>();
+            }
+        }
+    }
     public void CalculatePieceMoves()
     {
+        ClearMeta();
+
         for (int i = 0; i < _board.GetLength(0); i++)
         {
             for (int j = 0; j < _board.GetLength(1); j++)
             {
                 var pos = new PiecePosition(i, j);
 
-                if (_board[i, j] != null)
+                if (_board[i, j].OccupyingPiece != null)
                 {
-                    _board[i, j].CalculateMoves(pos);
+                    _board[i, j].OccupyingPiece.CalculateMoves(pos);
                 }
             }
         }
@@ -209,9 +226,9 @@ public class Board
             {
                 var pos = new PiecePosition(i, j);
 
-                if (_board[i, j] != null)
+                if (_board[i, j].OccupyingPiece != null)
                 {
-                    _board[i, j].EliminateIllegalMoves(pos);
+                    _board[i, j].OccupyingPiece.EliminateIllegalMoves();
                 }
             }
         }

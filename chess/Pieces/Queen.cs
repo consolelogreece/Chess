@@ -7,8 +7,8 @@ namespace chess.pieces
     public class Queen : Piece
     {
 
-        public Queen(Player pieceOwner, Board board)
-        : base(pieceOwner, board, "Queen")
+        public Queen(Player pieceOwner, Board board, PiecePosition startingPosition)
+            : base(pieceOwner, board, startingPosition, "Queen")
         {
         }
 
@@ -20,12 +20,13 @@ namespace chess.pieces
 
             while (++copy.row < _board.RowColLen && --copy.col >= 0)
             {
-                if (_board[copy] != null)
+                if (_board[copy].OccupyingPiece != null)
                 {
-                    if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
+                        _board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -39,12 +40,13 @@ namespace chess.pieces
 
             while (--copy.row >= 0 && --copy.col >= 0)
             {
-                if (_board[copy] != null)
+                if (_board[copy].OccupyingPiece != null)
                 {
-                    if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
+                        _board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -58,12 +60,13 @@ namespace chess.pieces
 
             while (--copy.row >= 0 && ++copy.col < _board.RowColLen)
             {
-                if (_board[copy] != null)
+                if (_board[copy].OccupyingPiece != null)
                 {
-                    if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
+                        _board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -77,12 +80,13 @@ namespace chess.pieces
 
             while (++copy.row < _board.RowColLen && ++copy.col < _board.RowColLen)
             {
-                if (_board[copy] != null)
+                if (_board[copy].OccupyingPiece != null)
                 {
-                    if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
+                        _board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -96,12 +100,13 @@ namespace chess.pieces
 
             while (++copy.col < _board.RowColLen)
             {
-                if (_board[copy] != null)
+                if (_board[copy].OccupyingPiece != null)
                 {
-                    if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
+                        _board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -115,12 +120,13 @@ namespace chess.pieces
 
             while (--copy.col >= 0)
             {
-                if (_board[copy] != null)
+                if (_board[copy].OccupyingPiece != null)
                 {
-                    if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
+                        _board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -134,12 +140,13 @@ namespace chess.pieces
 
             while (--copy.row >= 0)
             {
-                if (_board[copy] != null)
+                if (_board[copy].OccupyingPiece != null)
                 {
-                    if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
+                        _board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -153,12 +160,13 @@ namespace chess.pieces
 
             while (++copy.row < _board.RowColLen)
             {
-                if (_board[copy] != null)
+                if (_board[copy].OccupyingPiece != null)
                 {
-                    if (_board[copy].PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
+                        _board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -169,7 +177,7 @@ namespace chess.pieces
 
             PossibleMoves = possibleMoves;
 
-            return true;
+            return base.CalculateMoves(piecePosition);
         }
     }
 }
