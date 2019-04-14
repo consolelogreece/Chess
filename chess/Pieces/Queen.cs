@@ -26,7 +26,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -46,7 +46,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -66,7 +66,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -86,7 +86,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -106,7 +106,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -126,7 +126,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -146,7 +146,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -166,7 +166,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;

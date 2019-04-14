@@ -29,7 +29,7 @@ namespace chess.pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
                         } 
                         
@@ -49,7 +49,7 @@ namespace chess.pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
                         } 
                         
@@ -77,7 +77,7 @@ namespace chess.pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
                         } 
                         
@@ -97,7 +97,7 @@ namespace chess.pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
                         } 
                         
@@ -125,7 +125,7 @@ namespace chess.pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
                         } 
                         
@@ -145,7 +145,7 @@ namespace chess.pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
                         } 
                         
@@ -173,7 +173,7 @@ namespace chess.pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
                         } 
                         
@@ -193,7 +193,7 @@ namespace chess.pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            _board[copy].OccupyingPiece.RegisterThreat(this);
+                            //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
                         } 
                         

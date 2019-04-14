@@ -8,7 +8,7 @@ namespace chess.pieces
     {
         public Player PieceOwner { get; private set; }
 
-        public List<Piece> ThreateningPieces = new List<Piece>();
+        public List<Piece> PinningPieces = new List<Piece>();
 
         public PiecePosition CurrentPosition;
 
@@ -54,14 +54,14 @@ namespace chess.pieces
                     }
                 }
             }
+
+            var tile = _board[this.CurrentPosition];
         }
 
-        public virtual bool RegisterThreat(Piece piece)
+        public virtual void StripIllegalMovesPin(Piece piece)
         {
-            ThreateningPieces.Add(piece);
-            return true;
-        }
 
+        }
         public virtual bool Move(PiecePosition move)
         {
             if (PossibleMoves.Contains(move))

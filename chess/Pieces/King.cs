@@ -6,6 +6,7 @@ namespace chess.pieces
 {
     public class King : Piece
     {
+        // NOTE. WHEN CHECKING FOR CHECKMATE. IF THE KING IS IN DOUBLE CHECK, AND THERE ARE NO PLACES IT CAN MOVE, IT IS CHECKMATE. NO NEED TO CHECK FOR BLOCKS/TAKES ETC.
         public King(Player pieceOwner, Board board, PiecePosition startingPosition)
             : base(pieceOwner, board, startingPosition, "King")
         {

@@ -25,7 +25,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -45,7 +45,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -65,7 +65,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -85,7 +85,7 @@ namespace chess.pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        _board[copy].OccupyingPiece.RegisterThreat(this);
+                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -98,5 +98,47 @@ namespace chess.pieces
 
             return base.CalculateMoves(piecePosition);
         }
-    }
+
+        public override void EliminateIllegalMoves()
+        {
+            foreach(var piece in _board[this.CurrentPosition].ThreateningPieces)
+            {
+                // if this piece is pinned, remove any spaces it cant move to.
+                piece.StripIllegalMovesPin(this);
+            }
+        }
+        public override void StripIllegalMovesPin(Piece piece)
+        {
+            if (this.CurrentPosition.row == piece.CurrentPosition.row)
+            {
+                if (this.CurrentPosition.col < piece.CurrentPosition.col)
+                {
+                    var pos = this.CurrentPosition;
+
+                    while(++pos.col < _board.RowColLen)
+                    {
+                        var currentTile = _board[pos];
+                        if (_board[pos].OccupyingPiece != null )
+                        {
+                            // ignore piece if its the piece we're checking for pins
+                            if (_board[pos].OccupyingPiece != piece)
+                            {
+                                if (_board[pos].OccupyingPiece.PieceName == "King" && _board[pos].OccupyingPiece.PieceOwner.Id == piece.PieceOwner.Id)                               
+                                {
+                                    piece.PossibleMoves.RemoveAll(m => m.row != piece.CurrentPosition.row);
+                                }
+
+                                return;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+
+                }
+            }
+
+        }
+    } 
 }

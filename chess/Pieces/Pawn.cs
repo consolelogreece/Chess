@@ -64,13 +64,11 @@ namespace chess.pieces
                 if (copy.col + 1 < _board.RowColLen && _board[new PiecePosition(copy.row, copy.col + 1)].OccupyingPiece != null && _board[new PiecePosition(copy.row, copy.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                 {
                     possibleMoves.Add(new PiecePosition(copy.row, copy.col + 1));
-                    _board[new PiecePosition(copy.row, copy.col + 1)].OccupyingPiece.RegisterThreat(this);
                 }
 
                 if (copy.col - 1 >= 0 && _board[new PiecePosition(copy.row, copy.col - 1)].OccupyingPiece != null && _board[new PiecePosition(copy.row, copy.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                 {
                     possibleMoves.Add(new PiecePosition(copy.row, copy.col - 1));
-                    _board[new PiecePosition(copy.row, copy.col - 1)].OccupyingPiece.RegisterThreat(this);
                 }
             }
 
