@@ -16,7 +16,7 @@ namespace chess.pieces
 
         public List<PiecePosition> PossibleMoves { get; protected set; } = new List<PiecePosition>();
 
-        protected readonly Board _board;
+        public readonly Board _board;
 
         public Piece(Player pieceOwner, Board board, PiecePosition startingPosition, string pieceName = "Piece")
         {

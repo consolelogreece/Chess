@@ -109,36 +109,32 @@ namespace chess.pieces
         }
         public override void StripIllegalMovesPin(Piece piece)
         {
-            if (this.CurrentPosition.row == piece.CurrentPosition.row)
+            var helper = new MoveHelpers();
+
+            var pos = this.CurrentPosition;
+
+            if (pos.row == piece.CurrentPosition.row)
             {
-                if (this.CurrentPosition.col < piece.CurrentPosition.col)
+                if (pos.col < piece.CurrentPosition.col)
                 {
-                    var pos = this.CurrentPosition;
-
-                    while(++pos.col < _board.RowColLen)
-                    {
-                        var currentTile = _board[pos];
-                        if (_board[pos].OccupyingPiece != null )
-                        {
-                            // ignore piece if its the piece we're checking for pins
-                            if (_board[pos].OccupyingPiece != piece)
-                            {
-                                if (_board[pos].OccupyingPiece.PieceName == "King" && _board[pos].OccupyingPiece.PieceOwner.Id == piece.PieceOwner.Id)                               
-                                {
-                                    piece.PossibleMoves.RemoveAll(m => m.row != piece.CurrentPosition.row);
-                                }
-
-                                return;
-                            }
-                        }
-                    }
+                    helper.StripMovesPinnedHorizontalLR(this, piece);
                 }
                 else
                 {
-
+                    helper.StripMovesPinnedHorizontalRL(this, piece);
                 }
             }
-
+            else if(pos.col == piece.CurrentPosition.col)
+            {
+                if (pos.row < piece.CurrentPosition.row)
+                {
+                    helper.StripMovesPinnedVerticalUD(this, piece);
+                }
+                else
+                {
+                   helper.StripMovesPinnedVerticalDU(this, piece); 
+                }
+            }
         }
     } 
 }

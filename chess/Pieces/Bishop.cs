@@ -95,5 +95,35 @@ namespace chess.pieces
 
             return base.CalculateMoves(piecePosition);
         }
+
+        public override void StripIllegalMovesPin(Piece piece)
+        {
+            var helper = new MoveHelpers();
+
+            var pos = this.CurrentPosition;
+
+            if (pos.row < piece.CurrentPosition.col)
+            {
+                if (pos.col < piece.CurrentPosition.col)
+                {
+                    helper.StripMovesPinnedDiagonalTLBR(this, piece);
+                }
+                else
+                {
+                    helper.StripMovesPinnedDiagonalTRBL(this, piece);
+                }
+            }
+            else
+            {
+                if (pos.col < piece.CurrentPosition.row)
+                {
+                    helper.StripMovesPinnedDiagonalBRTL(this, piece);
+                }
+                else
+                {
+                   helper.StripMovesPinnedDiagonalBLTR(this, piece); 
+                }
+            }
+        }
     }
 }
