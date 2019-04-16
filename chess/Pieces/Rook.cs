@@ -99,34 +99,37 @@ namespace chess.pieces
             return base.CalculateMoves(piecePosition);
         }
 
-        public override void StripIllegalMovesPin(Piece piece)
+        public override List<BoardTile> XRay(Piece target)
         {
-            var helper = new MoveHelpers();
-
             var pos = this.CurrentPosition;
 
-            if (pos.row == piece.CurrentPosition.row)
+            List<BoardTile> tiles = new List<BoardTile>();
+
+            if (pos.row == target.CurrentPosition.row)
             {
-                if (pos.col < piece.CurrentPosition.col)
+                if (pos.col < target.CurrentPosition.col)
                 {
-                    helper.StripMovesPinnedHorizontalLR(this, piece);
+                    tiles = MoveHelpers.XRayHorizontalLR(this, target);
+
                 }
                 else
                 {
-                    helper.StripMovesPinnedHorizontalRL(this, piece);
+                    tiles = MoveHelpers.XRayHorizontalRL(this, target);
                 }
             }
-            else if(pos.col == piece.CurrentPosition.col)
+            else if(pos.col == target.CurrentPosition.col)
             {
-                if (pos.row < piece.CurrentPosition.row)
+                if (pos.row < target.CurrentPosition.row)
                 {
-                    helper.StripMovesPinnedVerticalUD(this, piece);
+                    tiles = MoveHelpers.XRayVerticalUD(this, target);
                 }
                 else
                 {
-                   helper.StripMovesPinnedVerticalDU(this, piece); 
+                   tiles = MoveHelpers.XRayVerticalDU(this, target); 
                 }
             }
+
+            return tiles;
         }
     } 
 }

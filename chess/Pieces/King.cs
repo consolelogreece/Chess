@@ -47,9 +47,19 @@ namespace chess.pieces
 
 
         // TODO: currently the king thinks it can move because the tile opposite a checking piece technically isnt threatened. will need to xray to remove all those options too.
+        // for the todo above, consider having xray in its own function. it takes a starting position and a direction and returns all squares until it finds an occupied one and maybe ignores kings? idk
         public override void EliminateIllegalMoves()
         {
             PossibleMoves.RemoveAll(m => _board[new PiecePosition(m.row, m.col)].ThreateningPieces.Any(p => p.PieceOwner.Id != this.PieceOwner.Id));
+
+            // base.EliminateIllegalMoves();
+
+            foreach(var threateningPiece in _board[this.CurrentPosition].ThreateningPieces)
+            {
+                var tiles = threateningPiece.XRay(this);
+
+                this.PossibleMoves.RemoveAll(m => tiles.Any(t => t.Position == m));
+            }
         }
 
         public bool IsInCheckmate()

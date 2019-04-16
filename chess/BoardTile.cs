@@ -7,8 +7,12 @@ public class BoardTile
 
     public List<Piece> ThreateningPieces;
 
-    public BoardTile()
+    public readonly PiecePosition Position;
+
+    public BoardTile(PiecePosition pos)
     {
         ThreateningPieces = new List<Piece>();
+
+        Position = pos;
     }
 }

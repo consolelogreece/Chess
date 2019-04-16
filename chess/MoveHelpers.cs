@@ -1,143 +1,154 @@
+using System;
+using System.Collections.Generic;
 using chess.pieces;
 
-public class MoveHelpers
+// todo: change from static and pass in to classes via DI.
+public static class MoveHelpers
 {
-    //TODO: start from pinned piece, not pinner.
+    //TODO: start from target piece, not pinner.
     // TODO: RENAME diagonal checks to be accurate on unflipped board.
-    public void StripMovesPinnedHorizontalLR(Piece pinner, Piece pinned)
+    public static List<BoardTile> XRayHorizontalLR(Piece pinner, Piece target)
     {
-        var _board = pinned._board;
+        var _board = target._board;
 
         var pos = pinner.CurrentPosition;
+
+        var tiles = new List<BoardTile>();
 
         while(++pos.col < _board.RowColLen)
         {
-            if (IsPinned(pinned, pos))
-            {
-                pinned.PossibleMoves.RemoveAll(m => m.row != pinned.CurrentPosition.row);
-            }
+            tiles.Add(_board[pos]);
         }
-    }
 
-    public void StripMovesPinnedHorizontalRL(Piece pinner, Piece pinned)
+        return tiles;
+    }
+    public static List<BoardTile> XRayHorizontalRL(Piece pinner, Piece target)
     {
-        var _board = pinned._board;
+        var _board = target._board;
 
         var pos = pinner.CurrentPosition;
+
+        var tiles = new List<BoardTile>();
 
         while(--pos.col >= 0)
         {
-            if (IsPinned(pinned, pos))
-            {
-                pinned.PossibleMoves.RemoveAll(m => m.row != pinned.CurrentPosition.row);
-            }
+                tiles.Add(_board[pos]);
         }
+
+        return tiles;
     }
 
     // NOTE: when printed, the board is flipped veritcally, techincally rows go from top to bottom. This is why this method is UP-DOWN.z
-    public void StripMovesPinnedVerticalUD(Piece pinner, Piece pinned)
+    public static List<BoardTile> XRayVerticalUD(Piece pinner, Piece target)
     {
-        var _board = pinned._board;
+        var _board = target._board;
 
         var pos = pinner.CurrentPosition;
+
+        var tiles = new List<BoardTile>();
 
         while(++pos.row < _board.RowColLen)
         {
-            if (IsPinned(pinned, pos))
-            {
-                pinned.PossibleMoves.RemoveAll(m => m.col != pinned.CurrentPosition.col);
-            }
+              tiles.Add(_board[pos]);
         }
+
+        return tiles;
     }
 
-    public void StripMovesPinnedVerticalDU(Piece pinner, Piece pinned)
+    public static List<BoardTile> XRayVerticalDU(Piece pinner, Piece target)
     {
-        var _board = pinned._board;
+        var _board = target._board;
         
         var pos = pinner.CurrentPosition;
 
-        while(--pos.row < _board.RowColLen)
+        var tiles = new List<BoardTile>();
+
+        while(--pos.row >= 0)
         {
-            if (IsPinned(pinned, pos))
-            {
-                pinned.PossibleMoves.RemoveAll(m => m.col != pinned.CurrentPosition.col);
-            }
+                tiles.Add(_board[pos]);
         }
+
+        return tiles;
     }
 
-    public void StripMovesPinnedDiagonalTLBR(Piece pinner, Piece pinned)
+    public static List<BoardTile> XRayDiagonalTLBR(Piece pinner, Piece target)
     {
-        var _board = pinned._board;
+        var _board = target._board;
         
         var pos = pinner.CurrentPosition;
+
+        var tiles = new List<BoardTile>();
 
         while(--pos.row >= 0 && ++pos.col < _board.RowColLen)
         {
-            if (IsPinned(pinned, pos))
-            {
-                pinned.PossibleMoves.RemoveAll(m => m.col + m.row != pinner.CurrentPosition.col + pinner.CurrentPosition.row);
-            }
+                tiles.Add(_board[pos]);
         }
+
+        return tiles;
     }
 
-    public void StripMovesPinnedDiagonalBRTL(Piece pinner, Piece pinned)
+    public static List<BoardTile> XRayDiagonalBRTL(Piece pinner, Piece target)
     {
-        var _board = pinned._board;
+        var _board = target._board;
         
         var pos = pinner.CurrentPosition;
+
+        var tiles = new List<BoardTile>();
 
         while(--pos.row >= 0 && --pos.col >= 0)
         {
-            if (IsPinned(pinned, pos))
-            {
-                pinned.PossibleMoves.RemoveAll(m => m.col - m.row != pinner.CurrentPosition.col - pinner.CurrentPosition.row);
-            }
+                tiles.Add(_board[pos]);
         }
+
+        return tiles;
     }
 
-    public void StripMovesPinnedDiagonalTRBL(Piece pinner, Piece pinned)
+    public static List<BoardTile> XRayDiagonalTRBL(Piece pinner, Piece target)
     {
-        var _board = pinned._board;
+        var _board = target._board;
         
         var pos = pinner.CurrentPosition;
+
+        var tiles = new List<BoardTile>();
 
         while(++pos.row < _board.RowColLen && --pos.col >= 0)
         {
-            if (IsPinned(pinned, pos))
-            {
-                pinned.PossibleMoves.RemoveAll(m => m.col + m.row != pinner.CurrentPosition.col + pinner.CurrentPosition.row);
-            }
+                tiles.Add(_board[pos]);
         }
+
+        return tiles;
     }
 
-     public void StripMovesPinnedDiagonalBLTR(Piece pinner, Piece pinned)
+     public static List<BoardTile> XRayDiagonalBLTR(Piece pinner, Piece target)
     {
-        var _board = pinned._board;
+        var _board = target._board;
         
         var pos = pinner.CurrentPosition;
 
+        var tiles = new List<BoardTile>();
+
         while(++pos.row < _board.RowColLen && ++pos.col < _board.RowColLen)
         {
-            if (IsPinned(pinned, pos))
-            {
-                pinned.PossibleMoves.RemoveAll(m => m.col - m.row != pinner.CurrentPosition.col - pinner.CurrentPosition.row);
-            }
+                tiles.Add(_board[pos]);
         }
+
+        return tiles;
     }
 
-    // TODO: FIGURE OUT WHY THE FUCK THIS DOESNT WORK. PINNED PIECEOWNER AND CURRENT TILE AREDIFERENT PLAYERS WTF. WHY DOES IT WORK FOR OTHERS I DONT GET IT
-    private bool IsPinned (Piece pinned, PiecePosition currentTilePos)
+    public static bool IsPinned (Piece target, PiecePosition currentTilePos)
     {
-        var _board = pinned._board;
+        var _board = target._board;
 
         var currentTile = _board[currentTilePos];
+
+        var tiles = new List<BoardTile>();
 
         if (_board[currentTilePos].OccupyingPiece != null )
         {
             // ignore piece if its the piece we're checking for pins
-            if (_board[currentTilePos].OccupyingPiece != pinned)
+            if (_board[currentTilePos].OccupyingPiece != target)
             {
-                if (_board[currentTilePos].OccupyingPiece.PieceName == "King" && _board[currentTilePos].OccupyingPiece.PieceOwner.Id == pinned.PieceOwner.Id)                               
+                if (_board[currentTilePos].OccupyingPiece.PieceName == "King" && _board[currentTilePos].OccupyingPiece.PieceOwner.Id == target.PieceOwner.Id)                               
                 {
                     return true;
                 }
