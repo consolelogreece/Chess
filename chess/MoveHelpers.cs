@@ -15,9 +15,11 @@ public static class MoveHelpers
 
         var tiles = new List<BoardTile>();
 
-        while(++pos.col < _board.RowColLen)
+        while(pos.col < _board.RowColLen)
         {
             tiles.Add(_board[pos]);
+
+            pos.col++;
         }
 
         return tiles;
@@ -30,9 +32,11 @@ public static class MoveHelpers
 
         var tiles = new List<BoardTile>();
 
-        while(--pos.col >= 0)
+        while(pos.col >= 0)
         {
-                tiles.Add(_board[pos]);
+            tiles.Add(_board[pos]);
+
+            pos.col--;
         }
 
         return tiles;
@@ -47,9 +51,11 @@ public static class MoveHelpers
 
         var tiles = new List<BoardTile>();
 
-        while(++pos.row < _board.RowColLen)
+        while(pos.row < _board.RowColLen)
         {
-              tiles.Add(_board[pos]);
+            tiles.Add(_board[pos]);
+
+            pos.row++;
         }
 
         return tiles;
@@ -63,9 +69,11 @@ public static class MoveHelpers
 
         var tiles = new List<BoardTile>();
 
-        while(--pos.row >= 0)
+        while(pos.row >= 0)
         {
-                tiles.Add(_board[pos]);
+            tiles.Add(_board[pos]);
+
+            pos.row--;
         }
 
         return tiles;
@@ -79,9 +87,12 @@ public static class MoveHelpers
 
         var tiles = new List<BoardTile>();
 
-        while(--pos.row >= 0 && ++pos.col < _board.RowColLen)
+        while(pos.row >= 0 && pos.col < _board.RowColLen)
         {
-                tiles.Add(_board[pos]);
+            tiles.Add(_board[pos]);
+
+            pos.row--;
+            pos.col++;
         }
 
         return tiles;
@@ -95,9 +106,12 @@ public static class MoveHelpers
 
         var tiles = new List<BoardTile>();
 
-        while(--pos.row >= 0 && --pos.col >= 0)
+        while(pos.row >= 0 && pos.col >= 0)
         {
-                tiles.Add(_board[pos]);
+            tiles.Add(_board[pos]);
+
+            pos.row--;
+            pos.col--;
         }
 
         return tiles;
@@ -111,9 +125,12 @@ public static class MoveHelpers
 
         var tiles = new List<BoardTile>();
 
-        while(++pos.row < _board.RowColLen && --pos.col >= 0)
+        while(pos.row < _board.RowColLen && pos.col >= 0)
         {
-                tiles.Add(_board[pos]);
+            tiles.Add(_board[pos]);
+
+            pos.row++;
+            pos.col--;
         }
 
         return tiles;
@@ -127,9 +144,12 @@ public static class MoveHelpers
 
         var tiles = new List<BoardTile>();
 
-        while(++pos.row < _board.RowColLen && ++pos.col < _board.RowColLen)
+        while(pos.row < _board.RowColLen && pos.col < _board.RowColLen)
         {
-                tiles.Add(_board[pos]);
+            tiles.Add(_board[pos]);
+
+            pos.row++;
+            pos.col++;
         }
 
         return tiles;
