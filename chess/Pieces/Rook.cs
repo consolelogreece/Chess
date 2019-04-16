@@ -99,14 +99,6 @@ namespace chess.pieces
             return base.CalculateMoves(piecePosition);
         }
 
-        public override void EliminateIllegalMoves()
-        {
-            foreach(var piece in _board[this.CurrentPosition].ThreateningPieces)
-            {
-                // if this piece is pinned, remove any spaces it cant move to.
-                piece.StripIllegalMovesPin(this);
-            }
-        }
         public override void StripIllegalMovesPin(Piece piece)
         {
             var helper = new MoveHelpers();

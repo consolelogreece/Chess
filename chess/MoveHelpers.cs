@@ -70,11 +70,11 @@ public class MoveHelpers
         
         var pos = pinner.CurrentPosition;
 
-        while(++pos.row < _board.RowColLen && ++pos.col < _board.RowColLen)
+        while(--pos.row >= 0 && ++pos.col < _board.RowColLen)
         {
             if (IsPinned(pinned, pos))
             {
-                pinned.PossibleMoves.RemoveAll(m => m.col - m.row != pinner.CurrentPosition.col - pinner.CurrentPosition.row);
+                pinned.PossibleMoves.RemoveAll(m => m.col + m.row != pinner.CurrentPosition.col + pinner.CurrentPosition.row);
             }
         }
     }
@@ -104,7 +104,7 @@ public class MoveHelpers
         {
             if (IsPinned(pinned, pos))
             {
-                pinned.PossibleMoves.RemoveAll(m => m.col - m.row != pinner.CurrentPosition.col - pinner.CurrentPosition.row);
+                pinned.PossibleMoves.RemoveAll(m => m.col + m.row != pinner.CurrentPosition.col + pinner.CurrentPosition.row);
             }
         }
     }
@@ -115,7 +115,7 @@ public class MoveHelpers
         
         var pos = pinner.CurrentPosition;
 
-        while(--pos.row >= 0 && ++pos.col < _board.RowColLen)
+        while(++pos.row < _board.RowColLen && ++pos.col < _board.RowColLen)
         {
             if (IsPinned(pinned, pos))
             {
@@ -124,6 +124,7 @@ public class MoveHelpers
         }
     }
 
+    // TODO: FIGURE OUT WHY THE FUCK THIS DOESNT WORK. PINNED PIECEOWNER AND CURRENT TILE AREDIFERENT PLAYERS WTF. WHY DOES IT WORK FOR OTHERS I DONT GET IT
     private bool IsPinned (Piece pinned, PiecePosition currentTilePos)
     {
         var _board = pinned._board;

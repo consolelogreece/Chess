@@ -179,5 +179,58 @@ namespace chess.pieces
 
             return base.CalculateMoves(piecePosition);
         }
+
+        public override void StripIllegalMovesPin(Piece piece)
+        {
+            var helper = new MoveHelpers();
+
+            var pos = this.CurrentPosition;
+
+            // note: order of the checks here are important. if it were reversed, horizontal/vertical pins would trip diagonal pin checks.
+            if (pos.row == piece.CurrentPosition.row)
+            {
+                if (pos.col < piece.CurrentPosition.col)
+                {
+                    helper.StripMovesPinnedHorizontalLR(this, piece);
+                }
+                else
+                {
+                    helper.StripMovesPinnedHorizontalRL(this, piece);
+                }
+            }
+            else if(pos.col == piece.CurrentPosition.col)
+            {
+                if (pos.row < piece.CurrentPosition.row)
+                {
+                    helper.StripMovesPinnedVerticalUD(this, piece);
+                }
+                else
+                {
+                   helper.StripMovesPinnedVerticalDU(this, piece); 
+                }
+            }
+            else if (pos.row < piece.CurrentPosition.col)
+            {
+                if (pos.col < piece.CurrentPosition.col)
+                {
+                    helper.StripMovesPinnedDiagonalTLBR(this, piece);
+                }
+                else
+                {
+                    helper.StripMovesPinnedDiagonalTRBL(this, piece);
+                }
+            }
+            else
+            {
+                if (pos.col < piece.CurrentPosition.col)
+                {
+                    helper.StripMovesPinnedDiagonalBRTL(this, piece);
+                }
+                else
+                {
+                   helper.StripMovesPinnedDiagonalBLTR(this, piece); 
+                }
+            }
+        }   
     }
 }

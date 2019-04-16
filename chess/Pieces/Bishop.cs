@@ -102,11 +102,11 @@ namespace chess.pieces
 
             var pos = this.CurrentPosition;
 
-            if (pos.row < piece.CurrentPosition.col)
+            if (pos.row < piece.CurrentPosition.row)
             {
                 if (pos.col < piece.CurrentPosition.col)
                 {
-                    helper.StripMovesPinnedDiagonalTLBR(this, piece);
+                    helper.StripMovesPinnedDiagonalBLTR(this, piece);
                 }
                 else
                 {
@@ -115,13 +115,13 @@ namespace chess.pieces
             }
             else
             {
-                if (pos.col < piece.CurrentPosition.row)
+                if (pos.col < piece.CurrentPosition.col)
                 {
-                    helper.StripMovesPinnedDiagonalBRTL(this, piece);
+                    helper.StripMovesPinnedDiagonalTLBR(this, piece); 
                 }
                 else
                 {
-                   helper.StripMovesPinnedDiagonalBLTR(this, piece); 
+                   helper.StripMovesPinnedDiagonalBRTL(this, piece);
                 }
             }
         }

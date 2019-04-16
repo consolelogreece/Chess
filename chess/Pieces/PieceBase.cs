@@ -41,23 +41,30 @@ namespace chess.pieces
 
         public virtual void EliminateIllegalMoves()
         {
-            King king;
+        //     King king;
 
-            for(var i = 0; i <  _board.RowColLen; i++)
+        //     for(var i = 0; i <  _board.RowColLen; i++)
+        //     {
+        //         for(var j = 0; j <  _board.RowColLen; j++)
+        //         {
+        //             if (_board[new PiecePosition(i,j)].OccupyingPiece != null && _board[new PiecePosition(i, j)].OccupyingPiece.PieceName == "King")
+        //             {
+        //                 king = (King)_board[new PiecePosition(i,j)].OccupyingPiece;
+        //                 break;
+        //             }
+        //         }
+        //     }
+
+        //     var tile = _board[this.CurrentPosition];
+
+            foreach(var piece in _board[this.CurrentPosition].ThreateningPieces)
             {
-                for(var j = 0; j <  _board.RowColLen; j++)
-                {
-                    if (_board[new PiecePosition(i,j)].OccupyingPiece != null && _board[new PiecePosition(i, j)].OccupyingPiece.PieceName == "King")
-                    {
-                        king = (King)_board[new PiecePosition(i,j)].OccupyingPiece;
-                        break;
-                    }
-                }
+                // if this piece is pinned, remove any spaces it cant move to.
+                piece.StripIllegalMovesPin(this);
             }
-
-            var tile = _board[this.CurrentPosition];
         }
 
+        // Each piece eholds the logic on how it can pin other pieces here. a piece will ask this piece if it's pinned, and this piece will remove moves as necessary.
         public virtual void StripIllegalMovesPin(Piece piece)
         {
 
