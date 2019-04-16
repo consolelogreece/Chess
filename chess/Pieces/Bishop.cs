@@ -102,7 +102,7 @@ namespace chess.pieces
 
             var pos = this.CurrentPosition;
 
-            if (pos.row < piece.CurrentPosition.row)
+            if (pos.row < piece.CurrentPosition.col)
             {
                 if (pos.col < piece.CurrentPosition.col)
                 {

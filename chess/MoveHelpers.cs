@@ -3,6 +3,7 @@ using chess.pieces;
 public class MoveHelpers
 {
     //TODO: start from pinned piece, not pinner.
+    // TODO: RENAME diagonal checks to be accurate on unflipped board.
     public void StripMovesPinnedHorizontalLR(Piece pinner, Piece pinned)
     {
         var _board = pinned._board;

@@ -213,7 +213,7 @@ namespace chess.pieces
             {
                 if (pos.col < piece.CurrentPosition.col)
                 {
-                    helper.StripMovesPinnedDiagonalTLBR(this, piece);
+                    helper.StripMovesPinnedDiagonalBLTR(this, piece);
                 }
                 else
                 {
@@ -224,11 +224,11 @@ namespace chess.pieces
             {
                 if (pos.col < piece.CurrentPosition.col)
                 {
-                    helper.StripMovesPinnedDiagonalBRTL(this, piece);
+                    helper.StripMovesPinnedDiagonalTLBR(this, piece); 
                 }
                 else
                 {
-                   helper.StripMovesPinnedDiagonalBLTR(this, piece); 
+                   helper.StripMovesPinnedDiagonalBRTL(this, piece);
                 }
             }
         }   

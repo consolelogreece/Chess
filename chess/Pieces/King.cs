@@ -45,9 +45,36 @@ namespace chess.pieces
             return base.CalculateMoves(move);
         }
 
+
+        // TODO: currently the king thinks it can move because the tile opposite a checking piece technically isnt threatened. will need to xray to remove all those options too.
         public override void EliminateIllegalMoves()
         {
             PossibleMoves.RemoveAll(m => _board[new PiecePosition(m.row, m.col)].ThreateningPieces.Any(p => p.PieceOwner.Id != this.PieceOwner.Id));
+        }
+
+        public bool IsInCheckmate()
+        {
+            var checkingPieces = _board[this.CurrentPosition].ThreateningPieces;
+
+            // if there are possible moves, can't be checkmate so no point making further checks.
+            if (this.PossibleMoves.Count > 0) return false;
+
+            // if there are no moves, and more than on checking piece, no blocks/takes will save from mate.
+            if (checkingPieces.Count > 1)
+            {
+                return true;
+            }
+
+            var posOfChecker = checkingPieces[0].CurrentPosition;
+
+            var tileOfChecker = _board[posOfChecker];
+
+            // see if the checker can be taken by any of the threatening pieces
+            if (tileOfChecker.ThreateningPieces.Any(m => m.PossibleMoves.Any(pm => pm == posOfChecker))) return true;
+
+            // todo: check for blocks.      
+
+            return false;
         }
     }
 }
