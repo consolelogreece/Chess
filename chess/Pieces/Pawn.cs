@@ -8,7 +8,7 @@ namespace chess.pieces
     {
         private bool _hasMoved = false;
 
-        public bool _enPassant = false;
+        public bool EnPassant = false;
 
         private int _direction;
 
@@ -25,8 +25,8 @@ namespace chess.pieces
         {
             _hasMoved = true;
 
-            if (Math.Abs(move.row - CurrentPosition.col) != 1) _enPassant = true;
-            else _enPassant = false;
+            if (Math.Abs(move.row - CurrentPosition.row) != 1) EnPassant = true;
+            else EnPassant = false;
 
             return base.Move(move);
         }
@@ -77,12 +77,12 @@ namespace chess.pieces
             copy.col++;
             
             // TODO: Register threats for en passant.
-            if (copy.col < _board.RowColLen && _board[copy].OccupyingPiece != null && _board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[copy].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[copy].OccupyingPiece)._enPassant)
+            if (copy.col < _board.RowColLen && _board[copy].OccupyingPiece != null && _board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[copy].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[copy].OccupyingPiece).EnPassant)
             possibleMoves.Add(new PiecePosition(piecePosition.row + _direction, piecePosition.col + 1));
 
             copy.col -= 2;
 
-            if (copy.col >= 0 && _board[copy].OccupyingPiece != null && _board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[copy].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[copy].OccupyingPiece)._enPassant)
+            if (copy.col >= 0 && _board[copy].OccupyingPiece != null && _board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[copy].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[copy].OccupyingPiece).EnPassant)
             possibleMoves.Add(new PiecePosition(piecePosition.row + _direction, piecePosition.col - 1));
 
             PossibleMoves = possibleMoves;
