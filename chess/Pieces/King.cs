@@ -80,11 +80,17 @@ namespace chess.pieces
             var tileOfChecker = _board[posOfChecker];
 
             // see if the checker can be taken by any of the threatening pieces
-            if (tileOfChecker.ThreateningPieces.Any(m => m.PossibleMoves.Any(pm => pm == posOfChecker))) return true;
+            if (tileOfChecker.ThreateningPieces.Any(m => m.PossibleMoves.Any(pm => pm == posOfChecker))) return false;
 
-            // todo: check for blocks.      
+            // todo: check for blocks.
+            var checkPath = tileOfChecker.OccupyingPiece.XRay(this);
 
-            return false;
+            if (checkPath.Any(m => m.ThreateningPieces.Any(p => p.PieceOwner.Id == this.PieceOwner.Id && p.PossibleMoves.Contains(m.Position))))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
