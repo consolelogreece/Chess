@@ -18,7 +18,7 @@ namespace chess.pieces
         public Pawn(Player pieceOwner, Board board, PiecePosition startingPosition)
             : base(pieceOwner, board, startingPosition, "Pawn")
         {
-            _direction = pieceOwner.color == ConsoleColor.Blue ? -1 : 1;
+            _direction = pieceOwner.Side == "bottom" ? -1 : 1;
         }
 
         public override bool Move(PiecePosition move)
@@ -57,7 +57,7 @@ namespace chess.pieces
             //reset
             copy = piecePosition;
 
-            copy.row++;
+            copy.row += _direction;
 
             if (copy.row < _board.RowColLen)
             {
