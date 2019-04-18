@@ -3,32 +3,26 @@ using System.Linq;
 using System.Collections.Generic;
 using chess.pieces;
 
-// make move, see if king now in check, if it is, the move is illegal.
-// redesign. have a board that keeps track of what pieces can move where. i.e. each square has a list of pieces where it can move, and a piece that currently occupies the square.
-
 // TODO, ON MOVE UPDATE BOARD TILES AND STUFF/SET APPROPRAITE NULLS.
-// ON MOVE, MAKE SURE TO CLEAR THREATENING PIECES ON ALL TILES AS TEHY ARE RECALCULATED.
-// may have to remove threatening pieces on all pieces that arent kings.
-
+// TODO: find better way of taking a piece, just setting posiiton of piece to null isnt good enough
 namespace chess
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var board = new Board();
+            var player1 = new Player(Guid.NewGuid().ToString(), "top");
+            var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            board.Setup();
+            var game = new Game(new List<Player>(){player1, player2});
 
-            board.CalculatePieceMoves();
-
-            board.PrintBoard();
+            game.SetupDefault();
 
             while (true)
             {
                 try
                 {
-                    board.PrintBoard();
+                    game.Board.PrintBoard();
                     Console.Write("Select piece to move(format: <row>,<col>): ");
 
                     var move = Console.ReadLine();
@@ -40,9 +34,9 @@ namespace chess
                     // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
                     PiecePosition selectedPosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
 
-                    Piece selectedPiece = board[selectedPosition].OccupyingPiece;
+                    Piece selectedPiece = game.Board[selectedPosition].OccupyingPiece;
 
-                    board.PrintBoard(selectedPiece);
+                    game.Board.PrintBoard(selectedPiece);
 
                     Console.Write("Select position to piece to (format: <row>,<col>): ");
 
@@ -53,11 +47,7 @@ namespace chess
                     // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
                     PiecePosition movePosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
 
-                    selectedPiece.Move(movePosition);
-
-                    board.CalculatePieceMoves();
-
-                    board.IsCheck();
+                    game.Move(selectedPosition, movePosition);
                 }
                 catch(Exception ex)
                 {
@@ -115,78 +105,9 @@ public class Board
 
     public readonly int RowColLen = 8;
 
-    public void Setup()
+    public void RegisterPiece(Piece piece)
     {
-        var owner1 = new Player(Guid.NewGuid().ToString(), ConsoleColor.Blue);
-        var owner2 = new Player(Guid.NewGuid().ToString(), ConsoleColor.DarkRed);
-
-        // this[new PiecePosition(7, 0)].OccupyingPiece = new Rook(owner1, this, new PiecePosition(7,0));
-        // this[new PiecePosition(7, 1)].OccupyingPiece = new Knight(owner1, this, new PiecePosition(7,1));
-        // this[new PiecePosition(7, 2)].OccupyingPiece = new Bishop(owner1, this, new PiecePosition(7,2));
-        // this[new PiecePosition(7, 3)].OccupyingPiece = new Queen(owner1, this, new PiecePosition(7,3));
-        // this[new PiecePosition(7, 4)].OccupyingPiece = new King(owner1, this, new PiecePosition(7,4));
-        // this[new PiecePosition(7, 5)].OccupyingPiece = new Bishop(owner1, this, new PiecePosition(7,5));
-        // this[new PiecePosition(7, 6)].OccupyingPiece = new Knight(owner1, this, new PiecePosition(7,6));
-        // this[new PiecePosition(7, 7)].OccupyingPiece = new Rook(owner1, this, new PiecePosition(7,7));
-        // this[new PiecePosition(6, 0)].OccupyingPiece = new Pawn(owner1, this, new PiecePosition(6,0));
-        // this[new PiecePosition(6, 1)].OccupyingPiece = new Pawn(owner1, this, new PiecePosition(6,1));
-        // this[new PiecePosition(6, 2)].OccupyingPiece = new Pawn(owner1, this, new PiecePosition(6,2));
-        // this[new PiecePosition(6, 3)].OccupyingPiece = new Pawn(owner1, this, new PiecePosition(6,3));
-        // this[new PiecePosition(6, 4)].OccupyingPiece = new Pawn(owner1, this, new PiecePosition(6,4));
-        // this[new PiecePosition(6, 5)].OccupyingPiece = new Pawn(owner1, this, new PiecePosition(6,5));
-        // this[new PiecePosition(6, 6)].OccupyingPiece = new Pawn(owner1, this, new PiecePosition(6,6));
-        // this[new PiecePosition(6, 7)].OccupyingPiece = new Pawn(owner1, this, new PiecePosition(6,7));
-
-        // this[new PiecePosition(0, 0)].OccupyingPiece = new Rook(owner2, this, new PiecePosition(0,0));
-        // this[new PiecePosition(0, 1)].OccupyingPiece = new Knight(owner2, this, new PiecePosition(0,1));
-        // this[new PiecePosition(0, 2)].OccupyingPiece = new Bishop(owner2, this, new PiecePosition(0,2));
-        // this[new PiecePosition(0, 3)].OccupyingPiece = new Queen(owner2, this, new PiecePosition(0,3));
-        // this[new PiecePosition(0, 4)].OccupyingPiece = new King(owner2, this, new PiecePosition(0,4));
-        // this[new PiecePosition(0, 5)].OccupyingPiece = new Bishop(owner2, this, new PiecePosition(0,5));
-        // this[new PiecePosition(0, 6)].OccupyingPiece = new Knight(owner2, this, new PiecePosition(0,6));
-        // this[new PiecePosition(0, 7)].OccupyingPiece = new Rook(owner2, this, new PiecePosition(0,7));
-        // this[new PiecePosition(1, 0)].OccupyingPiece = new Pawn(owner2, this, new PiecePosition(1,0));
-        // this[new PiecePosition(1, 1)].OccupyingPiece = new Pawn(owner2, this, new PiecePosition(1,1));
-        // this[new PiecePosition(1, 2)].OccupyingPiece = new Pawn(owner2, this, new PiecePosition(1,2));
-        // this[new PiecePosition(1, 3)].OccupyingPiece = new Pawn(owner2, this, new PiecePosition(1,3));
-        // this[new PiecePosition(1, 4)].OccupyingPiece = new Pawn(owner2, this, new PiecePosition(1,4));
-        // this[new PiecePosition(1, 5)].OccupyingPiece = new Pawn(owner2, this, new PiecePosition(1,5));
-        // this[new PiecePosition(1, 6)].OccupyingPiece = new Pawn(owner2, this, new PiecePosition(1,6));
-        // this[new PiecePosition(1, 7)].OccupyingPiece = new Pawn(owner2, this, new PiecePosition(1,7));
-
-        // // checkmate check
-        this[new PiecePosition(7, 4)].OccupyingPiece = new King(owner1, this, new PiecePosition(7,4));
-        this[new PiecePosition(0,3)].OccupyingPiece = new Rook(owner1, this, new PiecePosition(0,3));
-        //this[new PiecePosition(5, 4)].OccupyingPiece = new King(owner2, this, new PiecePosition(5,4));
-        this[new PiecePosition(7, 0)].OccupyingPiece = new Rook(owner2, this, new PiecePosition(7,0));
-        //this[new PiecePosition(0, 5)].OccupyingPiece = new Rook(owner2, this, new PiecePosition(0,5));
-        this[new PiecePosition(6, 0)].OccupyingPiece = new Rook(owner2, this, new PiecePosition(7,0));
-
-        // this[new PiecePosition(3,3)].OccupyingPiece = new Queen(owner2, this, new PiecePosition(3,3));
-        // this[new PiecePosition(3,4)].OccupyingPiece = new Rook(owner1, this, new PiecePosition(3,4));
-        // this[new PiecePosition(3,5)].OccupyingPiece = new Rook(owner1, this, new PiecePosition(3,5));
-        // this[new PiecePosition(3,7)].OccupyingPiece = new King(owner1, this, new PiecePosition(3,6));
-
-        // this[new PiecePosition(3,1)].OccupyingPiece = new Rook(owner1, this, new PiecePosition(3,1));
-        // this[new PiecePosition(3,0)].OccupyingPiece = new King(owner1, this, new PiecePosition(3,0));
-
-        // this[new PiecePosition(5,3)].OccupyingPiece = new Rook(owner1, this, new PiecePosition(5,3));
-        // this[new PiecePosition(6,3)].OccupyingPiece = new King(owner1, this, new PiecePosition(6,3));
-
-        // this[new PiecePosition(1,3)].OccupyingPiece = new Rook(owner1, this, new PiecePosition(1,3));
-        // this[new PiecePosition(0,3)].OccupyingPiece = new King(owner1, this, new PiecePosition(0,3));
-
-        // this[new PiecePosition(2,2)].OccupyingPiece = new Bishop(owner1, this, new PiecePosition(2,2));
-        // this[new PiecePosition(0,0)].OccupyingPiece = new King(owner1, this, new PiecePosition(0,0));
-
-        // this[new PiecePosition(4,4)].OccupyingPiece = new Bishop(owner1, this, new PiecePosition(4,4));
-        // this[new PiecePosition(6,6)].OccupyingPiece = new King(owner1, this, new PiecePosition(6,6));
-
-        // this[new PiecePosition(4,2)].OccupyingPiece = new Bishop(owner1, this, new PiecePosition(4,2));
-        // this[new PiecePosition(6,0)].OccupyingPiece = new King(owner1, this, new PiecePosition(6,0));
-
-        // this[new PiecePosition(2,4)].OccupyingPiece = new Bishop(owner1, this, new PiecePosition(2,4));
-        // this[new PiecePosition(0,6)].OccupyingPiece = new King(owner1, this, new PiecePosition(0,6));
+        this[piece.CurrentPosition].OccupyingPiece = piece;
     }
 
     public void PrintBoard(Piece selectedPiece = null)
@@ -227,8 +148,7 @@ public class Board
                     continue;
                 }
 
-                Console.ForegroundColor = piece.PieceOwner.color;
-
+                Console.ForegroundColor = piece.PieceOwner.Side == "bottom" ? ConsoleColor.DarkBlue : ConsoleColor.DarkRed;
                 Console.Write($"  {piece.PieceName[0]}  ");
             }
 
@@ -291,13 +211,108 @@ public class Board
 
 public struct Player
 {
-    public Player(string Id, ConsoleColor color)
+    public Player(string Id, string side)
     {
         this.Id = Id;
 
-        this.color = color;
+        this.Side = side;
     }
 
-    public string Id;
-    public ConsoleColor color;
+    public readonly string Id;
+
+    public readonly string Side;
+}
+
+public class Game
+{
+    public Board Board { get; private set; }
+
+    protected List<Player> _players = new List<Player>();
+
+    public Game(List<Player> players)
+    {
+        if (players.Count != 2 || players[0].Id == players[1].Id)
+        {
+            throw new InvalidOperationException("Two unique players only");
+        }
+
+        Board = new Board();
+
+        _players = players;
+    }
+
+    public void Setup(List<Piece> pieces)
+    {
+        foreach(var piece in pieces)
+        {
+            if (!_players.Any(p => p.Id == piece.PieceOwner.Id)) 
+                throw new InvalidOperationException("Piece owner not registered");
+
+            Board.RegisterPiece(piece);
+        }
+
+        // calculate initial moves.
+        Board.CalculatePieceMoves();
+    }
+
+    public void SetupDefault()
+    {
+        var pieces = new List<Piece>();
+
+        var owner1 = _players[0];
+
+        var owner2 = _players[1];
+
+        pieces.Add(new Rook(owner1, Board, new PiecePosition(0,0))); 
+        pieces.Add(new Knight(owner1, Board, new PiecePosition(0,1))); 
+        pieces.Add(new Bishop(owner1, Board, new PiecePosition(0,2))); 
+        pieces.Add(new Queen(owner1, Board, new PiecePosition(0,3))); 
+        pieces.Add(new King(owner1, Board, new PiecePosition(0,4))); 
+        pieces.Add(new Bishop(owner1, Board, new PiecePosition(0,5))); 
+        pieces.Add(new Knight(owner1, Board, new PiecePosition(0,6))); 
+        pieces.Add(new Rook(owner1, Board, new PiecePosition(0,7))); 
+
+        pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,0)));       
+        pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,1)));
+        pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,2)));
+        pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,3)));
+        pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,4)));       
+        pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,5)));
+        pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,6)));
+        pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,7)));
+
+        pieces.Add(new Rook(owner2, Board, new PiecePosition(7,0))); 
+        pieces.Add(new Knight(owner2, Board, new PiecePosition(7,1))); 
+        pieces.Add(new Bishop(owner2, Board, new PiecePosition(7,2))); 
+        pieces.Add(new Queen(owner2, Board, new PiecePosition(7,3))); 
+        pieces.Add(new King(owner2, Board, new PiecePosition(7,4))); 
+        pieces.Add(new Bishop(owner2, Board, new PiecePosition(7,5))); 
+        pieces.Add(new Knight(owner2, Board, new PiecePosition(7,6))); 
+        pieces.Add(new Rook(owner2, Board, new PiecePosition(7,7))); 
+
+        pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,0)));       
+        pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,1)));  
+        pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,2)));  
+        pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,3)));  
+        pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,4)));  
+        pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,5)));  
+        pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,6)));  
+        pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,7)));  
+        
+        this.Setup(pieces);
+    }
+
+    public bool Move(PiecePosition from, PiecePosition to)
+    {
+        var selectedPiece = Board[from].OccupyingPiece;
+
+        var moveSuccessful = selectedPiece.Move(to);
+
+        if (moveSuccessful)
+        {
+            Board.CalculatePieceMoves();
+        }
+
+        return moveSuccessful;
+    }
 }

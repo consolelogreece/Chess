@@ -12,18 +12,17 @@ namespace Test.Pieces
         public void CanMoveTwoSpacesOnFirstMove()
         {
             //arrange
-            var board = new Board();
+            var player1 = new Player(Guid.NewGuid().ToString(), "top");
+            var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            var player = new Player(Guid.NewGuid().ToString(), "top");
+            var game = new Game(new List<Player>(){ player1, player2 });
 
-            var pawn = new Pawn(player, board, new PiecePosition(0,0));
+            var pawn = new Pawn(player1, game.Board, new PiecePosition(0,0));
             
             var pieces = new List<Piece>(){ pawn };
 
-            board.Setup(pieces);
-
             //act
-            board.CalculatePieceMoves();
+            game.Setup(pieces);
             
             //assert
             Assert.Equal(2, pawn.PossibleMoves.Count);
@@ -33,24 +32,21 @@ namespace Test.Pieces
         public void CanOnlyMoveOneSpaceAfterFirstMove()
         {
             //arrange
-            var board = new Board();
+            var player1 = new Player(Guid.NewGuid().ToString(), "top");
+            var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            var player = new Player(Guid.NewGuid().ToString(), "top");
+            var game = new Game(new List<Player>(){ player1, player2 });
 
-            var pawn = new Pawn(player, board, new PiecePosition(0,0));
+            var pawn = new Pawn(player1, game.Board, new PiecePosition(0,0));
             
             var pieces = new List<Piece>(){ pawn };
 
-            board.Setup(pieces);
-
             //act
-            board.CalculatePieceMoves();
+            game.Setup(pieces);
 
             var move = new PiecePosition(2,0);
 
-            pawn.Move(move);
-
-            board.CalculatePieceMoves();            
+            game.Move(pawn.CurrentPosition, move);
             
             //assert
             Assert.Equal(1, pawn.PossibleMoves.Count);
@@ -60,20 +56,18 @@ namespace Test.Pieces
         public void CanOnlyMoveForward()
         {
             //arrange
-            var board = new Board();
-
             var player1 = new Player(Guid.NewGuid().ToString(), "top");
             var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            var pawn1 = new Pawn(player1, board, new PiecePosition(3,0));
-            var pawn2 = new Pawn(player2, board, new PiecePosition(3,7));
+            var game = new Game(new List<Player>(){ player1, player2 });
+
+            var pawn1 = new Pawn(player1, game.Board, new PiecePosition(3,0));
+            var pawn2 = new Pawn(player2, game.Board, new PiecePosition(3,7));
             
             var pieces = new List<Piece>(){ pawn1, pawn2 };
 
-            board.Setup(pieces);
-
             //act
-            board.CalculatePieceMoves();
+            game.Setup(pieces);
 
             var pawn1HasMoveThatIsntForward = false;
 
@@ -107,46 +101,44 @@ namespace Test.Pieces
         [Fact]
         public void CanMoveDiagonallyForwardOneSquareWhenTaking()
         {
-            var board = new Board();
-
+           //arrange
             var player1 = new Player(Guid.NewGuid().ToString(), "top");
             var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            var pawn1 = new Pawn(player1, board, new PiecePosition(3,0));
-            var pawn2 = new Pawn(player2, board, new PiecePosition(4,1));
+            var game = new Game(new List<Player>(){ player1, player2 });
+
+            var pawn1 = new Pawn(player1, game.Board, new PiecePosition(3,0));
+            var pawn2 = new Pawn(player2, game.Board, new PiecePosition(4,1));
             
             var pieces = new List<Piece>(){ pawn1, pawn2 };
 
-            board.Setup(pieces);
-
             //act
-            board.CalculatePieceMoves();
+            game.Setup(pieces);
             
             //assert
-            Assert.Contains(pawn2, board[pawn1.CurrentPosition].ThreateningPieces);
-            Assert.Contains(pawn1, board[pawn2.CurrentPosition].ThreateningPieces);
+            Assert.Contains(pawn2, game.Board[pawn1.CurrentPosition].ThreateningPieces);
+            Assert.Contains(pawn1, game.Board[pawn2.CurrentPosition].ThreateningPieces);
         }
 
         [Fact]
         public void EnPassantFlagEnabledOnDoubleMove()
         {
-             //arrange
-            var board = new Board();
+            //arrange
+            var player1 = new Player(Guid.NewGuid().ToString(), "top");
+            var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            var player = new Player(Guid.NewGuid().ToString(), "top");
+            var game = new Game(new List<Player>(){ player1, player2 });
 
-            var pawn = new Pawn(player, board, new PiecePosition(0,0));
+            var pawn = new Pawn(player1, game.Board, new PiecePosition(0,0));
             
             var pieces = new List<Piece>(){ pawn };
 
-            board.Setup(pieces);
-
             //act
-            board.CalculatePieceMoves();
+            game.Setup(pieces);
 
             var move = new PiecePosition(2,0);
 
-            pawn.Move(move);            
+            game.Move(pawn.CurrentPosition, move);            
             
             //assert
             Assert.True(pawn.EnPassant);
@@ -155,23 +147,22 @@ namespace Test.Pieces
         [Fact]
         public void EnPassantFlagDisabledOnSingleMove()
         {
-             //arrange
-            var board = new Board();
+            //arrange
+            var player1 = new Player(Guid.NewGuid().ToString(), "top");
+            var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            var player = new Player(Guid.NewGuid().ToString(), "top");
+            var game = new Game(new List<Player>(){ player1, player2 });
 
-            var pawn = new Pawn(player, board, new PiecePosition(0,0));
+            var pawn = new Pawn(player1, game.Board, new PiecePosition(0,0));
             
             var pieces = new List<Piece>(){ pawn };
 
-            board.Setup(pieces);
-
             //act
-            board.CalculatePieceMoves();
+            game.Setup(pieces);
 
             var move = new PiecePosition(1,0);
 
-            pawn.Move(move);            
+            game.Move(pawn.CurrentPosition, move);            
             
             //assert
             Assert.False(pawn.EnPassant);
@@ -181,26 +172,22 @@ namespace Test.Pieces
         public void CanMoveEnPassant()
         {
             //arrange
-            var board = new Board();
-
             var player1 = new Player(Guid.NewGuid().ToString(), "top");
             var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            var pawn1 = new Pawn(player1, board, new PiecePosition(2,0));
-            var pawn2 = new Pawn(player2, board, new PiecePosition(4,1));
+            var game = new Game(new List<Player>(){ player1, player2 });
+
+            var pawn1 = new Pawn(player1, game.Board, new PiecePosition(2,0));
+            var pawn2 = new Pawn(player2, game.Board, new PiecePosition(4,1));
             
             var pieces = new List<Piece>(){ pawn1, pawn2 };
 
-            board.Setup(pieces);
-
             //act
-            board.CalculatePieceMoves();
+            game.Setup(pieces);
 
             var move = new PiecePosition(4,0);
 
-            pawn1.Move(move);
-
-            board.CalculatePieceMoves();
+            game.Move(pawn1.CurrentPosition, move);
 
             //assert
             var enPassantPos = new PiecePosition(3,0);
@@ -213,65 +200,59 @@ namespace Test.Pieces
         public void CanTakeEnPassant()
         {
             //arrange
-            var board = new Board();
-
             var player1 = new Player(Guid.NewGuid().ToString(), "top");
             var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            var pawn1 = new Pawn(player1, board, new PiecePosition(2,0));
-            var pawn2 = new Pawn(player2, board, new PiecePosition(4,1));
+            var game = new Game(new List<Player>(){ player1, player2 });
+
+            var pawn1 = new Pawn(player1, game.Board, new PiecePosition(2,0));
+            var pawn2 = new Pawn(player2, game.Board, new PiecePosition(4,1));
             
             var pieces = new List<Piece>(){ pawn1, pawn2 };
 
-            board.Setup(pieces);
-
             //act
-            board.CalculatePieceMoves();
+            game.Setup(pieces);
 
             var move = new PiecePosition(4,0);
 
-            pawn1.Move(move);
-
-            board.CalculatePieceMoves();
+            game.Move(pawn1.CurrentPosition, move);
 
             var enPassantPos = new PiecePosition(3,0);
 
-            pawn2.Move(enPassantPos);
+            game.Move(pawn2.CurrentPosition, enPassantPos);
 
             //assert
-            Assert.Null(board[pawn1.CurrentPosition].OccupyingPiece);
+            Assert.Null(game.Board[pawn1.CurrentPosition].OccupyingPiece);
         }
 
         [Fact]
         public void CanOnlyMoveForwardWhenVerticallyPinned()
         {
             //arrange
-            var board = new Board();
-
             var player1 = new Player(Guid.NewGuid().ToString(), "top");
             var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            var p1Pawn1 = new Pawn(player1, board, new PiecePosition(3,3));
-            var p1King1 = new King(player1, board, new PiecePosition(0,3));
-            var p2Rook1 = new Rook(player2, board, new PiecePosition(6,3));
+            var game = new Game(new List<Player>(){ player1, player2 });
+
+            var p1Pawn1 = new Pawn(player1, game.Board, new PiecePosition(3,3));
+            var p1King1 = new King(player1, game.Board, new PiecePosition(0,3));
+            var p2Rook1 = new Rook(player2, game.Board, new PiecePosition(6,3));
 
             // add takeable piece to add possibility of moving out of current col.
-            var p2Pawn1 = new Pawn(player2, board, new PiecePosition(4,4));
+            var p2Pawn1 = new Pawn(player2, game.Board, new PiecePosition(4,4));
 
 
-            var p1Pawn2 = new Pawn(player1, board, new PiecePosition(3,5));
-            var p1King2 = new King(player1, board, new PiecePosition(1,5));
-            var p2Rook2 = new Rook(player2, board, new PiecePosition(7,5));
+            var p1Pawn2 = new Pawn(player1, game.Board, new PiecePosition(3,5));
+            var p1King2 = new King(player1, game.Board, new PiecePosition(1,5));
+            var p2Rook2 = new Rook(player2, game.Board, new PiecePosition(7,5));
 
             // add takeable piece to add possibility of moving out of current col.
-            var p2Pawn2 = new Pawn(player2, board, new PiecePosition(4,6));
+            var p2Pawn2 = new Pawn(player2, game.Board, new PiecePosition(4,6));
             
-            var pieces = new List<Piece>(){ p1Pawn1, p1King1, p2Rook1, p2Pawn1, p1Pawn2, p1King2, p2Rook2, p2Pawn2};
-
-            board.Setup(pieces);
+            var pieces = new List<Piece>(){ p1Pawn1, p1King1, p2Rook1, p2Pawn1, p1Pawn2, p1King2, p2Rook2, p2Pawn2};    
 
             //act
-            board.CalculatePieceMoves();
+            game.Setup(pieces);
 
             //assert
             Assert.NotEmpty(p1Pawn1.PossibleMoves);
@@ -289,27 +270,25 @@ namespace Test.Pieces
         public void CantMoveWhenHorizontallyPinned()
         {
             //arrange
-            var board = new Board();
-
             var player1 = new Player(Guid.NewGuid().ToString(), "top");
             var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
+            var game = new Game(new List<Player>(){ player1, player2 });
+
             // create pin from right to left.
-            var p1Pawn1 = new Pawn(player1, board, new PiecePosition(3,3));
-            var p1King1 = new King(player1, board, new PiecePosition(3,0));
-            var p2Rook1 = new Rook(player2, board, new PiecePosition(3,6));
+            var p1Pawn1 = new Pawn(player1, game.Board, new PiecePosition(3,3));
+            var p1King1 = new King(player1, game.Board, new PiecePosition(3,0));
+            var p2Rook1 = new Rook(player2, game.Board, new PiecePosition(3,6));
 
             // create pin from left to right.
-            var p1Pawn2 = new Pawn(player1, board, new PiecePosition(4,4));
-            var p1King2 = new King(player1, board, new PiecePosition(4,7));
-            var p2Rook2 = new Rook(player2, board, new PiecePosition(4,1));
-            
+            var p1Pawn2 = new Pawn(player1, game.Board, new PiecePosition(4,4));
+            var p1King2 = new King(player1, game.Board, new PiecePosition(4,7));
+            var p2Rook2 = new Rook(player2, game.Board, new PiecePosition(4,1));
+         
             var pieces = new List<Piece>(){ p1Pawn1, p1King1, p2Rook1, p1Pawn2, p1King2, p2Rook2};
 
-            board.Setup(pieces);
-
             //act
-            board.CalculatePieceMoves();
+            game.Setup(pieces);
 
             //assert
             Assert.Empty(p1Pawn1.PossibleMoves);
