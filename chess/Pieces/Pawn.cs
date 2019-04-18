@@ -28,7 +28,20 @@ namespace chess.pieces
             if (Math.Abs(move.row - CurrentPosition.row) != 1) EnPassant = true;
             else EnPassant = false;
 
-            return base.Move(move);
+            if (PossibleMoves.Contains(move))
+            {
+                // only time when this would be true is when taking another pawn en passant.
+                if (move.col != this.CurrentPosition.col && _board[move].OccupyingPiece == null)
+                {
+                    _board[new PiecePosition(move.row + (-1 * _direction), move.col)].OccupyingPiece = null;
+                }
+                _board[move].OccupyingPiece = this;
+                _board[CurrentPosition].OccupyingPiece = null;
+                CurrentPosition = move;
+                return true;
+            }
+
+            return false;
         }
 
         public override bool CalculateMoves(PiecePosition piecePosition)
