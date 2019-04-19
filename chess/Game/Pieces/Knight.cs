@@ -31,9 +31,7 @@ namespace Chess.Pieces
                         {
                             //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
-                        } 
-                        
-                        
+                        }                        
                     }
                     else
                     {
@@ -51,9 +49,7 @@ namespace Chess.Pieces
                         {
                             //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
-                        } 
-                        
-                        
+                        }                   
                     }
                     else
                     {
@@ -80,8 +76,6 @@ namespace Chess.Pieces
                             //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
                         } 
-                        
-                        
                     }
                     else
                     {
@@ -99,9 +93,7 @@ namespace Chess.Pieces
                         {
                             //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
-                        } 
-                        
-                        
+                        }           
                     }
                     else
                     {
@@ -127,9 +119,7 @@ namespace Chess.Pieces
                         {
                             //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
-                        } 
-                        
-                        
+                        }          
                     }
                     else
                     {
@@ -147,9 +137,7 @@ namespace Chess.Pieces
                         {
                             //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
-                        } 
-                        
-                        
+                        }
                     }
                     else
                     {
@@ -175,9 +163,7 @@ namespace Chess.Pieces
                         {
                             //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
-                        } 
-                        
-                        
+                        }
                     }
                     else
                     {
@@ -195,9 +181,7 @@ namespace Chess.Pieces
                         {
                             //_board[copy].OccupyingPiece.RegisterThreat(this);
                             possibleMoves.Add(copy);
-                        } 
-                        
-                        
+                        }     
                     }
                     else
                     {
