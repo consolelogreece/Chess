@@ -82,7 +82,6 @@ namespace Chess.Pieces
             // see if the checker can be taken by any of the threatening pieces
             if (tileOfChecker.ThreateningPieces.Any(m => m.PossibleMoves.Any(pm => pm == posOfChecker))) return false;
 
-            // todo: check for blocks.
             var checkPath = tileOfChecker.OccupyingPiece.XRay(this);
 
             if (checkPath.Any(m => m.ThreateningPieces.Any(p => p.PieceOwner.Id == this.PieceOwner.Id && p.PossibleMoves.Contains(m.Position))))
@@ -91,6 +90,25 @@ namespace Chess.Pieces
             }
 
             return true;
+        }
+
+        public List<BoardTile> GetCheckPath()
+        {
+            var checkingPieces = _board[this.CurrentPosition].ThreateningPieces;
+
+            var path = checkingPieces[0].XRay(this);
+
+            var i = path.Count - 1;
+
+            // as xray returns the pieces after the king, we want to remove those extra pieces as they are not part of the check path.
+            while (i >= 0)
+            {
+                if (path[i].OccupyingPiece != this) path.RemoveAt(i);
+                else break;
+                i--;
+            }
+
+            return path;
         }
     }
 }

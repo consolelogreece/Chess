@@ -1,10 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Chess;
 using Chess.Pieces;
 
 namespace Chess
 {
-    public class Board
+    public class Board : IEnumerable
     {
         private BoardTile[,] _board;
 
@@ -112,20 +115,9 @@ namespace Chess
             Console.WriteLine("\n---------------------------------------------");
         }
 
-        public void ClearMeta()
-        {
-            for(var i = 0; i < RowColLen; i++)
-            {
-                for(var j = 0; j < RowColLen; j++)
-                {
-                    _board[i,j].ThreateningPieces = new List<Piece>();
-                }
-            }
-        }
+        
         public void CalculatePieceMoves()
         {
-            ClearMeta();
-
             for (int i = 0; i < _board.GetLength(0); i++)
             {
                 for (int j = 0; j < _board.GetLength(1); j++)
@@ -150,6 +142,11 @@ namespace Chess
                     }
                 }
             }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _board.Cast<BoardTile>().GetEnumerator();
         }
     }
 }

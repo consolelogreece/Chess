@@ -29,6 +29,11 @@ namespace Chess.Pieces
             CurrentPosition = startingPosition;
         }
 
+        public void ClearMoves()
+        {
+            this.PossibleMoves.Clear();
+        }
+
         public virtual bool CalculateMoves(PiecePosition move)
         {
             foreach(var m in PossibleMoves)
