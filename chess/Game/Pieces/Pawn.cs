@@ -12,9 +12,6 @@ namespace Chess.Pieces
 
         private int _direction;
 
-        // this is multiplier for first move
-        private int _moveMultiplier = 2;
-
         public Pawn(Player pieceOwner, Board board, PiecePosition startingPosition)
             : base(pieceOwner, board, startingPosition, "Pawn")
         {
@@ -38,10 +35,54 @@ namespace Chess.Pieces
                 _board[move].OccupyingPiece = this;
                 _board[CurrentPosition].OccupyingPiece = null;
                 CurrentPosition = move;
+                Promote();
                 return true;
             }
 
             return false;
+        }
+
+        private bool Promote()
+        {
+            // added one to row to normalize position.
+            if (this.CurrentPosition.row != 0 && this.CurrentPosition.row + 1 != _board.RowColLen)
+            {
+                return false;
+            }
+
+            Console.WriteLine("Selecet piece to promote to (rook, knight, bishop, or queen):");
+
+            string piece = Console.ReadLine();
+
+            bool hasPromoted = false;
+
+            while(!hasPromoted)
+            {
+                switch(piece)
+                {
+                    case "rook":
+                        _board[this.CurrentPosition].OccupyingPiece = new Rook(this.PieceOwner, _board, this.CurrentPosition);
+                        hasPromoted = true;
+                        break;
+
+                    case "knight":
+                        _board[this.CurrentPosition].OccupyingPiece = new Knight(this.PieceOwner, _board, this.CurrentPosition);
+                        hasPromoted = true;
+                        break;
+
+                    case "bishop":
+                        _board[this.CurrentPosition].OccupyingPiece = new Bishop(this.PieceOwner, _board, this.CurrentPosition);
+                        hasPromoted = true;
+                        break;
+
+                    case "queen":
+                        _board[this.CurrentPosition].OccupyingPiece = new Queen(this.PieceOwner, _board, this.CurrentPosition);
+                        hasPromoted = true;
+                        break;
+                }
+            }
+
+            return true;
         }
 
         public override bool CalculateMoves(PiecePosition piecePosition)
@@ -91,12 +132,12 @@ namespace Chess.Pieces
             
             // TODO: Register threats for en passant.
             if (copy.col < _board.RowColLen && _board[copy].OccupyingPiece != null && _board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[copy].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[copy].OccupyingPiece).EnPassant)
-            possibleMoves.Add(new PiecePosition(piecePosition.row + _direction, piecePosition.col + 1));
+                possibleMoves.Add(new PiecePosition(piecePosition.row + _direction, piecePosition.col + 1));
 
             copy.col -= 2;
 
             if (copy.col >= 0 && _board[copy].OccupyingPiece != null && _board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[copy].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[copy].OccupyingPiece).EnPassant)
-            possibleMoves.Add(new PiecePosition(piecePosition.row + _direction, piecePosition.col - 1));
+                possibleMoves.Add(new PiecePosition(piecePosition.row + _direction, piecePosition.col - 1));
 
             PossibleMoves = possibleMoves;
 
