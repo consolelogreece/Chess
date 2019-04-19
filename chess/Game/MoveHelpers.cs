@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using chess.pieces;
+using Chess;
+using Chess.Pieces;
 
 // todo: change from static and pass in to classes via DI.
 public static class MoveHelpers

@@ -2,13 +2,12 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace chess.pieces
+namespace Chess.Pieces
 {
-    public class Queen : Piece
+    public class Rook : Piece
     {
-
-        public Queen(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "Queen")
+        public Rook(Player pieceOwner, Board board, PiecePosition startingPosition)
+            : base(pieceOwner, board, startingPosition, "Rook")
         {
         }
 
@@ -17,86 +16,6 @@ namespace chess.pieces
             var possibleMoves = new List<PiecePosition>();
 
             var copy = piecePosition;
-
-            while (++copy.row < _board.RowColLen && --copy.col >= 0)
-            {
-                if (_board[copy].OccupyingPiece != null)
-                {
-                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
-                    {
-                        // player can take this piece, so it is therefore a possible move.
-                        possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
-                    }
-
-                    break;
-                }
-
-                possibleMoves.Add(copy);
-            }
-
-            //reset
-            copy = piecePosition;
-
-            while (--copy.row >= 0 && --copy.col >= 0)
-            {
-                if (_board[copy].OccupyingPiece != null)
-                {
-                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
-                    {
-                        // player can take this piece, so it is therefore a possible move.
-                        possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
-                    }
-
-                    break;
-                }
-
-                possibleMoves.Add(copy);
-            }
-
-            //reset
-            copy = piecePosition;
-
-            while (--copy.row >= 0 && ++copy.col < _board.RowColLen)
-            {
-                if (_board[copy].OccupyingPiece != null)
-                {
-                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
-                    {
-                        // player can take this piece, so it is therefore a possible move.
-                        possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
-                    }
-
-                    break;
-                }
-
-                possibleMoves.Add(copy);
-            }
-
-            //reset
-            copy = piecePosition;
-
-            while (++copy.row < _board.RowColLen && ++copy.col < _board.RowColLen)
-            {
-                if (_board[copy].OccupyingPiece != null)
-                {
-                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
-                    {
-                        // player can take this piece, so it is therefore a possible move.
-                        possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
-                    }
-
-                    break;
-                }
-
-                possibleMoves.Add(copy);
-            }
-
-            //reset
-            copy = piecePosition;
 
             while (++copy.col < _board.RowColLen)
             {
@@ -184,10 +103,8 @@ namespace chess.pieces
         {
             var pos = this.CurrentPosition;
 
-            
             List<BoardTile> tiles = new List<BoardTile>();
 
-            // note: order of the checks here are important. if it were reversed, horizontal/vertical pins would trip diagonal pin checks.
             if (pos.row == target.CurrentPosition.row)
             {
                 if (pos.col < target.CurrentPosition.col)
@@ -211,30 +128,8 @@ namespace chess.pieces
                    tiles = MoveHelpers.XRayVerticalDU(this, target); 
                 }
             }
-            else if (pos.row < target.CurrentPosition.row)
-            {
-                if (pos.col < target.CurrentPosition.col)
-                {
-                    tiles = MoveHelpers.XRayDiagonalBLTR(this, target);
-                }
-                else
-                {
-                    tiles = MoveHelpers.XRayDiagonalTRBL(this, target);
-                }
-            }
-            else
-            {
-                if (pos.col < target.CurrentPosition.col)
-                {
-                    tiles = MoveHelpers.XRayDiagonalTLBR(this, target); 
-                }
-                else
-                {
-                   tiles =MoveHelpers.XRayDiagonalBRTL(this, target);
-                }
-            }
 
             return tiles;
-        }   
-    }
+        }
+    } 
 }

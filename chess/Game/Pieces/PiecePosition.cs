@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace chess.pieces
+namespace Chess.Pieces
 {
     public struct PiecePosition
     {
