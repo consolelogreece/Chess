@@ -89,54 +89,54 @@ namespace Chess.Pieces
         {
             var possibleMoves = new List<PiecePosition>();
 
-            var copy = this.CurrentPosition;
+            var pos = this.CurrentPosition;
 
-            copy.row += _direction;
+            pos.row += _direction;
 
-            if (_board[copy].OccupyingPiece == null)
+            if (_board[pos].OccupyingPiece == null)
             {
-                possibleMoves.Add(copy);
+                possibleMoves.Add(pos);
 
                 if (!_hasMoved)
                 {
-                    copy.row += _direction;
+                    pos.row += _direction;
 
-                    if (_board[copy].OccupyingPiece == null)
+                    if (_board[pos].OccupyingPiece == null)
                     {
-                        possibleMoves.Add(copy);
+                        possibleMoves.Add(pos);
                     }
                 }
             }
 
             //reset
-            copy = this.CurrentPosition;
+            pos = this.CurrentPosition;
 
-            copy.row += _direction;
+            pos.row += _direction;
 
-            if (copy.row < _board.RowColLen)
+            if (pos.row < _board.RowColLen)
             {
-                if (copy.col + 1 < _board.RowColLen && _board[new PiecePosition(copy.row, copy.col + 1)].OccupyingPiece != null && _board[new PiecePosition(copy.row, copy.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                if (pos.col + 1 < _board.RowColLen && _board[new PiecePosition(pos.row, pos.col + 1)].OccupyingPiece != null && _board[new PiecePosition(pos.row, pos.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                 {
-                    possibleMoves.Add(new PiecePosition(copy.row, copy.col + 1));
+                    possibleMoves.Add(new PiecePosition(pos.row, pos.col + 1));
                 }
 
-                if (copy.col - 1 >= 0 && _board[new PiecePosition(copy.row, copy.col - 1)].OccupyingPiece != null && _board[new PiecePosition(copy.row, copy.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                if (pos.col - 1 >= 0 && _board[new PiecePosition(pos.row, pos.col - 1)].OccupyingPiece != null && _board[new PiecePosition(pos.row, pos.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                 {
-                    possibleMoves.Add(new PiecePosition(copy.row, copy.col - 1));
+                    possibleMoves.Add(new PiecePosition(pos.row, pos.col - 1));
                 }
             }
 
             //reset
-            copy = this.CurrentPosition;
-            copy.col++;
+            pos = this.CurrentPosition;
+            pos.col++;
             
             // TODO: Register threats for en passant.
-            if (copy.col < _board.RowColLen && _board[copy].OccupyingPiece != null && _board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[copy].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[copy].OccupyingPiece).EnPassant)
+            if (pos.col < _board.RowColLen && _board[pos].OccupyingPiece != null && _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[pos].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[pos].OccupyingPiece).EnPassant)
                 possibleMoves.Add(new PiecePosition(this.CurrentPosition.row + _direction, this.CurrentPosition.col + 1));
 
-            copy.col -= 2;
+            pos.col -= 2;
 
-            if (copy.col >= 0 && _board[copy].OccupyingPiece != null && _board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[copy].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[copy].OccupyingPiece).EnPassant)
+            if (pos.col >= 0 && _board[pos].OccupyingPiece != null && _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[pos].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[pos].OccupyingPiece).EnPassant)
                 possibleMoves.Add(new PiecePosition(this.CurrentPosition.row + _direction, this.CurrentPosition.col - 1));
 
             PossibleMoves = possibleMoves;

@@ -15,177 +15,177 @@ namespace Chess.Pieces
         {
             var possibleMoves = new List<PiecePosition>();
 
-            var copy = this.CurrentPosition;
+            var pos = this.CurrentPosition;
 
-            copy.row += 2;
+            pos.row += 2;
 
-            if (copy.row < _board.RowColLen)
+            if (pos.row < _board.RowColLen)
             {
-                copy.col += 1;
+                pos.col += 1;
 
-                if (copy.col < _board.RowColLen)
+                if (pos.col < _board.RowColLen)
                 {
-                    if (_board[copy].OccupyingPiece != null)
+                    if (_board[pos].OccupyingPiece != null)
                     {
-                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
                             // player can take this piece, so it is therefore a possible move.
-                            possibleMoves.Add(copy);
+                            possibleMoves.Add(pos);
                         }                        
                     }
                     else
                     {
-                       possibleMoves.Add(copy); 
+                       possibleMoves.Add(pos); 
                     }    
                 }
 
-                copy.col -= 2;
+                pos.col -= 2;
 
-                if (copy.col >= 0)
+                if (pos.col >= 0)
                 {
-                    if (_board[copy].OccupyingPiece != null)
+                    if (_board[pos].OccupyingPiece != null)
                     {
-                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
                             // player can take this piece, so it is therefore a possible move.
-                            possibleMoves.Add(copy);
+                            possibleMoves.Add(pos);
                         }                   
                     }
                     else
                     {
-                       possibleMoves.Add(copy); 
+                       possibleMoves.Add(pos); 
                     }    
                 }
             }
 
             //reset
-            copy = this.CurrentPosition;
+            pos = this.CurrentPosition;
 
-            copy.row -= 2;
+            pos.row -= 2;
 
-            if (copy.row >= 0)
+            if (pos.row >= 0)
             {
-                copy.col += 1;
+                pos.col += 1;
 
-                if (copy.col < _board.RowColLen)
+                if (pos.col < _board.RowColLen)
                 {
-                    if (_board[copy].OccupyingPiece != null)
+                    if (_board[pos].OccupyingPiece != null)
                     {
-                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
                             // player can take this piece, so it is therefore a possible move.
-                            possibleMoves.Add(copy);
+                            possibleMoves.Add(pos);
                         } 
                     }
                     else
                     {
-                       possibleMoves.Add(copy); 
+                       possibleMoves.Add(pos); 
                     }    
                 }
 
-                copy.col -= 2;
+                pos.col -= 2;
 
-                if (copy.col >= 0)
+                if (pos.col >= 0)
                 {
-                    if (_board[copy].OccupyingPiece != null)
+                    if (_board[pos].OccupyingPiece != null)
                     {
-                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
                             // player can take this piece, so it is therefore a possible move.
-                            possibleMoves.Add(copy);
+                            possibleMoves.Add(pos);
                         }           
                     }
                     else
                     {
-                       possibleMoves.Add(copy); 
+                       possibleMoves.Add(pos); 
                     }    
                 }
             }
 
             //reset
-            copy = this.CurrentPosition;
+            pos = this.CurrentPosition;
 
-            copy.col -= 2;
+            pos.col -= 2;
 
-            if (copy.col >= 0)
+            if (pos.col >= 0)
             {
-                copy.row += 1;
+                pos.row += 1;
 
-                if (copy.row < _board.RowColLen)
+                if (pos.row < _board.RowColLen)
                 {
-                   if (_board[copy].OccupyingPiece != null)
+                   if (_board[pos].OccupyingPiece != null)
                     {
-                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
                             // player can take this piece, so it is therefore a possible move.
-                            possibleMoves.Add(copy);
+                            possibleMoves.Add(pos);
                         }          
                     }
                     else
                     {
-                       possibleMoves.Add(copy); 
+                       possibleMoves.Add(pos); 
                     }    
                 }
 
-                copy.row -= 2;
+                pos.row -= 2;
 
-                if (copy.row >= 0)
+                if (pos.row >= 0)
                 {
-                    if (_board[copy].OccupyingPiece != null)
+                    if (_board[pos].OccupyingPiece != null)
                     {
-                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
                             // player can take this piece, so it is therefore a possible move.  
-                            possibleMoves.Add(copy);
+                            possibleMoves.Add(pos);
                         }
                     }
                     else
                     {
-                       possibleMoves.Add(copy); 
+                       possibleMoves.Add(pos); 
                     }    
                 }
             }
 
             //reset
-            copy = this.CurrentPosition;
+            pos = this.CurrentPosition;
 
-            copy.col += 2;
+            pos.col += 2;
 
-            if (copy.col < _board.RowColLen)
+            if (pos.col < _board.RowColLen)
             {
-                copy.row += 1;
+                pos.row += 1;
 
-                if (copy.row < _board.RowColLen)
+                if (pos.row < _board.RowColLen)
                 {
-                    if (_board[copy].OccupyingPiece != null)
+                    if (_board[pos].OccupyingPiece != null)
                     {
-                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
                             // player can take this piece, so it is therefore a possible move.
-                            possibleMoves.Add(copy);
+                            possibleMoves.Add(pos);
                         }
                     }
                     else
                     {
-                       possibleMoves.Add(copy); 
+                       possibleMoves.Add(pos); 
                     }    
                 }
 
-                copy.row -= 2;
+                pos.row -= 2;
 
-                if (copy.row >= 0)
+                if (pos.row >= 0)
                 {
-                    if (_board[copy].OccupyingPiece != null)
+                    if (_board[pos].OccupyingPiece != null)
                     {
-                        if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                        if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
                             // player can take this piece, so it is therefore a possible move.
-                            possibleMoves.Add(copy);
+                            possibleMoves.Add(pos);
                         }     
                     }
                     else
                     {
-                       possibleMoves.Add(copy); 
+                       possibleMoves.Add(pos); 
                     }    
                 }
             }

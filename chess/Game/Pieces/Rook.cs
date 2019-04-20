@@ -16,79 +16,79 @@ namespace Chess.Pieces
         {
             var possibleMoves = new List<PiecePosition>();
 
-            var copy = this.CurrentPosition;
+            var pos = this.CurrentPosition;
 
-            while (++copy.col < _board.RowColLen)
+            while (++pos.col < _board.RowColLen)
             {
-                if (_board[copy].OccupyingPiece != null)
+                if (_board[pos].OccupyingPiece != null)
                 {
-                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
-                        possibleMoves.Add(copy);
+                        possibleMoves.Add(pos);
                     }
 
                     break;
                 }
 
-                possibleMoves.Add(copy);
+                possibleMoves.Add(pos);
             }
 
             //reset
-            copy = this.CurrentPosition;
+            pos = this.CurrentPosition;
 
-            while (--copy.col >= 0)
+            while (--pos.col >= 0)
             {
-                if (_board[copy].OccupyingPiece != null)
+                if (_board[pos].OccupyingPiece != null)
                 {
-                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
-                        possibleMoves.Add(copy);
+                        possibleMoves.Add(pos);
                     }
 
                     break;
                 }
 
-                possibleMoves.Add(copy);
+                possibleMoves.Add(pos);
             }
 
             //reset
-            copy = this.CurrentPosition;
+            pos = this.CurrentPosition;
 
-            while (--copy.row >= 0)
+            while (--pos.row >= 0)
             {
-                if (_board[copy].OccupyingPiece != null)
+                if (_board[pos].OccupyingPiece != null)
                 {
-                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
-                        possibleMoves.Add(copy);
+                        possibleMoves.Add(pos);
                     }
 
                     break;
                 }
 
-                possibleMoves.Add(copy);
+                possibleMoves.Add(pos);
             }
 
             //reset
-            copy = this.CurrentPosition;
+            pos = this.CurrentPosition;
 
-            while (++copy.row < _board.RowColLen)
+            while (++pos.row < _board.RowColLen)
             {
-                if (_board[copy].OccupyingPiece != null)
+                if (_board[pos].OccupyingPiece != null)
                 {
-                    if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                    if (_board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                     {
                         // player can take this piece, so it is therefore a possible move.
-                        possibleMoves.Add(copy);
+                        possibleMoves.Add(pos);
                     }
 
                     break;
                 }
 
-                possibleMoves.Add(copy);
+                possibleMoves.Add(pos);
             }
 
             PossibleMoves = possibleMoves;
