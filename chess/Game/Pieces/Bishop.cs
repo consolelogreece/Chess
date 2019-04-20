@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Chess.Helpers;
 
 namespace Chess.Pieces
 {
@@ -12,11 +13,11 @@ namespace Chess.Pieces
 
         }
 
-        public override bool CalculateMoves(PiecePosition piecePosition)
+        public override bool CalculateMoves()
         {
             var possibleMoves = new List<PiecePosition>();
 
-            var copy = piecePosition;
+            var copy = this.CurrentPosition;
 
             while (++copy.row < _board.RowColLen && --copy.col >= 0)
             {
@@ -35,7 +36,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             while (--copy.row >= 0 && --copy.col >= 0)
             {
@@ -54,7 +55,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             while (--copy.row >= 0 && ++copy.col < _board.RowColLen)
             {
@@ -73,7 +74,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             while (++copy.row < _board.RowColLen && ++copy.col < _board.RowColLen)
             {
@@ -93,7 +94,7 @@ namespace Chess.Pieces
 
             PossibleMoves = possibleMoves;
 
-            return base.CalculateMoves(piecePosition);
+            return base.CalculateMoves();
         }
 
         public override List<BoardTile> XRay(Piece target)

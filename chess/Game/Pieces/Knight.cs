@@ -11,11 +11,11 @@ namespace Chess.Pieces
         {
         }
 
-        public override bool CalculateMoves(PiecePosition piecePosition)
+        public override bool CalculateMoves()
         {
             var possibleMoves = new List<PiecePosition>();
 
-            var copy = piecePosition;
+            var copy = this.CurrentPosition;
 
             copy.row += 2;
 
@@ -29,7 +29,7 @@ namespace Chess.Pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            //_board[copy].OccupyingPiece.RegisterThreat(this);
+                            // player can take this piece, so it is therefore a possible move.
                             possibleMoves.Add(copy);
                         }                        
                     }
@@ -47,7 +47,7 @@ namespace Chess.Pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            //_board[copy].OccupyingPiece.RegisterThreat(this);
+                            // player can take this piece, so it is therefore a possible move.
                             possibleMoves.Add(copy);
                         }                   
                     }
@@ -59,7 +59,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             copy.row -= 2;
 
@@ -73,7 +73,7 @@ namespace Chess.Pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            //_board[copy].OccupyingPiece.RegisterThreat(this);
+                            // player can take this piece, so it is therefore a possible move.
                             possibleMoves.Add(copy);
                         } 
                     }
@@ -91,7 +91,7 @@ namespace Chess.Pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            //_board[copy].OccupyingPiece.RegisterThreat(this);
+                            // player can take this piece, so it is therefore a possible move.
                             possibleMoves.Add(copy);
                         }           
                     }
@@ -103,7 +103,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             copy.col -= 2;
 
@@ -117,7 +117,7 @@ namespace Chess.Pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            //_board[copy].OccupyingPiece.RegisterThreat(this);
+                            // player can take this piece, so it is therefore a possible move.
                             possibleMoves.Add(copy);
                         }          
                     }
@@ -135,7 +135,7 @@ namespace Chess.Pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            //_board[copy].OccupyingPiece.RegisterThreat(this);
+                            // player can take this piece, so it is therefore a possible move.  
                             possibleMoves.Add(copy);
                         }
                     }
@@ -147,7 +147,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             copy.col += 2;
 
@@ -161,7 +161,7 @@ namespace Chess.Pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            //_board[copy].OccupyingPiece.RegisterThreat(this);
+                            // player can take this piece, so it is therefore a possible move.
                             possibleMoves.Add(copy);
                         }
                     }
@@ -179,7 +179,7 @@ namespace Chess.Pieces
                     {
                         if (_board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
                         {
-                            //_board[copy].OccupyingPiece.RegisterThreat(this);
+                            // player can take this piece, so it is therefore a possible move.
                             possibleMoves.Add(copy);
                         }     
                     }
@@ -192,7 +192,7 @@ namespace Chess.Pieces
 
             PossibleMoves = possibleMoves;
 
-            return base.CalculateMoves(piecePosition);
+            return base.CalculateMoves();
         }
     }
 }

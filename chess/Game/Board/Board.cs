@@ -11,6 +11,8 @@ namespace Chess
     {
         private BoardTile[,] _board;
 
+        public readonly int RowColLen = 8;
+
         public Board()
         {
             _board = new BoardTile[RowColLen, RowColLen];
@@ -23,34 +25,11 @@ namespace Chess
             }
         }
 
-        public bool IsCheck()
-        {
-            foreach(var tile in _board)
-            {
-                if (tile.OccupyingPiece?.PieceName == "King")
-                {
-                    var king = (King)tile.OccupyingPiece;
-
-
-                    return king.IsInCheckmate();
-                }
-            }
-
-            return false;
-        }
-
-        // public bool IsCheckMate()
-        // {
-
-        // }
-
         public BoardTile this[PiecePosition p]
         {
             get { return _board[p.row, p.col]; }
             set { _board[p.row, p.col] = value; }
         }
-
-        public readonly int RowColLen = 8;
 
         public void RegisterPiece(Piece piece)
         {
@@ -113,35 +92,6 @@ namespace Chess
                 Console.Write($"| {i} |");
             }
             Console.WriteLine("\n---------------------------------------------");
-        }
-
-        
-        public void CalculatePieceMoves()
-        {
-            for (int i = 0; i < _board.GetLength(0); i++)
-            {
-                for (int j = 0; j < _board.GetLength(1); j++)
-                {
-                    var pos = new PiecePosition(i, j);
-
-                    if (_board[i, j].OccupyingPiece != null)
-                    {
-                        _board[i, j].OccupyingPiece.CalculateMoves(pos);
-                    }
-                }
-            }
-            for (int i = 0; i < _board.GetLength(0); i++)
-            {
-                for (int j = 0; j < _board.GetLength(1); j++)
-                {
-                    var pos = new PiecePosition(i, j);
-
-                    if (_board[i, j].OccupyingPiece != null)
-                    {
-                        _board[i, j].OccupyingPiece.EliminateIllegalMoves();
-                    }
-                }
-            }
         }
 
         public IEnumerator GetEnumerator()

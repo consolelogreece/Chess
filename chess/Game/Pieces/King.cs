@@ -12,41 +12,41 @@ namespace Chess.Pieces
         {
         }
 
-        public override bool CalculateMoves(PiecePosition move)
+        public override bool CalculateMoves()
         {
             var possibleMoves = new List<PiecePosition>();
 
-            if (move.row + 1 < _board.RowColLen && (_board[new PiecePosition(move.row + 1, move.col)].OccupyingPiece == null || _board[new PiecePosition(move.row + 1, move.col)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
-                possibleMoves.Add(new PiecePosition(move.row + 1, move.col));
+            if (this.CurrentPosition.row + 1 < _board.RowColLen && (_board[new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col)].OccupyingPiece == null || _board[new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+                possibleMoves.Add(new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col));
 
-            if (move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row , move.col + 1)].OccupyingPiece == null || _board[new PiecePosition(move.row, move.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
-                possibleMoves.Add(new PiecePosition(move.row, move.col + 1));
+            if (this.CurrentPosition.col + 1 < _board.RowColLen && (_board[new PiecePosition(this.CurrentPosition.row , this.CurrentPosition.col + 1)].OccupyingPiece == null || _board[new PiecePosition(this.CurrentPosition.row, this.CurrentPosition.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+                possibleMoves.Add(new PiecePosition(this.CurrentPosition.row, this.CurrentPosition.col + 1));
 
-            if (move.col - 1 >= 0 && (_board[new PiecePosition(move.row, move.col - 1)].OccupyingPiece == null || _board[new PiecePosition(move.row, move.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
-                possibleMoves.Add(new PiecePosition(move.row, move.col - 1));
+            if (this.CurrentPosition.col - 1 >= 0 && (_board[new PiecePosition(this.CurrentPosition.row, this.CurrentPosition.col - 1)].OccupyingPiece == null || _board[new PiecePosition(this.CurrentPosition.row, this.CurrentPosition.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+                possibleMoves.Add(new PiecePosition(this.CurrentPosition.row, this.CurrentPosition.col - 1));
 
-            if (move.row - 1 >= 0 && (_board[new PiecePosition(move.row - 1, move.col)].OccupyingPiece == null || _board[new PiecePosition(move.row - 1, move.col)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
-                possibleMoves.Add(new PiecePosition(move.row - 1, move.col));
+            if (this.CurrentPosition.row - 1 >= 0 && (_board[new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col)].OccupyingPiece == null || _board[new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+                possibleMoves.Add(new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col));
 
-            if (move.row + 1 < _board.RowColLen && move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row + 1, move.col + 1)].OccupyingPiece == null || _board[new PiecePosition(move.row + 1, move.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
-                possibleMoves.Add(new PiecePosition(move.row + 1, move.col + 1));
+            if (this.CurrentPosition.row + 1 < _board.RowColLen && this.CurrentPosition.col + 1 < _board.RowColLen && (_board[new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col + 1)].OccupyingPiece == null || _board[new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+                possibleMoves.Add(new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col + 1));
 
-            if (move.row + 1 < _board.RowColLen && move.col - 1 >= 0 && (_board[new PiecePosition(move.row + 1, move.col - 1)].OccupyingPiece == null || _board[new PiecePosition(move.row + 1, move.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
-                possibleMoves.Add(new PiecePosition(move.row + 1, move.col - 1));
+            if (this.CurrentPosition.row + 1 < _board.RowColLen && this.CurrentPosition.col - 1 >= 0 && (_board[new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col - 1)].OccupyingPiece == null || _board[new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+                possibleMoves.Add(new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col - 1));
 
-            if (move.row - 1 >= 0 && move.col + 1 < _board.RowColLen && (_board[new PiecePosition(move.row - 1, move.col + 1)].OccupyingPiece == null || _board[new PiecePosition(move.row - 1, move.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
-                possibleMoves.Add(new PiecePosition(move.row - 1, move.col + 1));
+            if (this.CurrentPosition.row - 1 >= 0 && this.CurrentPosition.col + 1 < _board.RowColLen && (_board[new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col + 1)].OccupyingPiece == null || _board[new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+                possibleMoves.Add(new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col + 1));
 
-            if (move.row - 1 >= 0 && move.col - 1 >= 0 && (_board[new PiecePosition(move.row - 1, move.col - 1)].OccupyingPiece == null || _board[new PiecePosition(move.row - 1, move.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
-                possibleMoves.Add(new PiecePosition(move.row - 1, move.col - 1));
+            if (this.CurrentPosition.row - 1 >= 0 && this.CurrentPosition.col - 1 >= 0 && (_board[new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col - 1)].OccupyingPiece == null || _board[new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+                possibleMoves.Add(new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col - 1));
 
             PossibleMoves = possibleMoves;
 
-            return base.CalculateMoves(move);
+            return base.CalculateMoves();
         }
 
 
-        // TODO: currently the king thinks it can move because the tile opposite a checking piece technically isnt threatened. will need to xray to remove all those options too.
+        // TODO: currently the king thinks it can this.CurrentPosition because the tile opposite a checking piece technically isnt threatened. will need to xray to rethis.CurrentPosition all those options too.
         // for the todo above, consider having xray in its own function. it takes a starting position and a direction and returns all squares until it finds an occupied one and maybe ignores kings? idk
         public override void EliminateIllegalMoves()
         {
@@ -66,10 +66,10 @@ namespace Chess.Pieces
         {
             var checkingPieces = _board[this.CurrentPosition].ThreateningPieces;
 
-            // if there are possible moves, can't be checkmate so no point making further checks.
+            // if there are possible this.CurrentPositions, can't be checkmate so no point making further checks.
             if (this.PossibleMoves.Count > 0) return false;
 
-            // if there are no moves, and more than on checking piece, no blocks/takes will save from mate.
+            // if there are no this.CurrentPositions, and more than on checking piece, no blocks/takes will save from mate.
             if (checkingPieces.Count > 1)
             {
                 return true;
@@ -100,7 +100,7 @@ namespace Chess.Pieces
 
             var i = path.Count - 1;
 
-            // as xray returns the pieces after the king, we want to remove those extra pieces as they are not part of the check path.
+            // as xray returns the pieces after the king, we want to rethis.CurrentPosition those extra pieces as they are not part of the check path.
             while (i >= 0)
             {
                 if (path[i].OccupyingPiece != this) path.RemoveAt(i);

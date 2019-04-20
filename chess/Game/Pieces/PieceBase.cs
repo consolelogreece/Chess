@@ -34,7 +34,7 @@ namespace Chess.Pieces
             this.PossibleMoves.Clear();
         }
 
-        public virtual bool CalculateMoves(PiecePosition move)
+        public virtual bool CalculateMoves()
         {
             foreach(var m in PossibleMoves)
             {

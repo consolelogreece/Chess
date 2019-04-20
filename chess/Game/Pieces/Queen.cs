@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Chess.Helpers;
 
 namespace Chess.Pieces
 {
@@ -12,11 +13,11 @@ namespace Chess.Pieces
         {
         }
 
-        public override bool CalculateMoves(PiecePosition piecePosition)
+        public override bool CalculateMoves()
         {
             var possibleMoves = new List<PiecePosition>();
 
-            var copy = piecePosition;
+            var copy = this.CurrentPosition;
 
             while (++copy.row < _board.RowColLen && --copy.col >= 0)
             {
@@ -26,7 +27,6 @@ namespace Chess.Pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -36,7 +36,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             while (--copy.row >= 0 && --copy.col >= 0)
             {
@@ -46,7 +46,7 @@ namespace Chess.Pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
+
                     }
 
                     break;
@@ -56,7 +56,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             while (--copy.row >= 0 && ++copy.col < _board.RowColLen)
             {
@@ -66,7 +66,6 @@ namespace Chess.Pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -76,7 +75,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             while (++copy.row < _board.RowColLen && ++copy.col < _board.RowColLen)
             {
@@ -86,7 +85,6 @@ namespace Chess.Pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -96,7 +94,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             while (++copy.col < _board.RowColLen)
             {
@@ -106,7 +104,6 @@ namespace Chess.Pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -116,7 +113,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             while (--copy.col >= 0)
             {
@@ -126,7 +123,6 @@ namespace Chess.Pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -136,7 +132,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             while (--copy.row >= 0)
             {
@@ -146,7 +142,6 @@ namespace Chess.Pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -156,7 +151,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             while (++copy.row < _board.RowColLen)
             {
@@ -166,7 +161,6 @@ namespace Chess.Pieces
                     {
                         // player can take this piece, so it is therefore a possible move.
                         possibleMoves.Add(copy);
-                        //_board[copy].OccupyingPiece.RegisterThreat(this);
                     }
 
                     break;
@@ -177,7 +171,7 @@ namespace Chess.Pieces
 
             PossibleMoves = possibleMoves;
 
-            return base.CalculateMoves(piecePosition);
+            return base.CalculateMoves();
         }
 
         public override List<BoardTile> XRay(Piece target)

@@ -85,11 +85,11 @@ namespace Chess.Pieces
             return true;
         }
 
-        public override bool CalculateMoves(PiecePosition piecePosition)
+        public override bool CalculateMoves()
         {
             var possibleMoves = new List<PiecePosition>();
 
-            var copy = piecePosition;
+            var copy = this.CurrentPosition;
 
             copy.row += _direction;
 
@@ -109,7 +109,7 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
 
             copy.row += _direction;
 
@@ -127,21 +127,21 @@ namespace Chess.Pieces
             }
 
             //reset
-            copy = piecePosition;
+            copy = this.CurrentPosition;
             copy.col++;
             
             // TODO: Register threats for en passant.
             if (copy.col < _board.RowColLen && _board[copy].OccupyingPiece != null && _board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[copy].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[copy].OccupyingPiece).EnPassant)
-                possibleMoves.Add(new PiecePosition(piecePosition.row + _direction, piecePosition.col + 1));
+                possibleMoves.Add(new PiecePosition(this.CurrentPosition.row + _direction, this.CurrentPosition.col + 1));
 
             copy.col -= 2;
 
             if (copy.col >= 0 && _board[copy].OccupyingPiece != null && _board[copy].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[copy].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[copy].OccupyingPiece).EnPassant)
-                possibleMoves.Add(new PiecePosition(piecePosition.row + _direction, piecePosition.col - 1));
+                possibleMoves.Add(new PiecePosition(this.CurrentPosition.row + _direction, this.CurrentPosition.col - 1));
 
             PossibleMoves = possibleMoves;
 
-            return base.CalculateMoves(piecePosition);
+            return base.CalculateMoves();
         }
     }
 }

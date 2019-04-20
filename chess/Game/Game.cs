@@ -6,7 +6,7 @@ using Chess.Pieces;
 namespace Chess
 {
     public class Game
-        {
+    {
         public Board Board { get; private set; }
 
         protected List<Player> _players = new List<Player>();
@@ -38,7 +38,7 @@ namespace Chess
             }
 
             // calculate initial moves.
-            Board.CalculatePieceMoves();
+            CalculatePieceMoves();
         }
 
         public void SetupDefault()
@@ -58,32 +58,32 @@ namespace Chess
             pieces.Add(new Knight(owner1, Board, new PiecePosition(0,6))); 
             pieces.Add(new Rook(owner1, Board, new PiecePosition(0,7))); 
 
-            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,0)));       
-            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,1)));
-            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,2)));
-            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,3)));
-            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,4)));       
-            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,5)));
-            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,6)));
-            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,7)));
+            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,0)));       
+            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,1)));
+            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,2)));
+            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,3)));
+            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,4)));       
+            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,5)));
+            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,6)));
+            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,7)));
 
-            // pieces.Add(new Rook(owner2, Board, new PiecePosition(7,0))); 
-            // pieces.Add(new Knight(owner2, Board, new PiecePosition(7,1))); 
-            // pieces.Add(new Bishop(owner2, Board, new PiecePosition(7,2))); 
-            // pieces.Add(new Queen(owner2, Board, new PiecePosition(7,3))); 
+            pieces.Add(new Rook(owner2, Board, new PiecePosition(7,0))); 
+            pieces.Add(new Knight(owner2, Board, new PiecePosition(7,1))); 
+            pieces.Add(new Bishop(owner2, Board, new PiecePosition(7,2))); 
+            pieces.Add(new Queen(owner2, Board, new PiecePosition(7,3))); 
             pieces.Add(new King(owner2, Board, new PiecePosition(7,4))); 
             pieces.Add(new Bishop(owner2, Board, new PiecePosition(7,5))); 
-            // pieces.Add(new Knight(owner2, Board, new PiecePosition(7,6))); 
-            // pieces.Add(new Rook(owner2, Board, new PiecePosition(7,7))); 
+            pieces.Add(new Knight(owner2, Board, new PiecePosition(7,6))); 
+            pieces.Add(new Rook(owner2, Board, new PiecePosition(7,7))); 
 
-            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,0)));       
-            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,1)));  
-            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,2)));  
-            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,3)));  
-            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,4)));  
-            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,5)));  
-            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,6)));  
-            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,7)));  
+            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,0)));       
+            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,1)));  
+            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,2)));  
+            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,3)));  
+            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,4)));  
+            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,5)));  
+            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,6)));  
+            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,7)));  
             
             this.Setup(pieces);
         }
@@ -108,10 +108,6 @@ namespace Chess
 
             if (moveSuccessful)
             {
-                ClearMeta();
-                ClearPossibleMoves();
-
-                Board.CalculatePieceMoves();
 
                 HandleCheckStuff();
 
@@ -169,7 +165,7 @@ namespace Chess
                     break;
                 }
 
-                // if does not match predicate, do not clear moves.
+                // if does not match all predicates, do not clear moves.
                 if (illegal) continue;
 
                 piece.PossibleMoves.Clear();
@@ -186,6 +182,23 @@ namespace Chess
                 }
 
                 tile.ThreateningPieces.Clear();
+            }
+        }
+
+        private void CalculatePieceMoves()
+        {
+            ClearMeta();
+
+            ClearPossibleMoves();
+
+            foreach(BoardTile tile in Board)
+            {
+                tile.OccupyingPiece?.CalculateMoves();
+            }
+
+            foreach(BoardTile tile in Board)
+            {
+                tile.OccupyingPiece?.EliminateIllegalMoves();
             }
         }
 
