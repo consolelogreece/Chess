@@ -180,5 +180,12 @@ namespace Chess.Helpers
             }
             return false;
         }
+
+        public static void MoveNormal(Piece taker, BoardTile to)
+        {
+            taker._board[taker.CurrentPosition].OccupyingPiece = null;
+            taker._board[to.Position].OccupyingPiece = taker;
+            taker.CurrentPosition = to.Position;
+        }
     }
 }

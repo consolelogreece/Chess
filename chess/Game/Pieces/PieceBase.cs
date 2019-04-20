@@ -14,7 +14,7 @@ namespace Chess.Pieces
 
         public readonly string PieceName;
 
-        public List<PiecePosition> PossibleMoves { get; protected set; } = new List<PiecePosition>();
+        public List<Move> PossibleMoves { get; protected set; } = new List<Move>();
 
         public readonly Board _board;
 
@@ -38,7 +38,7 @@ namespace Chess.Pieces
         {
             foreach(var m in PossibleMoves)
             {
-                _board[new PiecePosition(m.row, m.col)].ThreateningPieces.Add(this);
+                _board[m.To.Position].ThreateningPieces.Add(this);
             }
 
             return true;
@@ -59,7 +59,7 @@ namespace Chess.Pieces
                 // only if tile[2] is the king is there a pin, so don't do anything if it isnt.
                 if (occupiedTiles.Count >= 3 && occupiedTiles[2].OccupyingPiece.PieceName == "King" && occupiedTiles[2].OccupyingPiece.PieceOwner.Id == this.PieceOwner.Id)
                 {
-                    this.PossibleMoves.RemoveAll(m => !tiles.Any(t => t.Position == m));
+                    this.PossibleMoves.RemoveAll(m => !tiles.Any(t => t.Position == ((Move)m).To.Position));
                 }
             }
         }
@@ -69,13 +69,16 @@ namespace Chess.Pieces
         {
             return new List<BoardTile>();
         }
-        public virtual bool Move(PiecePosition move)
+        public virtual bool Move(PiecePosition movePos)
         {
-            if (PossibleMoves.Contains(move))
+            var move = PossibleMoves.FirstOrDefault(m => m.To.Position == movePos);
+
+            if (move != null)
             {
-                _board[move].OccupyingPiece = this;
-                _board[CurrentPosition].OccupyingPiece = null;
-                CurrentPosition = move;
+                move.MakeMove();
+                // _board[move.To.Position].OccupyingPiece = this;
+                // _board[CurrentPosition].OccupyingPiece = null;
+                // CurrentPosition = move;
                 return true;
             }
 

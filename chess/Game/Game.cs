@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chess.Helpers;
 using Chess.Pieces;
 
+// TODO: impement castling. will probably have to rethink moves. have a move class maybe instead of just using piece positions and null.
 namespace Chess
 {
     public class Game
@@ -108,6 +110,7 @@ namespace Chess
 
             if (moveSuccessful)
             {
+                CalculatePieceMoves();
 
                 HandleCheckStuff();
 
@@ -142,7 +145,7 @@ namespace Chess
                 {
                     if (piece == checkedPiece) continue;
                     
-                    piece.PossibleMoves.Add(tile.Position);
+                    piece.PossibleMoves.Add(new Move(tile, piece));
                 }
             }
         }
@@ -193,6 +196,10 @@ namespace Chess
 
             foreach(BoardTile tile in Board)
             {
+                if (tile.Position == new PiecePosition(3,0))
+                {
+                    
+                }
                 tile.OccupyingPiece?.CalculateMoves();
             }
 
