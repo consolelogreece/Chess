@@ -51,7 +51,7 @@ namespace Chess
 
             var owner2 = _players[1];
 
-            pieces.Add(new Rook(owner1, Board, new PiecePosition(0,0))); 
+            pieces.Add(new Rook(owner1, Board, new PiecePosition(0,0)));
             pieces.Add(new Knight(owner1, Board, new PiecePosition(0,1))); 
             pieces.Add(new Bishop(owner1, Board, new PiecePosition(0,2))); 
             pieces.Add(new King(owner1, Board, new PiecePosition(0,3)));
@@ -115,6 +115,8 @@ namespace Chess
                 HandleCheckStuff();
 
                 this.NextMovePlayer = _players[(_players.IndexOf(NextMovePlayer) + 1) % _players.Count];
+
+                HandleStalemateStuff();
             }
             
             return moveSuccessful;
@@ -147,6 +149,31 @@ namespace Chess
                     
                     piece.PossibleMoves.Add(new Move(tile, piece));
                 }
+            }
+        }
+
+        public void HandleStalemateStuff()
+        {
+            var hasMoveAvailable = false;
+
+            foreach(BoardTile tile in Board)
+            {
+                if (tile.OccupyingPiece != null && tile.OccupyingPiece.PieceOwner == this.NextMovePlayer)
+                {
+                    if (tile.OccupyingPiece.GetMoves().Count > 0) 
+                    {
+                        hasMoveAvailable = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!hasMoveAvailable)
+            {
+
+                Console.WriteLine("Game over, it's a stalemate!\nPress any key to exit...");
+                Console.Read();
+                Environment.Exit(0);
             }
         }
 
