@@ -7,6 +7,8 @@ namespace Chess.Pieces
 {
     public class Rook : Piece
     {
+        public bool HasMoved { get; private set; } = false;
+        
         public Rook(Player pieceOwner, Board board, PiecePosition startingPosition)
             : base(pieceOwner, board, startingPosition, "Rook")
         {
@@ -126,6 +128,15 @@ namespace Chess.Pieces
             }
 
             return tiles;
+        }
+
+        public override bool Move(PiecePosition movePos)
+        {
+            var wasSuccessful = base.Move(movePos);
+
+            if (wasSuccessful) this.HasMoved = true;
+
+            return wasSuccessful;
         }
     } 
 }

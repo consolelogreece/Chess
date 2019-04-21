@@ -2,6 +2,7 @@ namespace Chess
 {
     public struct Player
     {
+        // todo: store list of pieces by type so we don't have to loop board to find specific pieces. use hash map.
         public readonly string Id;
 
         public readonly string Side;

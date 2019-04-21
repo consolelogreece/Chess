@@ -29,13 +29,14 @@ namespace Chess.Pieces
             CurrentPosition = startingPosition;
         }
 
-        public void ClearMoves()
+        public virtual void ClearMoves()
         {
             this.PossibleMoves.Clear();
         }
 
         public virtual bool CalculateMoves()
         {
+            // todo: move this out of calculating moves as this is not technically a part of the calculation bit.
             foreach(var m in PossibleMoves)
             {
                 _board[m.To.Position].ThreateningPieces.Add(this);
@@ -71,18 +72,20 @@ namespace Chess.Pieces
         }
         public virtual bool Move(PiecePosition movePos)
         {
-            var move = PossibleMoves.FirstOrDefault(m => m.To.Position == movePos);
+            var move = this.GetMoves().FirstOrDefault(m => m.To.Position == movePos);
 
             if (move != null)
             {
                 move.MakeMove();
-                // _board[move.To.Position].OccupyingPiece = this;
-                // _board[CurrentPosition].OccupyingPiece = null;
-                // CurrentPosition = move;
                 return true;
             }
 
             return false;
+        }
+
+        public virtual List<Move> GetMoves()
+        {
+            return this.PossibleMoves;
         }
     }
 }

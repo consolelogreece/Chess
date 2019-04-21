@@ -54,8 +54,8 @@ namespace Chess
             pieces.Add(new Rook(owner1, Board, new PiecePosition(0,0))); 
             pieces.Add(new Knight(owner1, Board, new PiecePosition(0,1))); 
             pieces.Add(new Bishop(owner1, Board, new PiecePosition(0,2))); 
-            pieces.Add(new Queen(owner1, Board, new PiecePosition(0,3))); 
-            pieces.Add(new King(owner1, Board, new PiecePosition(0,4))); 
+            pieces.Add(new King(owner1, Board, new PiecePosition(0,3)));
+            pieces.Add(new Queen(owner1, Board, new PiecePosition(0,4)));  
             pieces.Add(new Bishop(owner1, Board, new PiecePosition(0,5))); 
             pieces.Add(new Knight(owner1, Board, new PiecePosition(0,6))); 
             pieces.Add(new Rook(owner1, Board, new PiecePosition(0,7))); 
@@ -69,7 +69,7 @@ namespace Chess
             pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,6)));
             pieces.Add(new Pawn(owner1, Board, new PiecePosition(1,7)));
 
-            pieces.Add(new Rook(owner2, Board, new PiecePosition(7,0))); 
+            pieces.Add(new Rook(owner2, Board, new PiecePosition(7, 0))); 
             pieces.Add(new Knight(owner2, Board, new PiecePosition(7,1))); 
             pieces.Add(new Bishop(owner2, Board, new PiecePosition(7,2))); 
             pieces.Add(new Queen(owner2, Board, new PiecePosition(7,3))); 
@@ -171,7 +171,7 @@ namespace Chess
                 // if does not match all predicates, do not clear moves.
                 if (illegal) continue;
 
-                piece.PossibleMoves.Clear();
+                piece.ClearMoves();
             }
         }
 
