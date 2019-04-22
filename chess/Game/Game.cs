@@ -6,7 +6,7 @@ using Chess.Helpers;
 using Chess.Moves;
 using Chess.Pieces;
 
-// TODO: impement castling. will probably have to rethink moves. have a move class maybe instead of just using piece positions and null.
+// TODO: add undo method to each move. this will help us implement minimax and will be a nice feature to boot.
 namespace Chess
 {
     public class Game
@@ -135,9 +135,6 @@ namespace Chess
             return moveSuccessful;
         }
 
-        // TODO: may have to change piece taking.
-        // for this, make a base move class, which just has a virtual makemove method.
-        // this will 
         public bool AIMove()
         {
             IMove move = null;

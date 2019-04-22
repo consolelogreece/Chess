@@ -5,8 +5,6 @@ using Chess.Pieces;
 using Chess;
 using System.Threading;
 
-// TODO, ON MOVE UPDATE BOARD TILES AND STUFF/SET APPROPRAITE NULLS.
-// TODO: find better way of taking a piece, just setting posiiton of piece to null isnt good enough
 namespace chess
 {
     class Program

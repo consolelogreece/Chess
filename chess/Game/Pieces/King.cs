@@ -57,7 +57,6 @@ namespace Chess.Pieces
             #region surrounding 8 blocks
             var pos = new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col);
 
-            // todo : someting wrong here i think. king no option to move to non check but can move into chek.
             if (pos.row < _board.RowColLen && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new Move(_board[pos], this));
             

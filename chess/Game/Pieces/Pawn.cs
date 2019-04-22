@@ -162,7 +162,6 @@ namespace Chess.Pieces
             pos = this.CurrentPosition;
             pos.col++;
             
-            // TODO: Register threats for en passant.
             if (pos.col < _board.RowColLen && _board[pos].OccupyingPiece != null && _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[pos].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[pos].OccupyingPiece).EnPassant)
             {
                 var tile = _board[new PiecePosition(pos.row + _direction, pos.col)];
