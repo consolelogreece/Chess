@@ -122,7 +122,7 @@ namespace Chess
 
             if (this.NextMovePlayer == this._players[1])
             {
-                //AIMove();
+                AIMove();
             }
             
             return moveSuccessful;
@@ -133,20 +133,26 @@ namespace Chess
         // this will 
         private bool AIMove()
         {
-            var pieces = new List<Piece>();
+            IMove move = null;
+
+            Piece movingPiece = null;
 
             foreach(BoardTile tile in Board)
             {
-                if (tile.OccupyingPiece?.PieceOwner == this.NextMovePlayer && tile.OccupyingPiece.GetMoves().Count != 0) pieces.Add(tile.OccupyingPiece);
+                if (tile.OccupyingPiece?.PieceOwner == this.NextMovePlayer && tile.OccupyingPiece.GetMoves().Count != 0) 
+                {
+                    foreach(var m in tile.OccupyingPiece.GetMoves())
+                    {
+                        if (move == null || m.MoveVal() > move.MoveVal())
+                        {
+                            move = m;
+                            movingPiece = tile.OccupyingPiece;
+                        }
+                    }
+                }
             }
 
-            var randomPiece = pieces[rnd.Next(pieces.Count)];
-
-            var moves = randomPiece.GetMoves();
-
-            var randomMove = moves[rnd.Next(moves.Count)];
-
-            return this.Move(randomPiece.CurrentPosition, randomMove.GetMovePos().Position);
+            return this.Move(movingPiece.CurrentPosition, move.GetMovePos().Position);
         }
 
         static Random rnd = new Random();

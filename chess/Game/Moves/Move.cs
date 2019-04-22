@@ -19,15 +19,16 @@ namespace Chess.Moves
             return To;
         }
 
-        public int MakeMove()
+        public void MakeMove()
         {
-            var val = To.OccupyingPiece?.PieceValue ?? 0;
-
             OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
             OwningPiece._board[To.Position].OccupyingPiece = OwningPiece;
             OwningPiece.CurrentPosition = To.Position;
+        }
 
-            return val;
+        public int MoveVal()
+        {
+            return To.OccupyingPiece?.PieceValue ?? 0;
         }
     }
 }

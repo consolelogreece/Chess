@@ -20,7 +20,7 @@ namespace Chess.Moves
             return To;
         }
 
-        public int MakeMove()
+        public void MakeMove()
         {
             var _castlingRookPosOffset = OwningPiece.CurrentPosition.col < _castlingRook.CurrentPosition.col ? -1 : 1;
 
@@ -32,7 +32,10 @@ namespace Chess.Moves
             var newRookPos = new PiecePosition(_castlingRook.CurrentPosition.row, To.Position.col + _castlingRookPosOffset);
             OwningPiece._board[newRookPos].OccupyingPiece = _castlingRook;
             _castlingRook.CurrentPosition = newRookPos;
+        }
 
+        public int MoveVal()
+        {
             return 0;
         }
     }

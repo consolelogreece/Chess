@@ -27,7 +27,7 @@ namespace Chess.Moves
             return To;
         }
 
-        public int MakeMove()
+        public void MakeMove()
         {
             OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
             OwningPiece._board[To.Position].OccupyingPiece = OwningPiece;
@@ -36,10 +36,12 @@ namespace Chess.Moves
             var enPassantPieceTaken = OwningPiece._board[new PiecePosition(OwningPiece.CurrentPosition.row + direction, OwningPiece.CurrentPosition.col)].OccupyingPiece;
 
             OwningPiece._board[enPassantPieceTaken.CurrentPosition].OccupyingPiece = null;
+        }
 
-            var val = enPassantPieceTaken.PieceValue;
-
-            return val;
+        public int MoveVal()
+        {
+            // can only en passant other pawns, so just get the value of the taker, which is a pawn.
+            return OwningPiece.PieceValue;
         }
     }
 }
