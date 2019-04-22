@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Chess.Helpers;
+using Chess.Moves;
 using Chess.Pieces;
 
 // TODO: impement castling. will probably have to rethink moves. have a move class maybe instead of just using piece positions and null.
@@ -118,9 +119,37 @@ namespace Chess
 
                 HandleStalemateStuff();
             }
+
+            if (this.NextMovePlayer == this._players[1])
+            {
+                //AIMove();
+            }
             
             return moveSuccessful;
         }
+
+        // TODO: may have to change piece taking.
+        // for this, make a base move class, which just has a virtual makemove method.
+        // this will 
+        private bool AIMove()
+        {
+            var pieces = new List<Piece>();
+
+            foreach(BoardTile tile in Board)
+            {
+                if (tile.OccupyingPiece?.PieceOwner == this.NextMovePlayer && tile.OccupyingPiece.GetMoves().Count != 0) pieces.Add(tile.OccupyingPiece);
+            }
+
+            var randomPiece = pieces[rnd.Next(pieces.Count)];
+
+            var moves = randomPiece.GetMoves();
+
+            var randomMove = moves[rnd.Next(moves.Count)];
+
+            return this.Move(randomPiece.CurrentPosition, randomMove.GetMovePos().Position);
+        }
+
+        static Random rnd = new Random();
 
         private void HandleCheckStuff()
         {

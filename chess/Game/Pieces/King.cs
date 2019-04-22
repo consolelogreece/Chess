@@ -2,24 +2,25 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Chess.Helpers;
+using Chess.Moves;
 
 namespace Chess.Pieces
 {
     public class King : Piece
     {
-        private Dictionary<Move, List<BoardTile>> CastleMoves = new Dictionary<Move, List<BoardTile>>();
+        private Dictionary<IMove, List<BoardTile>> CastleMoves = new Dictionary<IMove, List<BoardTile>>();
 
         private bool HasMoved = false;
         public King(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "King")
+            : base(pieceOwner, board, startingPosition, "King", int.MaxValue)
         {
         }
 
         public override bool CalculateMoves()
         {
-            var possibleMoves = new List<Move>();
+            var possibleMoves = new List<IMove>();
 
-            var castleMoves = new Dictionary<Move, List<BoardTile>>();
+            var castleMoves = new Dictionary<IMove, List<BoardTile>>();
 
             #region surrounding 8 blocks
             var pos = new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col);
@@ -101,21 +102,7 @@ namespace Chess.Pieces
                         i--;
                     }
 
-                    var move = new Move(to, this);
-
-                    move.SetConsequence(new Action(() => 
-                    {
-                         var rookPosOffset = this.CurrentPosition.col < rook.CurrentPosition.col ? -1 : 1;
-
-                        _board[this.CurrentPosition].OccupyingPiece = null;
-                        _board[to.Position].OccupyingPiece = this;
-                        this.CurrentPosition = to.Position;
-     
-                        _board[rook.CurrentPosition].OccupyingPiece = null;
-                        var newRookPos = new PiecePosition(rook.CurrentPosition.row, to.Position.col + rookPosOffset);
-                        _board[newRookPos].OccupyingPiece = rook;
-                        rook.CurrentPosition = newRookPos;
-                    }));
+                    var move = new Castle(to, this, rook);
 
                     castleMoves.Add(move, trimmedPath);
                 }
@@ -129,16 +116,16 @@ namespace Chess.Pieces
 
         public override void EliminateIllegalMoves()
         {
-            PossibleMoves.RemoveAll(m => _board[m.To.Position].ThreateningPieces.Any(p => p.PieceOwner.Id != this.PieceOwner.Id));
+            PossibleMoves.RemoveAll(m => _board[m.GetMovePos().Position].ThreateningPieces.Any(p => p.PieceOwner.Id != this.PieceOwner.Id));
 
             foreach(var threateningPiece in _board[this.CurrentPosition].ThreateningPieces)
             {
                 var tiles = threateningPiece.XRay(this);
 
-                this.PossibleMoves.RemoveAll(m => tiles.Any(t => t.Position == m.To.Position));
+                this.PossibleMoves.RemoveAll(m => tiles.Any(t => t.Position == m.GetMovePos().Position));
             }
 
-            var castleMovesToRemove = new List<Move>();
+            var castleMovesToRemove = new List<IMove>();
 
             foreach(var move in CastleMoves)
             {
@@ -169,11 +156,11 @@ namespace Chess.Pieces
             var tileOfChecker = _board[posOfChecker];
 
             // see if the checker can be taken by any of the threatening pieces
-            if (tileOfChecker.ThreateningPieces.Any(m => m.PossibleMoves.Any(pm => pm.To.Position == posOfChecker))) return false;
+            if (tileOfChecker.ThreateningPieces.Any(m => m.PossibleMoves.Any(pm => pm.GetMovePos().Position == posOfChecker))) return false;
 
             var checkPath = tileOfChecker.OccupyingPiece.XRay(this);
 
-            if (checkPath.Any(m => m.ThreateningPieces.Any(p => p.PieceOwner.Id == this.PieceOwner.Id && p.PossibleMoves.Any(x => x.To.Position == (m.Position)))))
+            if (checkPath.Any(m => m.ThreateningPieces.Any(p => p.PieceOwner.Id == this.PieceOwner.Id && p.PossibleMoves.Any(x => x.GetMovePos().Position == (m.Position)))))
             {
                 return false;
             }
@@ -206,7 +193,7 @@ namespace Chess.Pieces
             return path;
         }
 
-        public override List<Move> GetMoves()
+        public override List<IMove> GetMoves()
         {
             var moves = PossibleMoves.Concat(CastleMoves.Select(m => m.Key)).ToList();
 

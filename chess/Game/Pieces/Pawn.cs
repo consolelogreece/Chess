@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Chess.Helpers;
+using Chess.Moves;
 
 namespace Chess.Pieces
 {
@@ -14,7 +15,7 @@ namespace Chess.Pieces
         private int _direction;
 
         public Pawn(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "Pawn")
+            : base(pieceOwner, board, startingPosition, "Pawn", 10)
         {
             _direction = pieceOwner.Side == "bottom" ? -1 : 1;
         }
@@ -26,7 +27,7 @@ namespace Chess.Pieces
             if (Math.Abs(movePos.row - CurrentPosition.row) != 1) EnPassant = true;
             else EnPassant = false;
 
-            var move = PossibleMoves.FirstOrDefault(m => m.To.Position == movePos);
+            var move = PossibleMoves.FirstOrDefault(m => m.GetMovePos().Position == movePos);
 
             if (move != null)
             {
@@ -93,7 +94,7 @@ namespace Chess.Pieces
 
         public override bool CalculateMoves()
         {
-            var possibleMoves = new List<Move>();
+            var possibleMoves = new List<IMove>();
 
             var pos = this.CurrentPosition;
 
@@ -141,9 +142,8 @@ namespace Chess.Pieces
             // TODO: Register threats for en passant.
             if (pos.col < _board.RowColLen && _board[pos].OccupyingPiece != null && _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[pos].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[pos].OccupyingPiece).EnPassant)
             {
-                var tile = _board[new PiecePosition(this.CurrentPosition.row + _direction, this.CurrentPosition.col + 1)];
-                var move = new Move(tile, this);
-                move.SetConsequence(() => TakeEnPassant(move.OwningPiece, move.To));
+                var tile = _board[new PiecePosition(pos.row + _direction, pos.col)];
+                var move = new EnPassant(_board[tile.Position], this);               
                 possibleMoves.Add(move);
             }
                 
@@ -151,30 +151,14 @@ namespace Chess.Pieces
 
             if (pos.col >= 0 && _board[pos].OccupyingPiece != null && _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[pos].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[pos].OccupyingPiece).EnPassant)
             {
-                var tile = _board[new PiecePosition(this.CurrentPosition.row + _direction, this.CurrentPosition.col - 1)];
-                var move = new Move(tile, this);
-                move.SetConsequence(() => TakeEnPassant(move.OwningPiece, move.To));
+                var tile = _board[new PiecePosition(pos.row + _direction, pos.col)];
+                var move = new EnPassant(tile, this); 
                 possibleMoves.Add(move);
             }    
 
             PossibleMoves = possibleMoves;
 
             return base.CalculateMoves();
-        }
-
-        internal void TakeEnPassant(Piece taker, BoardTile to)
-        {
-            var move = to.Position;
-
-            // only time when this would be true is when taking another pawn en passant.
-            if (move.col != this.CurrentPosition.col && _board[move].OccupyingPiece == null)
-            {
-                _board[new PiecePosition(move.row + (-1 * _direction), move.col)].OccupyingPiece = null;
-            }
-
-            _board[move].OccupyingPiece = this;
-            _board[CurrentPosition].OccupyingPiece = null;
-            CurrentPosition = move;
         }
     }
 }

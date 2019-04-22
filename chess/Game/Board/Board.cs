@@ -62,7 +62,7 @@ namespace Chess
                     roundFlag = !roundFlag;
 
 
-                    if (selectedPiece != null && selectedPiece.GetMoves().Any(m => m.To.Position == pos))
+                    if (selectedPiece != null && selectedPiece.GetMoves().Any(m => m.GetMovePos().Position == pos))
                     {
                         Console.BackgroundColor = ConsoleColor.Magenta;
                     }

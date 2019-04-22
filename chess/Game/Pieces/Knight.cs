@@ -2,19 +2,20 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Chess.Helpers;
+using Chess.Moves;
 
 namespace Chess.Pieces
 {
     public class Knight : Piece
     {
         public Knight(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "knight")
+            : base(pieceOwner, board, startingPosition, "knight", 30)
         {
         }
 
         public override bool CalculateMoves()
         {
-            var possibleMoves = new List<Move>();
+            var possibleMoves = new List<IMove>();
 
             var pos = this.CurrentPosition;
 

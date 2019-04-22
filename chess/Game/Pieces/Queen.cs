@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Chess.Helpers;
+using Chess.Moves;
 
 namespace Chess.Pieces
 {
@@ -9,13 +10,13 @@ namespace Chess.Pieces
     {
 
         public Queen(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "Queen")
+            : base(pieceOwner, board, startingPosition, "Queen", 90)
         {
         }
 
         public override bool CalculateMoves()
         {
-            var possibleMoves = new List<Move>();
+            var possibleMoves = new List<IMove>();
 
             var pos = this.CurrentPosition;
 

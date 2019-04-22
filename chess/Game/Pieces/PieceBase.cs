@@ -1,28 +1,30 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Chess.Moves;
 
 namespace Chess.Pieces
 {
     public abstract class Piece
     {
-        public Player PieceOwner { get; private set; }
+        public readonly string PieceName;
 
-        public List<Piece> PinningPieces = new List<Piece>();
+        public readonly int PieceValue;
+        public Player PieceOwner { get; private set; }
 
         public PiecePosition CurrentPosition;
 
-        public readonly string PieceName;
-
-        public List<Move> PossibleMoves { get; protected set; } = new List<Move>();
+        public List<IMove> PossibleMoves { get; protected set; } = new List<IMove>();
 
         public readonly Board _board;
 
-        public Piece(Player pieceOwner, Board board, PiecePosition startingPosition, string pieceName = "Piece")
+        public Piece(Player pieceOwner, Board board, PiecePosition startingPosition, string pieceName = "Piece", int pieceValue = 10)
         {
             PieceOwner = pieceOwner;
 
             _board = board;
+
+            PieceValue = pieceValue;
 
             PieceName = pieceName;
 
@@ -39,7 +41,7 @@ namespace Chess.Pieces
             // todo: move this out of calculating moves as this is not technically a part of the calculation bit.
             foreach(var m in PossibleMoves)
             {
-                _board[m.To.Position].ThreateningPieces.Add(this);
+                _board[m.GetMovePos().Position].ThreateningPieces.Add(this);
             }
 
             return true;
@@ -72,7 +74,7 @@ namespace Chess.Pieces
         }
         public virtual bool Move(PiecePosition movePos)
         {
-            var move = this.GetMoves().FirstOrDefault(m => m.To.Position == movePos);
+            var move = this.GetMoves().FirstOrDefault(m => m.GetMovePos().Position == movePos);
 
             if (move != null)
             {
@@ -83,7 +85,7 @@ namespace Chess.Pieces
             return false;
         }
 
-        public virtual List<Move> GetMoves()
+        public virtual List<IMove> GetMoves()
         {
             return this.PossibleMoves;
         }

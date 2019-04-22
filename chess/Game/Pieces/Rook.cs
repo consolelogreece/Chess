@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Chess.Helpers;
+using Chess.Moves;
 
 namespace Chess.Pieces
 {
@@ -10,13 +11,13 @@ namespace Chess.Pieces
         public bool HasMoved { get; private set; } = false;
         
         public Rook(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "Rook")
+            : base(pieceOwner, board, startingPosition, "Rook", 50)
         {
         }
 
         public override bool CalculateMoves()
         {
-            var possibleMoves = new List<Move>();
+            var possibleMoves = new List<IMove>();
 
             var pos = this.CurrentPosition;
 
