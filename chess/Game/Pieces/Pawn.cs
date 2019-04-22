@@ -20,6 +20,38 @@ namespace Chess.Pieces
             _direction = pieceOwner.Side == "bottom" ? -1 : 1;
         }
 
+        protected override void GenBoardValueTable()
+        {
+            var boardValueTable = new float[8,8]
+            {
+                {0,0,0,0,0,0,0,0},
+                {5,5,5,5,5,5,5,5},
+                {1,1,2,3,3,2,1,1},
+                {0.5f,0.5f,1,2.5f,2.5f,1,0.5f,0.5f},
+                {0,0,0,2,2,0,0,0},
+                {0.5f,-0.5f,-1,0,0,-1,-0.5f,0.5f},
+                {0.5f,1,1,-2,-2,1,1,0.5f},
+                {0,0,0,0,0,0,0,0}
+            };
+
+            if (this.PieceOwner.Side == "top")
+            {
+                var actual = new float[8,8];
+
+                for(int i = 7; i >= 0; i--)
+                {
+                    for(int j = 7; j >= 0; j--)
+                    {
+                        actual[7 - i, 7 -j] = boardValueTable[i,j];
+                    }
+                }
+
+                boardValueTable = actual;
+            }
+
+            this.BoardValueTable = boardValueTable;
+        }
+
         public override bool Move(PiecePosition movePos)
         {
             _hasMoved = true;
@@ -31,15 +63,6 @@ namespace Chess.Pieces
 
             if (move != null)
             {
-                // // only time when this would be true is when taking another pawn en passant.
-                // if (move.col != this.CurrentPosition.col && _board[move].OccupyingPiece == null)
-                // {
-                //     _board[new PiecePosition(move.row + (-1 * _direction), move.col)].OccupyingPiece = null;
-                // }
-                // _board[move].OccupyingPiece = this;
-                // _board[CurrentPosition].OccupyingPiece = null;
-                // CurrentPosition = move;
-
                 move.MakeMove();
 
                 Promote();
@@ -102,7 +125,7 @@ namespace Chess.Pieces
 
             if (_board[pos].OccupyingPiece == null)
             {
-                possibleMoves.Add(new Move(_board[pos], this));
+                possibleMoves.Add(new NoneTaking(_board[pos], this));
 
                 if (!_hasMoved)
                 {
@@ -110,7 +133,7 @@ namespace Chess.Pieces
 
                     if (_board[pos].OccupyingPiece == null)
                     {
-                        possibleMoves.Add(new Move(_board[pos], this));
+                        possibleMoves.Add(new NoneTaking(_board[pos], this));
                     }
                 }
             }

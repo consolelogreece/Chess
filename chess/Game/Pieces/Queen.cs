@@ -14,6 +14,38 @@ namespace Chess.Pieces
         {
         }
 
+        protected override void GenBoardValueTable()
+        {
+            var boardValueTable = new float[8,8]
+            {
+                {-2,-1,-1,-0.5f,-0.5f,-1,-1,-2},
+                {-1,0,0,0,0,0,0,-1},
+                {-1,0,0.5f,0.5f,0.5f,0.5f,0,-1},
+                {-0.5f,0,0.5f,0.5f,0.5f,0.5f,0,-0.5f},
+                {0,0,0.5f,0.5f,0.5f,0.5f,0,-0.5f},
+                {-1,0.5f,0.5f,0.5f,0.5f,0.5f,0,-1},
+                {-1,0,0.5f,0,0,0,0,-1},
+                {-2,-1,-1,-0.5f,-0.5f,-1,-1,-2},
+            };
+
+            if (this.PieceOwner.Side == "top")
+            {
+                var actual = new float[8,8];
+
+                for(int i = 7; i >= 0; i--)
+                {
+                    for(int j = 7; j >= 0; j--)
+                    {
+                        actual[7 - i, 7 -j] = boardValueTable[i,j];
+                    }
+                }
+
+                boardValueTable = actual;
+            }
+
+            this.BoardValueTable = boardValueTable;
+        }
+
         public override bool CalculateMoves()
         {
             var possibleMoves = new List<IMove>();

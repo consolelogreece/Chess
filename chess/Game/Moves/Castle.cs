@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Chess.Pieces;
 
 namespace Chess.Moves
@@ -13,6 +14,15 @@ namespace Chess.Moves
             To = to;
             OwningPiece = pieceOwner;
             _castlingRook = castlingRook;
+        }
+
+        public List<string> GetMoveMeta()
+        {
+            return new List<string>()
+            {
+                "NonTaking",
+                "Castle"
+            };
         }
 
         public BoardTile GetMovePos()
@@ -34,9 +44,23 @@ namespace Chess.Moves
             _castlingRook.CurrentPosition = newRookPos;
         }
 
-        public int MoveVal()
+        public float MoveVal()
         {
-            return 0;
+            var _castlingRookPosOffset = OwningPiece.CurrentPosition.col < _castlingRook.CurrentPosition.col ? -1 : 1;
+
+            var newRookPos = new PiecePosition(_castlingRook.CurrentPosition.row, To.Position.col + _castlingRookPosOffset);
+
+            float val = 0;
+            
+            val -= OwningPiece.BoardValueTable[OwningPiece.CurrentPosition.row, OwningPiece.CurrentPosition.col];
+
+            val += OwningPiece.BoardValueTable[To.Position.row, To.Position.col];
+
+            val -= _castlingRook.BoardValueTable[_castlingRook.CurrentPosition.row, _castlingRook.CurrentPosition.col];
+
+            val += _castlingRook.BoardValueTable[newRookPos.row, newRookPos.col];
+
+            return val;
         }
     }
 }

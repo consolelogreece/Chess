@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Chess.Pieces;
 
 namespace Chess.Moves
@@ -22,6 +23,15 @@ namespace Chess.Moves
             OwningPiece = owningPiece;
         }
 
+        public List<string> GetMoveMeta()
+        {
+           return new List<string>()
+            {
+                "Indirect",
+                "Taking"
+            };
+        }
+
         public BoardTile GetMovePos()
         {
             return To;
@@ -38,10 +48,16 @@ namespace Chess.Moves
             OwningPiece._board[enPassantPieceTaken.CurrentPosition].OccupyingPiece = null;
         }
 
-        public int MoveVal()
+        public float MoveVal()
         {
             // can only en passant other pawns, so just get the value of the taker, which is a pawn.
-            return OwningPiece.PieceValue;
+            float val = OwningPiece.PieceValue;
+
+            val -= OwningPiece.BoardValueTable[OwningPiece.CurrentPosition.row, OwningPiece.CurrentPosition.col];
+
+            val += OwningPiece.BoardValueTable[To.Position.row, To.Position.col];
+
+            return val;
         }
     }
 }

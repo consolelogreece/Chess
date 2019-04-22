@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Chess.Pieces;
 using Chess;
+using System.Threading;
 
 // TODO, ON MOVE UPDATE BOARD TILES AND STUFF/SET APPROPRAITE NULLS.
 // TODO: find better way of taking a piece, just setting posiiton of piece to null isnt good enough
@@ -23,32 +24,42 @@ namespace chess
             {
                 try
                 {
-                    game.Board.PrintBoard();
-                    Console.Write("Select piece to move(format: <row>,<col>): ");
+                    // var x = Console.ReadLine();
 
-                    var move = Console.ReadLine();
+                    // if (x == "x")
+                    // {
 
-                    if (move == "quit") return;
+                    // }
 
-                    var deets = move.Split(",");
+                    // TODOOOOOO: FIND OUT WHY STALEMATE CALLED WHEN NOT STALEMATE. KING STILL HAD MOVES.
+                    game.AIMove();
 
-                    // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
-                    PiecePosition selectedPosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
+                    Thread.Sleep(100);
+                    // Console.Write("Select piece to move(format: <row>,<col>): ");
 
-                    Piece selectedPiece = game.Board[selectedPosition].OccupyingPiece;
+                    // var move = Console.ReadLine();
 
-                    game.Board.PrintBoard(selectedPiece);
+                    // if (move == "quit") return;
 
-                    Console.Write("Select position to piece to (format: <row>,<col>): ");
+                    // var deets = move.Split(",");
 
-                    move = Console.ReadLine();
+                    // // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
+                    // PiecePosition selectedPosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
 
-                    deets = move.Split(",");
+                    // Piece selectedPiece = game.Board[selectedPosition].OccupyingPiece;
 
-                    // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
-                    PiecePosition movePosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
+                    // game.Board.PrintBoard(selectedPiece);
 
-                    game.Move(selectedPosition, movePosition);
+                    // Console.Write("Select position to piece to (format: <row>,<col>): ");
+
+                    // move = Console.ReadLine();
+
+                    // deets = move.Split(",");
+
+                    // // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
+                    // PiecePosition movePosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
+
+                    // game.Move(selectedPosition, movePosition);
                 }
                 catch(Exception ex)
                 {

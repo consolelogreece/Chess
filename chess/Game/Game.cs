@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Chess.Helpers;
 using Chess.Moves;
 using Chess.Pieces;
@@ -87,6 +88,10 @@ namespace Chess
             pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,5)));  
             pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,6)));  
             pieces.Add(new Pawn(owner2, Board, new PiecePosition(6,7)));  
+
+            // pieces.Add(new King(owner2, Board, new PiecePosition(7,6))); 
+            // pieces.Add(new King(owner1, Board, new PiecePosition(0,1))); 
+            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(4,7)));
             
             this.Setup(pieces);
         }
@@ -113,25 +118,27 @@ namespace Chess
             {
                 CalculatePieceMoves();
 
+                Board.PrintBoard();
+
                 HandleCheckStuff();
 
                 this.NextMovePlayer = _players[(_players.IndexOf(NextMovePlayer) + 1) % _players.Count];
 
                 HandleStalemateStuff();
             }
-
-            if (this.NextMovePlayer == this._players[1])
-            {
-                AIMove();
-            }
+            // //if (this.NextMovePlayer == this._players[1])
+            // //{
+            //     AIMove();
+            // //}
             
+
             return moveSuccessful;
         }
 
         // TODO: may have to change piece taking.
         // for this, make a base move class, which just has a virtual makemove method.
         // this will 
-        private bool AIMove()
+        public bool AIMove()
         {
             IMove move = null;
 
@@ -154,8 +161,6 @@ namespace Chess
 
             return this.Move(movingPiece.CurrentPosition, move.GetMovePos().Position);
         }
-
-        static Random rnd = new Random();
 
         private void HandleCheckStuff()
         {
@@ -258,7 +263,7 @@ namespace Chess
 
             foreach(BoardTile tile in Board)
             {
-                if (tile.Position == new PiecePosition(3,0))
+                if (tile.OccupyingPiece?.PieceName == "King")
                 {
                     
                 }

@@ -1,15 +1,14 @@
 using System.Collections.Generic;
-using Chess.Helpers;
 using Chess.Pieces;
 
 namespace Chess.Moves
 {
-    public class Move : IMove
+    public class NoneTaking : IMove
     {
         public readonly Piece OwningPiece;
         public readonly BoardTile To;
 
-        public Move(BoardTile to, Piece owningPiece)
+        public NoneTaking(BoardTile to, Piece owningPiece)
         {
             To = to;
             OwningPiece = owningPiece;
@@ -24,7 +23,7 @@ namespace Chess.Moves
         {
            return new List<string>()
             {
-                "Taking"
+                "NonTaking"
             };
         }
 

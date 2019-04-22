@@ -18,6 +18,8 @@ namespace Chess.Pieces
 
         public readonly Board _board;
 
+        public float[,] BoardValueTable {get; protected set;}
+
         public Piece(Player pieceOwner, Board board, PiecePosition startingPosition, string pieceName = "Piece", int pieceValue = 10)
         {
             PieceOwner = pieceOwner;
@@ -29,6 +31,27 @@ namespace Chess.Pieces
             PieceName = pieceName;
 
             CurrentPosition = startingPosition;
+
+            GenBoardValueTable();
+        }
+
+        protected virtual void GenBoardValueTable()
+        {
+            if (this.BoardValueTable != null) return;
+
+            var boardValueTable = new float[8,8]
+            {
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0}
+            };
+
+            this.BoardValueTable = boardValueTable;
         }
 
         public virtual void ClearMoves()

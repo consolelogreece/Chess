@@ -11,6 +11,8 @@ namespace Chess
 
         public readonly PiecePosition Position;
 
+        public readonly int TileValue;
+
         public BoardTile(PiecePosition pos)
         {
             ThreateningPieces = new List<Piece>();

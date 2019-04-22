@@ -13,7 +13,39 @@ namespace Chess.Pieces
         private bool HasMoved = false;
         public King(Player pieceOwner, Board board, PiecePosition startingPosition)
             : base(pieceOwner, board, startingPosition, "King", int.MaxValue)
+        {   
+        }
+
+        protected override void GenBoardValueTable()
         {
+            var boardValueTable = new float[8,8]
+            {
+                {-3,-4,-4,-5,-5,-4,-4,-3},
+                {-3,-4,-4,-5,-5,-4,-4,-3},
+                {-3,-4,-4,-5,-5,-4,-4,-3},
+                {-3,-4,-4,-5,-5,-4,-4,-3},
+                {-2,-3,-3,-4,-4,-2,-2,-1},
+                {-1,-2,-2,-2,-2,-2,-2,-1},
+                {2,2,0,0,0,0,2,2},
+                {2,3,1,0,0,1,3,0}
+            };
+
+            if (this.PieceOwner.Side == "top")
+            {
+                var actual = new float[8,8];
+
+                for(int i = 7; i >= 0; i--)
+                {
+                    for(int j = 7; j >= 0; j--)
+                    {
+                        actual[7 - i, 7 -j] = boardValueTable[i,j];
+                    }
+                }
+
+                boardValueTable = actual;
+            }
+
+            this.BoardValueTable = boardValueTable;
         }
 
         public override bool CalculateMoves()
@@ -25,12 +57,13 @@ namespace Chess.Pieces
             #region surrounding 8 blocks
             var pos = new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col);
 
+            // todo : someting wrong here i think. king no option to move to non check but can move into chek.
             if (pos.row < _board.RowColLen && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new Move(_board[pos], this));
             
             pos = new PiecePosition(this.CurrentPosition.row, this.CurrentPosition.col + 1);
 
-            if (pos.col< _board.RowColLen && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+            if (pos.col < _board.RowColLen && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new Move(_board[pos], this));
 
             pos = new PiecePosition(this.CurrentPosition.row, this.CurrentPosition.col - 1);
@@ -45,22 +78,22 @@ namespace Chess.Pieces
 
             pos = new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col + 1);
 
-            if (pos.row < _board.RowColLen && pos.col + 1 < _board.RowColLen && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+            if (pos.row < _board.RowColLen && pos.col < _board.RowColLen && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new Move(_board[pos], this));
 
             pos = new PiecePosition(this.CurrentPosition.row + 1, this.CurrentPosition.col - 1);
 
-            if (pos.row < _board.RowColLen && pos.col - 1 >= 0 && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+            if (pos.row < _board.RowColLen && pos.col >= 0 && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new Move(_board[pos], this));
 
             pos = new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col + 1);
 
-            if (pos.row >= 0 && pos.col + 1 < _board.RowColLen && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+            if (pos.row >= 0 && pos.col < _board.RowColLen && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new Move(_board[pos], this));
 
             pos = new PiecePosition(this.CurrentPosition.row - 1, this.CurrentPosition.col - 1);
 
-            if (pos.row >= 0 && pos.col - 1 >= 0 && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
+            if (pos.row >= 0 && pos.col >= 0 && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new Move(_board[pos], this));
             #endregion 
 
@@ -116,7 +149,7 @@ namespace Chess.Pieces
 
         public override void EliminateIllegalMoves()
         {
-            PossibleMoves.RemoveAll(m => _board[m.GetMovePos().Position].ThreateningPieces.Any(p => p.PieceOwner.Id != this.PieceOwner.Id));
+            PossibleMoves.RemoveAll(m => _board[m.GetMovePos().Position].ThreateningPieces.Any(p => p.PieceOwner.Id != this.PieceOwner.Id && !p.GetMoves().Any(pm => pm.GetMovePos() == m.GetMovePos() && pm.GetMoveMeta().Contains("NonTaking"))));
 
             foreach(var threateningPiece in _board[this.CurrentPosition].ThreateningPieces)
             {
