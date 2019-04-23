@@ -55,6 +55,8 @@ namespace Chess.Moves
             OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
             OwningPiece.CurrentPosition = From.Position;
             OwningPiece._board[From.Position].OccupyingPiece = OwningPiece;
+
+            OwningPiece.TimesMoved--;
         }
     }
 }

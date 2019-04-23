@@ -8,8 +8,6 @@ namespace Chess.Pieces
 {
     public class Pawn : Piece
     {
-        private bool _hasMoved = false;
-
         public bool EnPassant = false;
 
         private int _direction;
@@ -54,8 +52,6 @@ namespace Chess.Pieces
 
         public override IMove Move(PiecePosition movePos)
         {
-            _hasMoved = true;
-
             if (Math.Abs(movePos.row - CurrentPosition.row) != 1) EnPassant = true;
             else EnPassant = false;
 
@@ -64,6 +60,8 @@ namespace Chess.Pieces
             if (move != null)
             {
                 move.MakeMove();
+
+                TimesMoved++;
 
                 Promote();
             }
@@ -126,7 +124,7 @@ namespace Chess.Pieces
             {
                 possibleMoves.Add(new NonTaking(_board[pos], this));
 
-                if (!_hasMoved)
+                if (TimesMoved == 0)
                 {
                     pos.row += _direction;
 

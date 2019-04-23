@@ -10,7 +10,6 @@ namespace Chess.Pieces
     {
         private Dictionary<IMove, List<BoardTile>> CastleMoves = new Dictionary<IMove, List<BoardTile>>();
 
-        private bool HasMoved = false;
         public King(Player pieceOwner, Board board, PiecePosition startingPosition)
             : base(pieceOwner, board, startingPosition, "♚", "King", int.MaxValue)
         {   
@@ -97,7 +96,7 @@ namespace Chess.Pieces
             #endregion 
 
             // hasn't yet moved, so check for castles
-            if (!this.HasMoved)
+            if (this.TimesMoved == 0)
             {    
                 var rooks = new List<Rook>();
 
@@ -107,7 +106,7 @@ namespace Chess.Pieces
 
                 foreach(var rook in rooks)
                 {
-                    if(rook.HasMoved) continue;
+                    if(rook.TimesMoved != 0) continue;
 
                     var isRookOnRight = this.CurrentPosition.col < rook.CurrentPosition.col;
 
@@ -236,15 +235,6 @@ namespace Chess.Pieces
         {
             PossibleMoves.Clear();
             CastleMoves.Clear();
-        }
-
-        public override IMove Move(PiecePosition movePos)
-        {
-            var move = base.Move(movePos);
-
-            if (move != null) this.HasMoved = true;
-
-            return move;
         }
     }
 }

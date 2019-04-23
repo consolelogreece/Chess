@@ -10,7 +10,7 @@ namespace Chess.Pieces
         public readonly string PieceName;
 
         public readonly string VisualID;
-
+        public int TimesMoved = 0;
         public readonly int PieceValue;
         public Player PieceOwner { get; private set; }
 
@@ -106,6 +106,7 @@ namespace Chess.Pieces
             if (move != null)
             {
                 move.MakeMove();
+                TimesMoved++;
             }
 
             return move;
