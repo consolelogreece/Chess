@@ -9,6 +9,8 @@ namespace Chess.Pieces
     {
         public readonly string PieceName;
 
+        public readonly string VisualID;
+
         public readonly int PieceValue;
         public Player PieceOwner { get; private set; }
 
@@ -20,7 +22,7 @@ namespace Chess.Pieces
 
         public float[,] BoardValueTable {get; protected set;}
 
-        public Piece(Player pieceOwner, Board board, PiecePosition startingPosition, string pieceName = "Piece", int pieceValue = 10)
+        public Piece(Player pieceOwner, Board board, PiecePosition startingPosition, string visualId = "X", string pieceName = "Piece", int pieceValue = 10)
         {
             PieceOwner = pieceOwner;
 
@@ -31,6 +33,8 @@ namespace Chess.Pieces
             PieceName = pieceName;
 
             CurrentPosition = startingPosition;
+
+            VisualID = visualId;
 
             GenBoardValueTable();
         }
@@ -95,17 +99,16 @@ namespace Chess.Pieces
         {
             return new List<BoardTile>();
         }
-        public virtual bool Move(PiecePosition movePos)
+        public virtual IMove Move(PiecePosition movePos)
         {
             var move = this.GetMoves().FirstOrDefault(m => m.GetMovePos().Position == movePos);
 
             if (move != null)
             {
                 move.MakeMove();
-                return true;
             }
 
-            return false;
+            return move;
         }
 
         public virtual List<IMove> GetMoves()

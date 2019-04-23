@@ -11,7 +11,7 @@ namespace Chess.Pieces
         public bool HasMoved { get; private set; } = false;
         
         public Rook(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "Rook", 50)
+            : base(pieceOwner, board, startingPosition, "♜", "Rook", 50)
         {
         }
 
@@ -163,13 +163,13 @@ namespace Chess.Pieces
             return tiles;
         }
 
-        public override bool Move(PiecePosition movePos)
+        public override IMove Move(PiecePosition movePos)
         {
-            var wasSuccessful = base.Move(movePos);
+            var move = base.Move(movePos);
 
-            if (wasSuccessful) this.HasMoved = true;
+            if (move != null) this.HasMoved = true;
 
-            return wasSuccessful;
+            return move;
         }
     } 
 }

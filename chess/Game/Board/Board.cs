@@ -61,7 +61,6 @@ namespace Chess
 
                     roundFlag = !roundFlag;
 
-
                     if (selectedPiece != null && selectedPiece.GetMoves().Any(m => m.GetMovePos().Position == pos))
                     {
                         Console.BackgroundColor = ConsoleColor.Magenta;
@@ -75,7 +74,7 @@ namespace Chess
                     }
 
                     Console.ForegroundColor = piece.PieceOwner.Side == "bottom" ? ConsoleColor.DarkBlue : ConsoleColor.DarkRed;
-                    Console.Write($"  {piece.PieceName[0]}  ");
+                    Console.Write($"  {piece.VisualID}  ");
                 }
 
                 // offset for checker board pattern.

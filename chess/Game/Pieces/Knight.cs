@@ -9,7 +9,7 @@ namespace Chess.Pieces
     public class Knight : Piece
     {
         public Knight(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "knight", 30)
+            : base(pieceOwner, board, startingPosition, "♞", "Knight", 30)
         {
         }
 

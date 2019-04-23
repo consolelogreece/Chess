@@ -3,14 +3,19 @@ using Chess.Pieces;
 
 namespace Chess.Moves
 {
-    public class NoneTaking : IMove
+    public class NonTaking : IMove
     {
         public readonly Piece OwningPiece;
         public readonly BoardTile To;
 
-        public NoneTaking(BoardTile to, Piece owningPiece)
+        private BoardTile From;
+
+        private Piece _pieceTaken;
+
+        public NonTaking(BoardTile to, Piece owningPiece)
         {
             To = to;
+            From = owningPiece._board[owningPiece.CurrentPosition];
             OwningPiece = owningPiece;
         }
 
@@ -43,6 +48,13 @@ namespace Chess.Moves
             val += OwningPiece.BoardValueTable[To.Position.row, To.Position.col];
 
             return val;
+        }
+
+         public void UndoMove()
+        {
+            OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
+            OwningPiece.CurrentPosition = From.Position;
+            OwningPiece._board[From.Position].OccupyingPiece = OwningPiece;
         }
     }
 }

@@ -59,5 +59,10 @@ namespace Chess.Moves
 
             return val;
         }
+
+        public void UndoMove()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

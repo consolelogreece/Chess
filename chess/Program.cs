@@ -22,42 +22,42 @@ namespace chess
             {
                 try
                 {
-                    // var x = Console.ReadLine();
-
-                    // if (x == "x")
-                    // {
-
-                    // }
+                    game.Board.PrintBoard();
 
                     // TODOOOOOO: FIND OUT WHY STALEMATE CALLED WHEN NOT STALEMATE. KING STILL HAD MOVES.
-                    game.AIMove();
+                    // game.AIMove();
 
-                    Thread.Sleep(100);
-                    // Console.Write("Select piece to move(format: <row>,<col>): ");
+                    // Thread.Sleep(100);
+                    Console.Write("Select piece to move(format: <row>,<col>) or \"undo\" to undo: ");
 
-                    // var move = Console.ReadLine();
+                    var move = Console.ReadLine();
 
-                    // if (move == "quit") return;
+                    if (move == "undo")
+                    {
+                        game.Undo();
+                    }
 
-                    // var deets = move.Split(",");
+                    if (move == "quit") return;
 
-                    // // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
-                    // PiecePosition selectedPosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
+                    var deets = move.Split(",");
 
-                    // Piece selectedPiece = game.Board[selectedPosition].OccupyingPiece;
+                    // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
+                    PiecePosition selectedPosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
 
-                    // game.Board.PrintBoard(selectedPiece);
+                    Piece selectedPiece = game.Board[selectedPosition].OccupyingPiece;
 
-                    // Console.Write("Select position to piece to (format: <row>,<col>): ");
+                    game.Board.PrintBoard(selectedPiece);
 
-                    // move = Console.ReadLine();
+                    Console.Write("Select position to piece to (format: <row>,<col>): ");
 
-                    // deets = move.Split(",");
+                    move = Console.ReadLine();
 
-                    // // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
-                    // PiecePosition movePosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
+                    deets = move.Split(",");
 
-                    // game.Move(selectedPosition, movePosition);
+                    // MINUS ONE TO NORMALIZE INPUT. E.G 1,1 WILL BECOME 0,0 WHICH IS THE ACTUAL ARRAY INDEX
+                    PiecePosition movePosition = new PiecePosition(int.Parse(deets[0]) - 1, int.Parse(deets[1]) - 1);
+
+                    game.Move(selectedPosition, movePosition);
                 }
                 catch(Exception ex)
                 {

@@ -15,7 +15,7 @@ namespace Chess.Pieces
         private int _direction;
 
         public Pawn(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "Pawn", 10)
+            : base(pieceOwner, board, startingPosition, "♟", "Pawn", 10)
         {
             _direction = pieceOwner.Side == "bottom" ? -1 : 1;
         }
@@ -52,7 +52,7 @@ namespace Chess.Pieces
             this.BoardValueTable = boardValueTable;
         }
 
-        public override bool Move(PiecePosition movePos)
+        public override IMove Move(PiecePosition movePos)
         {
             _hasMoved = true;
 
@@ -66,10 +66,9 @@ namespace Chess.Pieces
                 move.MakeMove();
 
                 Promote();
-                return true;
             }
 
-            return false;
+            return move;
         }
 
         private bool Promote()
@@ -125,7 +124,7 @@ namespace Chess.Pieces
 
             if (_board[pos].OccupyingPiece == null)
             {
-                possibleMoves.Add(new NoneTaking(_board[pos], this));
+                possibleMoves.Add(new NonTaking(_board[pos], this));
 
                 if (!_hasMoved)
                 {
@@ -133,7 +132,7 @@ namespace Chess.Pieces
 
                     if (_board[pos].OccupyingPiece == null)
                     {
-                        possibleMoves.Add(new NoneTaking(_board[pos], this));
+                        possibleMoves.Add(new NonTaking(_board[pos], this));
                     }
                 }
             }

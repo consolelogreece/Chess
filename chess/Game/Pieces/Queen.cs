@@ -10,7 +10,7 @@ namespace Chess.Pieces
     {
 
         public Queen(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "Queen", 90)
+            : base(pieceOwner, board, startingPosition, "♛", "Queen", 90)
         {
         }
 

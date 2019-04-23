@@ -12,6 +12,8 @@ namespace Chess.Moves
         BoardTile GetMovePos();
 
         List<string> GetMoveMeta();
+
+        void UndoMove();
     }
 }       
         

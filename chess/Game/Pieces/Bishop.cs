@@ -9,7 +9,7 @@ namespace Chess.Pieces
     public class Bishop : Piece
     {
         public Bishop(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "Bishop", 30)
+            : base(pieceOwner, board, startingPosition, "♝", "Bishop", 30)
         {
         }
 

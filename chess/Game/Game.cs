@@ -17,6 +17,8 @@ namespace Chess
 
         public Player NextMovePlayer;
 
+        private List<IMove> History = new List<IMove>();
+
         public Game(List<Player> players)
         {
             if (players.Count != 2 || players[0].Id == players[1].Id)
@@ -112,15 +114,15 @@ namespace Chess
                 return false;
             }
 
-            var moveSuccessful = selectedPiece.Move(to);
+            var move = selectedPiece.Move(to);
 
-            if (moveSuccessful)
+            if (move != null)
             {
+                History.Add(move);
+
                 CalculatePieceMoves();
 
-                Board.PrintBoard();
-
-                HandleCheckStuff();
+                //Board.PrintBoard();
 
                 this.NextMovePlayer = _players[(_players.IndexOf(NextMovePlayer) + 1) % _players.Count];
 
@@ -132,7 +134,7 @@ namespace Chess
             // //}
             
 
-            return moveSuccessful;
+            return move != null;
         }
 
         public bool AIMove()
@@ -214,6 +216,20 @@ namespace Chess
             }
         }
 
+        // may have to remove 2 as undoing a turn is undoing both black and white.
+        public void Undo()
+        {
+            if (History.Count == 0) return;
+
+            var move = History.Last();
+
+            move.UndoMove();
+
+            History.Remove(move);
+
+            CalculatePieceMoves();
+        }
+
         public void ClearPossibleMoves(params Predicate<Piece>[] predicates)
         {
             foreach(BoardTile tile in Board)
@@ -260,10 +276,6 @@ namespace Chess
 
             foreach(BoardTile tile in Board)
             {
-                if (tile.OccupyingPiece?.PieceName == "King")
-                {
-                    
-                }
                 tile.OccupyingPiece?.CalculateMoves();
             }
 
@@ -271,6 +283,8 @@ namespace Chess
             {
                 tile.OccupyingPiece?.EliminateIllegalMoves();
             }
+
+            HandleCheckStuff();
         }
 
         private King DetectCheck()

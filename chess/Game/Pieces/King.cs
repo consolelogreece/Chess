@@ -12,7 +12,7 @@ namespace Chess.Pieces
 
         private bool HasMoved = false;
         public King(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "King", int.MaxValue)
+            : base(pieceOwner, board, startingPosition, "♚", "King", int.MaxValue)
         {   
         }
 
@@ -238,13 +238,13 @@ namespace Chess.Pieces
             CastleMoves.Clear();
         }
 
-        public override bool Move(PiecePosition movePos)
+        public override IMove Move(PiecePosition movePos)
         {
-            var wasSuccessful = base.Move(movePos);
+            var move = base.Move(movePos);
 
-            if (wasSuccessful) this.HasMoved = true;
+            if (move != null) this.HasMoved = true;
 
-            return wasSuccessful;
+            return move;
         }
     }
 }
