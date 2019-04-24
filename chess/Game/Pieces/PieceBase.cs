@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Chess.Moves;
 
 namespace Chess.Pieces
@@ -8,19 +8,14 @@ namespace Chess.Pieces
     public abstract class Piece
     {
         public readonly string PieceName;
-
         public readonly string VisualID;
         public int TimesMoved = 0;
         public readonly int PieceValue;
         public Player PieceOwner { get; private set; }
-
         public PiecePosition CurrentPosition;
-
         public List<IMove> PossibleMoves { get; protected set; } = new List<IMove>();
-
         public readonly Board _board;
-
-        public float[,] BoardValueTable {get; protected set;}
+        public float[, ] BoardValueTable { get; protected set; }
 
         public Piece(Player pieceOwner, Board board, PiecePosition startingPosition, string visualId = "X", string pieceName = "Piece", int pieceValue = 10)
         {
@@ -41,18 +36,10 @@ namespace Chess.Pieces
 
         protected virtual void GenBoardValueTable()
         {
-            if (this.BoardValueTable != null) return;
+            if (this.BoardValueTable != null)return;
 
-            var boardValueTable = new float[8,8]
-            {
-                {0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0}
+            var boardValueTable = new float[8, 8]
+            { { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }
             };
 
             this.BoardValueTable = boardValueTable;
@@ -66,7 +53,7 @@ namespace Chess.Pieces
         public virtual bool CalculateMoves()
         {
             // todo: move this out of calculating moves as this is not technically a part of the calculation bit.
-            foreach(var m in PossibleMoves)
+            foreach (var m in PossibleMoves)
             {
                 _board[m.GetMovePos().Position].ThreateningPieces.Add(this);
             }
@@ -77,12 +64,12 @@ namespace Chess.Pieces
         // todo: currently removes option to actually take checking piece. fix. think has to do with having ++pos.row instead of pos.row++ in helpers
         public virtual void EliminateIllegalMoves()
         {
-            foreach(var threateningPiece in _board[this.CurrentPosition].ThreateningPieces)
+            foreach (var threateningPiece in _board[this.CurrentPosition].ThreateningPieces)
             {
                 var tiles = threateningPiece.XRay(this);
 
                 var occupiedTiles = tiles.Where(t => t.OccupyingPiece != null).ToList();
-                
+
                 // occupied tile[0] is the tile where the scanning piece is. aka where the scan starts.
                 // occupied tile[1] is the piece that the scanner is threatening.
                 // occupied tile[2] is the first piece after the threatened piece. if this it not the king, the piece is not pinned.

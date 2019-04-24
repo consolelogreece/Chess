@@ -17,7 +17,7 @@ namespace Chess.Helpers
 
             var tiles = new List<BoardTile>();
 
-            while(pos.col < _board.RowColLen)
+            while (pos.col < _board.RowColLen)
             {
                 tiles.Add(_board[pos]);
 
@@ -34,7 +34,7 @@ namespace Chess.Helpers
 
             var tiles = new List<BoardTile>();
 
-            while(pos.col >= 0)
+            while (pos.col >= 0)
             {
                 tiles.Add(_board[pos]);
 
@@ -53,7 +53,7 @@ namespace Chess.Helpers
 
             var tiles = new List<BoardTile>();
 
-            while(pos.row < _board.RowColLen)
+            while (pos.row < _board.RowColLen)
             {
                 tiles.Add(_board[pos]);
 
@@ -66,12 +66,12 @@ namespace Chess.Helpers
         public static List<BoardTile> XRayVerticalDU(Piece pinner, Piece target)
         {
             var _board = target._board;
-            
+
             var pos = pinner.CurrentPosition;
 
             var tiles = new List<BoardTile>();
 
-            while(pos.row >= 0)
+            while (pos.row >= 0)
             {
                 tiles.Add(_board[pos]);
 
@@ -84,12 +84,12 @@ namespace Chess.Helpers
         public static List<BoardTile> XRayDiagonalTLBR(Piece pinner, Piece target)
         {
             var _board = target._board;
-            
+
             var pos = pinner.CurrentPosition;
 
             var tiles = new List<BoardTile>();
 
-            while(pos.row >= 0 && pos.col < _board.RowColLen)
+            while (pos.row >= 0 && pos.col < _board.RowColLen)
             {
                 tiles.Add(_board[pos]);
 
@@ -103,12 +103,12 @@ namespace Chess.Helpers
         public static List<BoardTile> XRayDiagonalBRTL(Piece pinner, Piece target)
         {
             var _board = target._board;
-            
+
             var pos = pinner.CurrentPosition;
 
             var tiles = new List<BoardTile>();
 
-            while(pos.row >= 0 && pos.col >= 0)
+            while (pos.row >= 0 && pos.col >= 0)
             {
                 tiles.Add(_board[pos]);
 
@@ -122,12 +122,12 @@ namespace Chess.Helpers
         public static List<BoardTile> XRayDiagonalTRBL(Piece pinner, Piece target)
         {
             var _board = target._board;
-            
+
             var pos = pinner.CurrentPosition;
 
             var tiles = new List<BoardTile>();
 
-            while(pos.row < _board.RowColLen && pos.col >= 0)
+            while (pos.row < _board.RowColLen && pos.col >= 0)
             {
                 tiles.Add(_board[pos]);
 
@@ -141,12 +141,12 @@ namespace Chess.Helpers
         public static List<BoardTile> XRayDiagonalBLTR(Piece pinner, Piece target)
         {
             var _board = target._board;
-            
+
             var pos = pinner.CurrentPosition;
 
             var tiles = new List<BoardTile>();
 
-            while(pos.row < _board.RowColLen && pos.col < _board.RowColLen)
+            while (pos.row < _board.RowColLen && pos.col < _board.RowColLen)
             {
                 tiles.Add(_board[pos]);
 
@@ -157,7 +157,7 @@ namespace Chess.Helpers
             return tiles;
         }
 
-        public static bool IsPinned (Piece target, PiecePosition currentTilePos)
+        public static bool IsPinned(Piece target, PiecePosition currentTilePos)
         {
             var _board = target._board;
 
@@ -165,12 +165,12 @@ namespace Chess.Helpers
 
             var tiles = new List<BoardTile>();
 
-            if (_board[currentTilePos].OccupyingPiece != null )
+            if (_board[currentTilePos].OccupyingPiece != null)
             {
                 // ignore piece if its the piece we're checking for pins
                 if (_board[currentTilePos].OccupyingPiece != target)
                 {
-                    if (_board[currentTilePos].OccupyingPiece.PieceName == "King" && _board[currentTilePos].OccupyingPiece.PieceOwner.Id == target.PieceOwner.Id)                               
+                    if (_board[currentTilePos].OccupyingPiece.PieceName == "King" && _board[currentTilePos].OccupyingPiece.PieceOwner.Id == target.PieceOwner.Id)
                     {
                         return true;
                     }

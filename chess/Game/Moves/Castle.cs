@@ -51,7 +51,7 @@ namespace Chess.Moves
             var newRookPos = new PiecePosition(_castlingRook.CurrentPosition.row, To.Position.col + _castlingRookPosOffset);
 
             float val = 0;
-            
+
             val -= OwningPiece.BoardValueTable[OwningPiece.CurrentPosition.row, OwningPiece.CurrentPosition.col];
 
             val += OwningPiece.BoardValueTable[To.Position.row, To.Position.col];

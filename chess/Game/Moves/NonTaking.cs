@@ -26,7 +26,7 @@ namespace Chess.Moves
 
         public List<string> GetMoveMeta()
         {
-           return new List<string>()
+            return new List<string>()
             {
                 "NonTaking"
             };
@@ -50,7 +50,7 @@ namespace Chess.Moves
             return val;
         }
 
-         public void UndoMove()
+        public void UndoMove()
         {
             OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
             OwningPiece.CurrentPosition = From.Position;

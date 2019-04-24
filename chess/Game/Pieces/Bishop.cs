@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Chess.Helpers;
 using Chess.Moves;
 
@@ -8,34 +8,23 @@ namespace Chess.Pieces
 {
     public class Bishop : Piece
     {
-        public Bishop(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "♝", "Bishop", 30)
-        {
-        }
+        public Bishop(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "♝", "Bishop", 30) { }
 
         protected override void GenBoardValueTable()
         {
-            var boardValueTable = new float[8,8]
-            {
-                {-2,-1,-1,-1,-1,-1,-1,-2},
-                {-1,0,0,0,0,0,0,-1},
-                {-1,0,0.5f,1,1,0.5f,0,-1},
-                {-1,0.5f,0.5f,1,1,0.5f,0.5f,-1},
-                {-1,0,1,1,1,1,0,-1},
-                {-1,1,1,1,1,1,1,1},
-                {-1,0.5f,0,0,0,0,0.5f,-1},
-                {-2,-1,-1,-1,-1,-1,-1,-2}
+            var boardValueTable = new float[8, 8]
+            { {-2, -1, -1, -1, -1, -1, -1, -2 }, {-1, 0, 0, 0, 0, 0, 0, -1 }, {-1, 0, 0.5f, 1, 1, 0.5f, 0, -1 }, {-1, 0.5f, 0.5f, 1, 1, 0.5f, 0.5f, -1 }, {-1, 0, 1, 1, 1, 1, 0, -1 }, {-1, 1, 1, 1, 1, 1, 1, 1 }, {-1, 0.5f, 0, 0, 0, 0, 0.5f, -1 }, {-2, -1, -1, -1, -1, -1, -1, -2 }
             };
 
             if (this.PieceOwner.Side == "top")
             {
-                var actual = new float[8,8];
+                var actual = new float[8, 8];
 
-                for(int i = 7; i >= 0; i--)
+                for (int i = 7; i >= 0; i--)
                 {
-                    for(int j = 7; j >= 0; j--)
+                    for (int j = 7; j >= 0; j--)
                     {
-                        actual[7 - i, 7 -j] = boardValueTable[i,j];
+                        actual[7 - i, 7 - j] = boardValueTable[i, j];
                     }
                 }
 
@@ -150,11 +139,11 @@ namespace Chess.Pieces
             {
                 if (pos.col < target.CurrentPosition.col)
                 {
-                    tiles = MoveHelpers.XRayDiagonalTLBR(this, target); 
+                    tiles = MoveHelpers.XRayDiagonalTLBR(this, target);
                 }
                 else
                 {
-                   tiles = MoveHelpers.XRayDiagonalBRTL(this, target);
+                    tiles = MoveHelpers.XRayDiagonalBRTL(this, target);
                 }
             }
 

@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Chess.Helpers;
 using Chess.Moves;
 
@@ -8,34 +8,23 @@ namespace Chess.Pieces
 {
     public class Rook : Piece
     {
-        public Rook(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "♜", "Rook", 50)
-        {
-        }
+        public Rook(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "♜", "Rook", 50) { }
 
         protected override void GenBoardValueTable()
         {
-            var boardValueTable = new float[8,8]
-            {
-                {0,0,0,0,0,0,0,0},
-                {0.5f,1,1,1,1,1,1,0.5f},
-                {-0.5f,0,0,0,0,0,0,-0.5f},
-                {-0.5f,0,0,0,0,0,0,-0.5f},
-                {-0.5f,0,0,0,0,0,0,-0.5f},
-                {-0.5f,0,0,0,0,0,0,-0.5f},
-                {-0.5f,0,0,0,0,0,0,-0.5f},
-                {0,0,0,0.5f,0.5f,0,0,0}
+            var boardValueTable = new float[8, 8]
+            { { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0.5f, 1, 1, 1, 1, 1, 1, 0.5f }, {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f }, {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f }, {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f }, {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f }, {-0.5f, 0, 0, 0, 0, 0, 0, -0.5f }, { 0, 0, 0, 0.5f, 0.5f, 0, 0, 0 }
             };
 
             if (this.PieceOwner.Side == "top")
             {
-                var actual = new float[8,8];
+                var actual = new float[8, 8];
 
-                for(int i = 7; i >= 0; i--)
+                for (int i = 7; i >= 0; i--)
                 {
-                    for(int j = 7; j >= 0; j--)
+                    for (int j = 7; j >= 0; j--)
                     {
-                        actual[7 - i, 7 -j] = boardValueTable[i,j];
+                        actual[7 - i, 7 - j] = boardValueTable[i, j];
                     }
                 }
 
@@ -146,7 +135,7 @@ namespace Chess.Pieces
                     tiles = MoveHelpers.XRayHorizontalRL(this, target);
                 }
             }
-            else if(pos.col == target.CurrentPosition.col)
+            else if (pos.col == target.CurrentPosition.col)
             {
                 if (pos.row < target.CurrentPosition.row)
                 {
@@ -154,11 +143,11 @@ namespace Chess.Pieces
                 }
                 else
                 {
-                   tiles = MoveHelpers.XRayVerticalDU(this, target); 
+                    tiles = MoveHelpers.XRayVerticalDU(this, target);
                 }
             }
 
             return tiles;
         }
-    } 
+    }
 }

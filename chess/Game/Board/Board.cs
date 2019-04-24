@@ -9,23 +9,23 @@ namespace Chess
 {
     public class Board : IEnumerable
     {
-        private BoardTile[,] _board;
+        private BoardTile[, ] _board;
 
         public readonly int RowColLen = 8;
 
         public Board()
         {
             _board = new BoardTile[RowColLen, RowColLen];
-            for(int i = 0; i < RowColLen; i++)
+            for (int i = 0; i < RowColLen; i++)
             {
-                for(int j = 0; j < RowColLen; j++)
+                for (int j = 0; j < RowColLen; j++)
                 {
-                    _board[i,j] = new BoardTile(new PiecePosition(i, j));
+                    _board[i, j] = new BoardTile(new PiecePosition(i, j));
                 }
             }
         }
 
-        public BoardTile this[PiecePosition p]
+        public BoardTile this [PiecePosition p]
         {
             get { return _board[p.row, p.col]; }
             set { _board[p.row, p.col] = value; }
@@ -33,7 +33,7 @@ namespace Chess
 
         public void RegisterPiece(Piece piece)
         {
-            this[piece.CurrentPosition].OccupyingPiece = piece;
+            this [piece.CurrentPosition].OccupyingPiece = piece;
         }
 
         public void PrintBoard(Piece selectedPiece = null)

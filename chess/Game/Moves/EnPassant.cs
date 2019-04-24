@@ -14,7 +14,7 @@ namespace Chess.Moves
 
         public EnPassant(BoardTile to, Piece owningPiece)
         {
-            if (To?.OccupyingPiece != null) throw new InvalidOperationException("Space occupied, not en passant.");
+            if (To?.OccupyingPiece != null)throw new InvalidOperationException("Space occupied, not en passant.");
 
             direction = owningPiece.CurrentPosition.row < to.Position.row ? -1 : 1;
 
@@ -25,7 +25,7 @@ namespace Chess.Moves
 
         public List<string> GetMoveMeta()
         {
-           return new List<string>()
+            return new List<string>()
             {
                 "Indirect",
                 "Taking"

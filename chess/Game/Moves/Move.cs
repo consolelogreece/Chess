@@ -28,7 +28,7 @@ namespace Chess.Moves
 
         public List<string> GetMoveMeta()
         {
-           return new List<string>()
+            return new List<string>()
             {
                 "Taking"
             };

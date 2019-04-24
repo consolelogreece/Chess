@@ -4,9 +4,9 @@ namespace Chess.Moves
 {
     public interface IMove
     {
-        // return int is the value of the move. i.e. if move takes a knight, it'd be 3 etc..
         void MakeMove();
 
+        // return int is the value of the move. i.e. if move takes a knight, it'd be 3 etc..
         float MoveVal();
 
         BoardTile GetMovePos();
@@ -15,5 +15,4 @@ namespace Chess.Moves
 
         void UndoMove();
     }
-}       
-        
+}

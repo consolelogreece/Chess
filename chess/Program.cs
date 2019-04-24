@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
+using System;
 using System.Collections.Generic;
-using Chess.Pieces;
-using Chess;
+using System.Linq;
 using System.Threading;
+using Chess;
+using Chess.Pieces;
 
 namespace chess
 {
@@ -14,7 +14,7 @@ namespace chess
             var player1 = new Player(Guid.NewGuid().ToString(), "top");
             var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
 
-            var game = new Game(new List<Player>(){player1, player2});
+            var game = new Game(new List<Player>() { player1, player2 });
 
             game.SetupDefault();
 
@@ -24,7 +24,6 @@ namespace chess
                 {
                     game.Board.PrintBoard();
 
-                    // TODOOOOOO: FIND OUT WHY STALEMATE CALLED WHEN NOT STALEMATE. KING STILL HAD MOVES.
                     // game.AIMove();
 
                     // Thread.Sleep(100);
@@ -37,7 +36,7 @@ namespace chess
                         game.Undo();
                     }
 
-                    if (move == "quit") return;
+                    if (move == "quit")return;
 
                     var deets = move.Split(",");
 
@@ -59,7 +58,7 @@ namespace chess
 
                     game.Move(selectedPosition, movePosition);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex);
                 }
@@ -69,6 +68,3 @@ namespace chess
 }
 
 // after every move, go to the opposite king and see there is an enemy rook, bishop, queen, pawn etc horizontally, veritically... same wit
-
-
-

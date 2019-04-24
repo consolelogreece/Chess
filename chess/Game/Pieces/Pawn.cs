@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Chess.Helpers;
 using Chess.Moves;
 
@@ -12,35 +12,26 @@ namespace Chess.Pieces
 
         private int _direction;
 
-        public Pawn(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "♟", "Pawn", 10)
+        public Pawn(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "♟", "Pawn", 10)
         {
             _direction = pieceOwner.Side == "bottom" ? -1 : 1;
         }
 
         protected override void GenBoardValueTable()
         {
-            var boardValueTable = new float[8,8]
-            {
-                {0,0,0,0,0,0,0,0},
-                {5,5,5,5,5,5,5,5},
-                {1,1,2,3,3,2,1,1},
-                {0.5f,0.5f,1,2.5f,2.5f,1,0.5f,0.5f},
-                {0,0,0,2,2,0,0,0},
-                {0.5f,-0.5f,-1,0,0,-1,-0.5f,0.5f},
-                {0.5f,1,1,-2,-2,1,1,0.5f},
-                {0,0,0,0,0,0,0,0}
+            var boardValueTable = new float[8, 8]
+            { { 0, 0, 0, 0, 0, 0, 0, 0 }, { 5, 5, 5, 5, 5, 5, 5, 5 }, { 1, 1, 2, 3, 3, 2, 1, 1 }, { 0.5f, 0.5f, 1, 2.5f, 2.5f, 1, 0.5f, 0.5f }, { 0, 0, 0, 2, 2, 0, 0, 0 }, { 0.5f, -0.5f, -1, 0, 0, -1, -0.5f, 0.5f }, { 0.5f, 1, 1, -2, -2, 1, 1, 0.5f }, { 0, 0, 0, 0, 0, 0, 0, 0 }
             };
 
             if (this.PieceOwner.Side == "top")
             {
-                var actual = new float[8,8];
+                var actual = new float[8, 8];
 
-                for(int i = 7; i >= 0; i--)
+                for (int i = 7; i >= 0; i--)
                 {
-                    for(int j = 7; j >= 0; j--)
+                    for (int j = 7; j >= 0; j--)
                     {
-                        actual[7 - i, 7 -j] = boardValueTable[i,j];
+                        actual[7 - i, 7 - j] = boardValueTable[i, j];
                     }
                 }
 
@@ -52,7 +43,7 @@ namespace Chess.Pieces
 
         public override IMove Move(PiecePosition movePos)
         {
-            if (Math.Abs(movePos.row - CurrentPosition.row) != 1) EnPassant = true;
+            if (Math.Abs(movePos.row - CurrentPosition.row) != 1)EnPassant = true;
             else EnPassant = false;
 
             var move = PossibleMoves.FirstOrDefault(m => m.GetMovePos().Position == movePos);
@@ -83,9 +74,9 @@ namespace Chess.Pieces
 
             bool hasPromoted = false;
 
-            while(!hasPromoted)
+            while (!hasPromoted)
             {
-                switch(piece)
+                switch (piece)
                 {
                     case "rook":
                         _board[this.CurrentPosition].OccupyingPiece = new Rook(this.PieceOwner, _board, this.CurrentPosition);
@@ -158,22 +149,22 @@ namespace Chess.Pieces
             //reset
             pos = this.CurrentPosition;
             pos.col++;
-            
+
             if (pos.col < _board.RowColLen && _board[pos].OccupyingPiece != null && _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[pos].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[pos].OccupyingPiece).EnPassant)
             {
                 var tile = _board[new PiecePosition(pos.row + _direction, pos.col)];
-                var move = new EnPassant(_board[tile.Position], this);               
+                var move = new EnPassant(_board[tile.Position], this);
                 possibleMoves.Add(move);
             }
-                
+
             pos.col -= 2;
 
             if (pos.col >= 0 && _board[pos].OccupyingPiece != null && _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id && _board[pos].OccupyingPiece.PieceName == "Pawn" && ((Pawn)_board[pos].OccupyingPiece).EnPassant)
             {
                 var tile = _board[new PiecePosition(pos.row + _direction, pos.col)];
-                var move = new EnPassant(tile, this); 
+                var move = new EnPassant(tile, this);
                 possibleMoves.Add(move);
-            }    
+            }
 
             PossibleMoves = possibleMoves;
 
@@ -181,4 +172,3 @@ namespace Chess.Pieces
         }
     }
 }
-

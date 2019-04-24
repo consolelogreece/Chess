@@ -1,6 +1,6 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Chess.Helpers;
 using Chess.Moves;
 
@@ -10,34 +10,23 @@ namespace Chess.Pieces
     {
         private Dictionary<IMove, List<BoardTile>> CastleMoves = new Dictionary<IMove, List<BoardTile>>();
 
-        public King(Player pieceOwner, Board board, PiecePosition startingPosition)
-            : base(pieceOwner, board, startingPosition, "♚", "King", int.MaxValue)
-        {   
-        }
+        public King(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "♚", "King", int.MaxValue) { }
 
         protected override void GenBoardValueTable()
         {
-            var boardValueTable = new float[8,8]
-            {
-                {-3,-4,-4,-5,-5,-4,-4,-3},
-                {-3,-4,-4,-5,-5,-4,-4,-3},
-                {-3,-4,-4,-5,-5,-4,-4,-3},
-                {-3,-4,-4,-5,-5,-4,-4,-3},
-                {-2,-3,-3,-4,-4,-2,-2,-1},
-                {-1,-2,-2,-2,-2,-2,-2,-1},
-                {2,2,0,0,0,0,2,2},
-                {2,3,1,0,0,1,3,0}
+            var boardValueTable = new float[8, 8]
+            { {-3, -4, -4, -5, -5, -4, -4, -3 }, {-3, -4, -4, -5, -5, -4, -4, -3 }, {-3, -4, -4, -5, -5, -4, -4, -3 }, {-3, -4, -4, -5, -5, -4, -4, -3 }, {-2, -3, -3, -4, -4, -2, -2, -1 }, {-1, -2, -2, -2, -2, -2, -2, -1 }, { 2, 2, 0, 0, 0, 0, 2, 2 }, { 2, 3, 1, 0, 0, 1, 3, 0 }
             };
 
             if (this.PieceOwner.Side == "top")
             {
-                var actual = new float[8,8];
+                var actual = new float[8, 8];
 
-                for(int i = 7; i >= 0; i--)
+                for (int i = 7; i >= 0; i--)
                 {
-                    for(int j = 7; j >= 0; j--)
+                    for (int j = 7; j >= 0; j--)
                     {
-                        actual[7 - i, 7 -j] = boardValueTable[i,j];
+                        actual[7 - i, 7 - j] = boardValueTable[i, j];
                     }
                 }
 
@@ -58,7 +47,7 @@ namespace Chess.Pieces
 
             if (pos.row < _board.RowColLen && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
                 possibleMoves.Add(new Move(_board[pos], this));
-            
+
             pos = new PiecePosition(this.CurrentPosition.row, this.CurrentPosition.col + 1);
 
             if (pos.col < _board.RowColLen && (_board[pos].OccupyingPiece == null || _board[pos].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id))
@@ -97,22 +86,22 @@ namespace Chess.Pieces
 
             // hasn't yet moved, so check for castles
             if (this.TimesMoved == 0)
-            {    
+            {
                 var rooks = new List<Rook>();
 
-                foreach(BoardTile tile in _board)
+                foreach (BoardTile tile in _board)
                     if (tile.OccupyingPiece?.PieceName == "Rook" && tile.OccupyingPiece?.PieceOwner == this.PieceOwner)
                         rooks.Add(tile.OccupyingPiece as Rook);
 
-                foreach(var rook in rooks)
+                foreach (var rook in rooks)
                 {
-                    if(rook.TimesMoved != 0) continue;
+                    if (rook.TimesMoved != 0)continue;
 
                     var isRookOnRight = this.CurrentPosition.col < rook.CurrentPosition.col;
 
                     var path = GetPath(rook);
 
-                    if (path.Any(t => t.OccupyingPiece != null && t.OccupyingPiece != rook && t.OccupyingPiece != this)) continue;
+                    if (path.Any(t => t.OccupyingPiece != null && t.OccupyingPiece != rook && t.OccupyingPiece != this))continue;
 
                     var to = _board[new PiecePosition(this.CurrentPosition.row, this.CurrentPosition.col + (isRookOnRight ? 2 : -2))];
 
@@ -120,11 +109,11 @@ namespace Chess.Pieces
                     var trimmedPath = new List<BoardTile>();
 
                     var i = path.Count - 1;
-                        
-                    while(i >= 0)
+
+                    while (i >= 0)
                     {
-                        if (path[i] != to) trimmedPath.Add(path[i]);
-                        else 
+                        if (path[i] != to)trimmedPath.Add(path[i]);
+                        else
                         {
                             trimmedPath.Add(path[i]);
                             break;
@@ -149,7 +138,7 @@ namespace Chess.Pieces
         {
             PossibleMoves.RemoveAll(m => _board[m.GetMovePos().Position].ThreateningPieces.Any(p => p.PieceOwner.Id != this.PieceOwner.Id && !p.GetMoves().Any(pm => pm.GetMovePos() == m.GetMovePos() && pm.GetMoveMeta().Contains("NonTaking"))));
 
-            foreach(var threateningPiece in _board[this.CurrentPosition].ThreateningPieces)
+            foreach (var threateningPiece in _board[this.CurrentPosition].ThreateningPieces)
             {
                 var tiles = threateningPiece.XRay(this);
 
@@ -158,7 +147,7 @@ namespace Chess.Pieces
 
             var castleMovesToRemove = new List<IMove>();
 
-            foreach(var move in CastleMoves)
+            foreach (var move in CastleMoves)
             {
                 if (move.Value.Any(bt => bt.ThreateningPieces.Any(p => p.PieceOwner != this.PieceOwner)))
                 {
@@ -166,7 +155,7 @@ namespace Chess.Pieces
                 }
             }
 
-            foreach(var move in castleMovesToRemove) CastleMoves.Remove(move);
+            foreach (var move in castleMovesToRemove)CastleMoves.Remove(move);
         }
 
         public bool IsInCheckmate()
@@ -174,7 +163,7 @@ namespace Chess.Pieces
             var checkingPieces = _board[this.CurrentPosition].ThreateningPieces;
 
             // if there are possible moves, can't be checkmate so no point making further checks.
-            if (this.PossibleMoves.Count > 0) return false;
+            if (this.PossibleMoves.Count > 0)return false;
 
             // if there are no moves, and more than on checking piece, no blocks/takes will save from mate.
             if (checkingPieces.Count > 1)
@@ -187,7 +176,7 @@ namespace Chess.Pieces
             var tileOfChecker = _board[posOfChecker];
 
             // see if the checker can be taken by any of the threatening pieces
-            if (tileOfChecker.ThreateningPieces.Any(m => m.PossibleMoves.Any(pm => pm.GetMovePos().Position == posOfChecker))) return false;
+            if (tileOfChecker.ThreateningPieces.Any(m => m.PossibleMoves.Any(pm => pm.GetMovePos().Position == posOfChecker)))return false;
 
             var checkPath = tileOfChecker.OccupyingPiece.XRay(this);
 
@@ -216,7 +205,7 @@ namespace Chess.Pieces
 
             while (i >= 0)
             {
-                if (path[i].OccupyingPiece != this) path.RemoveAt(i);
+                if (path[i].OccupyingPiece != this)path.RemoveAt(i);
                 else break;
                 i--;
             }
