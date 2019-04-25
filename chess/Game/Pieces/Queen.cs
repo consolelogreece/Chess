@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Chess.Helpers;
+using Chess.Helpers.Moves;
 using Chess.Moves;
 
 namespace Chess.Pieces
@@ -206,45 +207,45 @@ namespace Chess.Pieces
             {
                 if (pos.col < target.CurrentPosition.col)
                 {
-                    tiles = MoveHelpers.XRayHorizontalLR(this, target);
+                    tiles = XRayHelpers.XRayHorizontalLR(this, target);
 
                 }
                 else
                 {
-                    tiles = MoveHelpers.XRayHorizontalRL(this, target);
+                    tiles = XRayHelpers.XRayHorizontalRL(this, target);
                 }
             }
             else if (pos.col == target.CurrentPosition.col)
             {
                 if (pos.row < target.CurrentPosition.row)
                 {
-                    tiles = MoveHelpers.XRayVerticalUD(this, target);
+                    tiles = XRayHelpers.XRayVerticalUD(this, target);
                 }
                 else
                 {
-                    tiles = MoveHelpers.XRayVerticalDU(this, target);
+                    tiles = XRayHelpers.XRayVerticalDU(this, target);
                 }
             }
             else if (pos.row < target.CurrentPosition.row)
             {
                 if (pos.col < target.CurrentPosition.col)
                 {
-                    tiles = MoveHelpers.XRayDiagonalBLTR(this, target);
+                    tiles = XRayHelpers.XRayDiagonalBLTR(this, target);
                 }
                 else
                 {
-                    tiles = MoveHelpers.XRayDiagonalTRBL(this, target);
+                    tiles = XRayHelpers.XRayDiagonalTRBL(this, target);
                 }
             }
             else
             {
                 if (pos.col < target.CurrentPosition.col)
                 {
-                    tiles = MoveHelpers.XRayDiagonalTLBR(this, target);
+                    tiles = XRayHelpers.XRayDiagonalTLBR(this, target);
                 }
                 else
                 {
-                    tiles = MoveHelpers.XRayDiagonalBRTL(this, target);
+                    tiles = XRayHelpers.XRayDiagonalBRTL(this, target);
                 }
             }
 

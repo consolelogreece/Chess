@@ -10,17 +10,23 @@ namespace Chess.Moves
 
         public readonly BoardTile To;
 
-        private int direction;
+        private readonly BoardTile From;
+
+        private Piece _pieceTaken;
 
         public EnPassant(BoardTile to, Piece owningPiece)
         {
             if (To?.OccupyingPiece != null)throw new InvalidOperationException("Space occupied, not en passant.");
 
-            direction = owningPiece.CurrentPosition.row < to.Position.row ? -1 : 1;
+            var direction = owningPiece.CurrentPosition.row < to.Position.row ? -1 : 1;
+
+            From = owningPiece._board[owningPiece.CurrentPosition];
 
             To = to;
 
             OwningPiece = owningPiece;
+
+            _pieceTaken = OwningPiece._board[new PiecePosition(to.Position.row + direction, to.Position.col)].OccupyingPiece;
         }
 
         public List<string> GetMoveMeta()
@@ -43,9 +49,7 @@ namespace Chess.Moves
             OwningPiece._board[To.Position].OccupyingPiece = OwningPiece;
             OwningPiece.CurrentPosition = To.Position;
 
-            var enPassantPieceTaken = OwningPiece._board[new PiecePosition(OwningPiece.CurrentPosition.row + direction, OwningPiece.CurrentPosition.col)].OccupyingPiece;
-
-            OwningPiece._board[enPassantPieceTaken.CurrentPosition].OccupyingPiece = null;
+            OwningPiece._board[_pieceTaken.CurrentPosition].OccupyingPiece = null;
         }
 
         public float MoveVal()
@@ -62,7 +66,11 @@ namespace Chess.Moves
 
         public void UndoMove()
         {
-            throw new NotImplementedException();
+           OwningPiece._board[_pieceTaken.CurrentPosition].OccupyingPiece = _pieceTaken;
+
+           OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
+           OwningPiece._board[From.Position].OccupyingPiece = OwningPiece;
+           OwningPiece.CurrentPosition = From.Position;
         }
     }
 }

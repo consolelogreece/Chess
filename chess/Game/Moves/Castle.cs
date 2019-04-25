@@ -7,13 +7,19 @@ namespace Chess.Moves
     {
         public readonly Piece OwningPiece;
         public readonly BoardTile To;
+
+        private readonly BoardTile KingFrom;
         private readonly Rook _castlingRook;
+
+        private readonly BoardTile RookFrom;
 
         public Castle(BoardTile to, Piece pieceOwner, Rook castlingRook)
         {
             To = to;
             OwningPiece = pieceOwner;
             _castlingRook = castlingRook;
+            KingFrom = OwningPiece._board[OwningPiece.CurrentPosition];
+            RookFrom = _castlingRook._board[_castlingRook.CurrentPosition];
         }
 
         public List<string> GetMoveMeta()
@@ -65,7 +71,13 @@ namespace Chess.Moves
 
         public void UndoMove()
         {
-            throw new System.NotImplementedException();
+            _castlingRook.CurrentPosition = RookFrom.Position;
+            RookFrom.OccupyingPiece = _castlingRook;
+            _castlingRook.TimesMoved--;
+
+            OwningPiece.CurrentPosition = KingFrom.Position;
+            KingFrom.OccupyingPiece = OwningPiece;
+            OwningPiece.TimesMoved--;
         }
     }
 }

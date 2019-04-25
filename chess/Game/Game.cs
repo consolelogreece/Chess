@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Chess.Helpers;
+using Chess.Helpers.Moves;
 using Chess.Moves;
 using Chess.Pieces;
 
 // TODO: add undo method to each move. this will help us implement minimax and will be a nice feature to boot.
+// TODO: Have promoting as a valid move so ai can do it.
 namespace Chess
 {
     public class Game
@@ -91,16 +93,27 @@ namespace Chess
             pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 6)));
             pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 7)));
 
-            // pieces.Add(new King(owner2, Board, new PiecePosition(7,6))); 
-            // pieces.Add(new King(owner1, Board, new PiecePosition(0,1))); 
-            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(4,7)));
-
             this.Setup(pieces);
         }
 
         private bool IsPlayersGo(Player player)
         {
             return this.NextMovePlayer == player;
+        }
+
+        public bool Move(IMove move, bool sw = true)
+        {
+            move.MakeMove();
+
+            History.Add(move);
+
+            CalculatePieceMoves();
+
+            if (sw) this.NextMovePlayer = _players[(_players.IndexOf(NextMovePlayer) + 1) % _players.Count];
+
+            if (sw) HandleStalemateStuff();
+
+            return true;
         }
 
         public bool Move(PiecePosition from, PiecePosition to)
@@ -118,46 +131,14 @@ namespace Chess
 
             if (move != null)
             {
-                History.Add(move);
-
-                CalculatePieceMoves();
-
-                //Board.PrintBoard();
-
-                this.NextMovePlayer = _players[(_players.IndexOf(NextMovePlayer) + 1) % _players.Count];
-
-                HandleStalemateStuff();
+                Move(move); 
             }
-            // //if (this.NextMovePlayer == this._players[1])
-            // //{
-            //     AIMove();
-            // //}
+            if (this.NextMovePlayer == this._players[1])
+            {
+                AIMove();
+            }
 
             return move != null;
-        }
-
-        public bool AIMove()
-        {
-            IMove move = null;
-
-            Piece movingPiece = null;
-
-            foreach (BoardTile tile in Board)
-            {
-                if (tile.OccupyingPiece?.PieceOwner == this.NextMovePlayer && tile.OccupyingPiece.GetMoves().Count != 0)
-                {
-                    foreach (var m in tile.OccupyingPiece.GetMoves())
-                    {
-                        if (move == null || m.MoveVal() > move.MoveVal())
-                        {
-                            move = m;
-                            movingPiece = tile.OccupyingPiece;
-                        }
-                    }
-                }
-            }
-
-            return this.Move(movingPiece.CurrentPosition, move.GetMovePos().Position);
         }
 
         private void HandleCheckStuff()
@@ -208,7 +189,6 @@ namespace Chess
 
             if (!hasMoveAvailable)
             {
-
                 Console.WriteLine("Game over, it's a stalemate!\nPress any key to exit...");
                 Console.Read();
                 Environment.Exit(0);
@@ -216,7 +196,7 @@ namespace Chess
         }
 
         // may have to remove 2 as undoing a turn is undoing both black and white.
-        public void Undo()
+        public void Undo(bool sw = true)
         {
             if (History.Count == 0)return;
 
@@ -226,7 +206,28 @@ namespace Chess
 
             History.Remove(move);
 
+            if (sw) this.NextMovePlayer = _players[(_players.IndexOf(NextMovePlayer) - 1) % _players.Count];
+
             CalculatePieceMoves();
+        }
+
+        public bool AIMove()
+        {
+            var move = AIHelpers.Minimax(this, 4);
+
+            return this.Move(move);
+        }
+    
+        public List<IMove> GetAllMoves(Player player)
+        {
+            var moves = new List<IMove>();
+
+            foreach(BoardTile tile in Board)
+            {
+                if (tile.OccupyingPiece != null && tile.OccupyingPiece.PieceOwner ==  player) moves.AddRange(tile.OccupyingPiece.GetMoves());
+            }
+
+            return moves;
         }
 
         public void ClearPossibleMoves(params Predicate<Piece>[] predicates)

@@ -10,7 +10,7 @@ namespace Chess.Pieces
     {
         private Dictionary<IMove, List<BoardTile>> CastleMoves = new Dictionary<IMove, List<BoardTile>>();
 
-        public King(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "♚", "King", int.MaxValue) { }
+        public King(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "♚", "King", 900) { }
 
         protected override void GenBoardValueTable()
         {

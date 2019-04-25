@@ -37,6 +37,8 @@ namespace Chess.Moves
             OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
             OwningPiece._board[To.Position].OccupyingPiece = OwningPiece;
             OwningPiece.CurrentPosition = To.Position;
+
+            OwningPiece.TimesMoved++;
         }
 
         public float MoveVal()

@@ -97,5 +97,28 @@ namespace Chess
         {
             return _board.Cast<BoardTile>().GetEnumerator();
         }
+
+        public float EvaluateBoard()
+        {
+            var total = 0f;
+
+            foreach(var tile in _board)
+            {
+                var piece = tile.OccupyingPiece;
+                
+                if (piece == null) continue;
+     
+                var val = 0f;
+
+                val += piece.PieceValue;
+
+                val += piece.BoardValueTable[piece.CurrentPosition.row, piece.CurrentPosition.col];
+
+                if (piece.PieceOwner.Side == "top") total -= val;
+                else total += val;
+            }
+
+            return total;
+        }
     }
 }

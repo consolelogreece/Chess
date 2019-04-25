@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Chess.Helpers;
+using Chess.Helpers.Moves;
 using Chess.Moves;
 
 namespace Chess.Pieces
@@ -128,22 +129,22 @@ namespace Chess.Pieces
             {
                 if (pos.col < target.CurrentPosition.col)
                 {
-                    tiles = MoveHelpers.XRayDiagonalBLTR(this, target);
+                    tiles = XRayHelpers.XRayDiagonalBLTR(this, target);
                 }
                 else
                 {
-                    tiles = MoveHelpers.XRayDiagonalTRBL(this, target);
+                    tiles = XRayHelpers.XRayDiagonalTRBL(this, target);
                 }
             }
             else
             {
                 if (pos.col < target.CurrentPosition.col)
                 {
-                    tiles = MoveHelpers.XRayDiagonalTLBR(this, target);
+                    tiles = XRayHelpers.XRayDiagonalTLBR(this, target);
                 }
                 else
                 {
-                    tiles = MoveHelpers.XRayDiagonalBRTL(this, target);
+                    tiles = XRayHelpers.XRayDiagonalBRTL(this, target);
                 }
             }
 

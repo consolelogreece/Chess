@@ -76,7 +76,7 @@ namespace Chess.Pieces
                 // only if tile[2] is the king is there a pin, so don't do anything if it isnt.
                 if (occupiedTiles.Count >= 3 && occupiedTiles[2].OccupyingPiece.PieceName == "King" && occupiedTiles[2].OccupyingPiece.PieceOwner.Id == this.PieceOwner.Id)
                 {
-                    this.PossibleMoves.RemoveAll(m => !tiles.Any(t => t.Position == ((Move)m).To.Position));
+                    this.PossibleMoves.RemoveAll(m => !tiles.Any(t => t.Position == (m.GetMovePos().Position)));
                 }
             }
         }
@@ -93,7 +93,6 @@ namespace Chess.Pieces
             if (move != null)
             {
                 move.MakeMove();
-                TimesMoved++;
             }
 
             return move;

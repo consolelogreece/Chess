@@ -52,8 +52,6 @@ namespace Chess.Pieces
             {
                 move.MakeMove();
 
-                TimesMoved++;
-
                 Promote();
             }
 
