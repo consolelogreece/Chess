@@ -87,13 +87,9 @@ namespace Chess.Pieces
             // hasn't yet moved, so check for castles
             if (this.TimesMoved == 0)
             {
-                var rooks = new List<Rook>();
+                var rooks = _board.GetPieces(p => p.PieceName == "Rook", p => p.PieceOwner == this.PieceOwner);
 
-                foreach (BoardTile tile in _board)
-                    if (tile.OccupyingPiece?.PieceName == "Rook" && tile.OccupyingPiece?.PieceOwner == this.PieceOwner)
-                        rooks.Add(tile.OccupyingPiece as Rook);
-
-                foreach (var rook in rooks)
+                foreach (Rook rook in rooks)
                 {
                     if (rook.TimesMoved != 0)continue;
 

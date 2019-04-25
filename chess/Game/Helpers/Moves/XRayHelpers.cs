@@ -40,7 +40,7 @@ namespace Chess.Helpers.Moves
             return tiles;
         }
 
-        // NOTE: when printed, the board is flipped veritcally, techincally rows go from top to bottom. This is why this method is UP-DOWN.z
+        // NOTE: when printed, the board is flipped veritcally, techincally rows go from top to bottom. This is why this method is UP-DOWN.
         public static List<BoardTile> XRayVerticalUD(Piece pinner, Piece target)
         {
             var _board = target._board;

@@ -86,6 +86,7 @@ namespace Chess.Pieces
         {
             return new List<BoardTile>();
         }
+        
         public virtual IMove Move(PiecePosition movePos)
         {
             var move = this.GetMoves().FirstOrDefault(m => m.GetMovePos().Position == movePos);

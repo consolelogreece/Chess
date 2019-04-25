@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using Chess.Pieces;
+
 namespace Chess
 {
     public struct Player
@@ -7,11 +11,15 @@ namespace Chess
 
         public readonly string Side;
 
-        public Player(string Id, string side)
+        public readonly bool _isAI;
+
+        public Player(string Id, string side, bool isAI = false)
         {
             this.Id = Id;
 
             this.Side = side;
+
+            _isAI = isAI;
         }
 
         public static bool operator ==(Player player1, Player player2)

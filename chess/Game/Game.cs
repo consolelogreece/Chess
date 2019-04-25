@@ -113,6 +113,8 @@ namespace Chess
 
             if (sw) HandleStalemateStuff();
 
+            if (sw && this.NextMovePlayer._isAI) AIMove();
+
             return true;
         }
 
@@ -132,10 +134,6 @@ namespace Chess
             if (move != null)
             {
                 Move(move); 
-            }
-            if (this.NextMovePlayer == this._players[1])
-            {
-                AIMove();
             }
 
             return move != null;
@@ -175,16 +173,15 @@ namespace Chess
         {
             var hasMoveAvailable = false;
 
-            foreach (BoardTile tile in Board)
-            {
-                if (tile.OccupyingPiece != null && tile.OccupyingPiece.PieceOwner == this.NextMovePlayer)
+            var pieces = Board.GetPieces(p => p.PieceOwner == this.NextMovePlayer);
+
+            foreach (var piece in pieces)
+            {          
+                if (piece.GetMoves().Count > 0)
                 {
-                    if (tile.OccupyingPiece.GetMoves().Count > 0)
-                    {
-                        hasMoveAvailable = true;
-                        break;
-                    }
-                }
+                    hasMoveAvailable = true;
+                    break;
+                }             
             }
 
             if (!hasMoveAvailable)
@@ -222,9 +219,11 @@ namespace Chess
         {
             var moves = new List<IMove>();
 
-            foreach(BoardTile tile in Board)
+            var pieces = Board.GetPieces(p => p.PieceOwner == player);
+
+            foreach(var piece in pieces)
             {
-                if (tile.OccupyingPiece != null && tile.OccupyingPiece.PieceOwner ==  player) moves.AddRange(tile.OccupyingPiece.GetMoves());
+                moves.AddRange(piece.GetMoves());
             }
 
             return moves;
@@ -232,12 +231,10 @@ namespace Chess
 
         public void ClearPossibleMoves(params Predicate<Piece>[] predicates)
         {
-            foreach (BoardTile tile in Board)
+            var pieces = Board.GetPieces();
+
+            foreach (var piece in pieces)
             {
-                var piece = tile.OccupyingPiece;
-
-                if (piece == null)continue;
-
                 var illegal = false;
 
                 foreach (var predicate in predicates)
@@ -249,7 +246,7 @@ namespace Chess
                 }
 
                 // if does not match all predicates, do not clear moves.
-                if (illegal)continue;
+                if (illegal) continue;
 
                 piece.ClearMoves();
             }
@@ -274,14 +271,16 @@ namespace Chess
 
             ClearPossibleMoves();
 
-            foreach (BoardTile tile in Board)
+            var pieces = Board.GetPieces();
+
+            foreach (var piece in pieces)
             {
-                tile.OccupyingPiece?.CalculateMoves();
+                piece.CalculateMoves();
             }
 
-            foreach (BoardTile tile in Board)
+            foreach (var piece in pieces)
             {
-                tile.OccupyingPiece?.EliminateIllegalMoves();
+                piece.EliminateIllegalMoves();
             }
 
             HandleCheckStuff();
@@ -289,17 +288,13 @@ namespace Chess
 
         private King DetectCheck()
         {
-            foreach (var tile in Board)
+            var kings = Board.GetPieces(p => p.PieceName == "King");
+            foreach (King king in kings)
             {
-                var piece = ((BoardTile)tile).OccupyingPiece;
-
-                if (piece?.PieceName == "King")
+                if (Board[king.CurrentPosition].ThreateningPieces.Any(p => p.PieceOwner != king.PieceOwner))
                 {
-                    if (Board[piece.CurrentPosition].ThreateningPieces.Any(p => p.PieceOwner != piece.PieceOwner))
-                    {
-                        return (King)piece;
-                    }
-                }
+                    return king;
+                }            
             }
 
             return null;

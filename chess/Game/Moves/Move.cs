@@ -18,7 +18,7 @@ namespace Chess.Moves
             To = to;
             From = owningPiece._board[owningPiece.CurrentPosition];
             OwningPiece = owningPiece;
-            _pieceTaken = OwningPiece._board[To.Position].OccupyingPiece;
+            _pieceTaken = To.OccupyingPiece;
         }
 
         public BoardTile GetMovePos()
@@ -36,6 +36,11 @@ namespace Chess.Moves
 
         public void MakeMove()
         {
+            if (_pieceTaken != null) 
+            {   
+                OwningPiece._board.DeRegisterPiece(_pieceTaken);
+            }
+
             OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
             OwningPiece._board[To.Position].OccupyingPiece = OwningPiece;
             OwningPiece.CurrentPosition = To.Position;
@@ -56,13 +61,14 @@ namespace Chess.Moves
 
         public void UndoMove()
         {
+            OwningPiece._board[To.Position].OccupyingPiece = null;
+
             if (_pieceTaken != null)
             {
                 _pieceTaken.CurrentPosition = To.Position;
+                OwningPiece._board.RegisterPiece(_pieceTaken);
             }
-
-            // will either set it to null, or the taken piece, therefore no null check required.
-            OwningPiece._board[To.Position].OccupyingPiece = _pieceTaken;
+            
             OwningPiece.CurrentPosition = From.Position;
             OwningPiece._board[From.Position].OccupyingPiece = OwningPiece;
 

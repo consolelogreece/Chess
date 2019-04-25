@@ -11,6 +11,8 @@ namespace Chess
     {
         private BoardTile[, ] _board;
 
+        private List<Piece> Pieces = new List<Piece>();
+
         public readonly int RowColLen = 8;
 
         public Board()
@@ -34,6 +36,36 @@ namespace Chess
         public void RegisterPiece(Piece piece)
         {
             this [piece.CurrentPosition].OccupyingPiece = piece;
+            Pieces.Add(piece);
+        }
+
+        public void DeRegisterPiece(Piece piece)
+        {
+            this[piece.CurrentPosition].OccupyingPiece = null;
+            Pieces.Remove(piece);
+        }
+
+        public List<Piece> GetPieces(params Predicate<Piece>[] predicates)
+        {
+            var pieces = new List<Piece>();
+
+            foreach (var piece in this.Pieces)
+            {
+                var shouldAdd = true;
+
+                foreach(var predicate in predicates)
+                {
+                    if (!predicate(piece)) 
+                    {
+                        shouldAdd = false;
+                        break;
+                    }
+                }
+
+                if (shouldAdd) pieces.Add(piece);
+            }
+
+            return pieces;
         }
 
         public void PrintBoard(Piece selectedPiece = null)
@@ -102,12 +134,8 @@ namespace Chess
         {
             var total = 0f;
 
-            foreach(var tile in _board)
+            foreach(var piece in GetPieces())
             {
-                var piece = tile.OccupyingPiece;
-                
-                if (piece == null) continue;
-     
                 var val = 0f;
 
                 val += piece.PieceValue;
