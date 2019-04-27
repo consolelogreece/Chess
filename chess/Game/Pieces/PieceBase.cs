@@ -15,7 +15,7 @@ namespace Chess.Pieces
         public PiecePosition CurrentPosition;
         public List<IMove> PossibleMoves { get; protected set; } = new List<IMove>();
         public readonly Board _board;
-        public float[, ] BoardValueTable { get; protected set; }
+        protected float[, ] BoardValueTable;
 
         public Piece(Player pieceOwner, Board board, PiecePosition startingPosition, string visualId = "X", string pieceName = "Piece", int pieceValue = 10)
         {
@@ -39,7 +39,15 @@ namespace Chess.Pieces
             if (this.BoardValueTable != null)return;
 
             var boardValueTable = new float[8, 8]
-            { { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 }
+            { 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }
             };
 
             this.BoardValueTable = boardValueTable;
@@ -48,6 +56,11 @@ namespace Chess.Pieces
         public virtual void ClearMoves()
         {
             this.PossibleMoves.Clear();
+        }
+
+        public float GetPosValue()
+        {
+            return this.BoardValueTable[this.CurrentPosition.row, this.CurrentPosition.col];
         }
 
         public virtual bool CalculateMoves()
@@ -86,7 +99,7 @@ namespace Chess.Pieces
         {
             return new List<BoardTile>();
         }
-        
+
         public virtual IMove Move(PiecePosition movePos)
         {
             var move = this.GetMoves().FirstOrDefault(m => m.GetMovePos().Position == movePos);

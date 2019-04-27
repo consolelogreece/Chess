@@ -41,7 +41,7 @@ namespace Chess
 
         public void DeRegisterPiece(Piece piece)
         {
-            this[piece.CurrentPosition].OccupyingPiece = null;
+            this [piece.CurrentPosition].OccupyingPiece = null;
             Pieces.Remove(piece);
         }
 
@@ -53,16 +53,16 @@ namespace Chess
             {
                 var shouldAdd = true;
 
-                foreach(var predicate in predicates)
+                foreach (var predicate in predicates)
                 {
-                    if (!predicate(piece)) 
+                    if (!predicate(piece))
                     {
                         shouldAdd = false;
                         break;
                     }
                 }
 
-                if (shouldAdd) pieces.Add(piece);
+                if (shouldAdd)pieces.Add(piece);
             }
 
             return pieces;
@@ -130,19 +130,19 @@ namespace Chess
             return _board.Cast<BoardTile>().GetEnumerator();
         }
 
-        public float EvaluateBoard()
+        public float EvaluateBoard(Player player)
         {
             var total = 0f;
 
-            foreach(var piece in GetPieces())
+            foreach (var piece in GetPieces())
             {
                 var val = 0f;
 
                 val += piece.PieceValue;
 
-                val += piece.BoardValueTable[piece.CurrentPosition.row, piece.CurrentPosition.col];
+                val += piece.GetPosValue();
 
-                if (piece.PieceOwner.Side == "top") total -= val;
+                if (piece.PieceOwner != player)total -= val;
                 else total += val;
             }
 

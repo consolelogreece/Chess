@@ -24,18 +24,26 @@ namespace chess
                 {
                     game.Board.PrintBoard();
 
+                    Console.WriteLine(game.NextMovePlayer.Side);
+
                     // game.AIMove();
 
                     // Thread.Sleep(100);
-                    Console.Write("Select piece to move(format: <row>,<col>) or \"undo\" to undo: ");
+                    Console.WriteLine("\"undo\" to undo, \"ai\" to make computer take turn, \"quit\" to quit, or");
+                    Console.Write("Select piece to move(format: <row>,<col>): ");
 
-                    var move = Console.ReadLine();
+                    var move = ""; //Console.ReadLine();
 
                     if (move == "undo")
                     {
                         game.Undo();
+                        continue;
                     }
-
+                    if (move == "ai" || true)
+                    {
+                        game.AIMove();
+                        continue;
+                    }
                     if (move == "quit")return;
 
                     var deets = move.Split(",");

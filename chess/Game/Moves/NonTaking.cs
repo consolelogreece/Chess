@@ -41,17 +41,6 @@ namespace Chess.Moves
             OwningPiece.TimesMoved++;
         }
 
-        public float MoveVal()
-        {
-            float val = To.OccupyingPiece?.PieceValue ?? 0;
-
-            val -= OwningPiece.BoardValueTable[OwningPiece.CurrentPosition.row, OwningPiece.CurrentPosition.col];
-
-            val += OwningPiece.BoardValueTable[To.Position.row, To.Position.col];
-
-            return val;
-        }
-
         public void UndoMove()
         {
             OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;

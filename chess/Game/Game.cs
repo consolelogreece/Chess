@@ -109,11 +109,9 @@ namespace Chess
 
             CalculatePieceMoves();
 
-            if (sw) this.NextMovePlayer = _players[(_players.IndexOf(NextMovePlayer) + 1) % _players.Count];
+            this.NextMovePlayer = _players[(_players.IndexOf(NextMovePlayer) + 1) % _players.Count];
 
-            if (sw) HandleStalemateStuff();
-
-            if (sw && this.NextMovePlayer._isAI) AIMove();
+            if (sw)HandleStalemateStuff();
 
             return true;
         }
@@ -133,7 +131,7 @@ namespace Chess
 
             if (move != null)
             {
-                Move(move); 
+                Move(move);
             }
 
             return move != null;
@@ -147,9 +145,10 @@ namespace Chess
 
             if (checkedPiece.IsInCheckmate())
             {
-                Console.WriteLine("Game over, it's Checkmate!\nPress any key to exit...");
-                Console.Read();
-                Environment.Exit(0);
+                // Console.WriteLine("Game over, it's Checkmate!\nPress any key to exit...");
+                // Console.Read();
+                // Environment.Exit(0);
+                return;
             }
 
             var checkPath = checkedPiece.GetCheckPath();
@@ -176,12 +175,12 @@ namespace Chess
             var pieces = Board.GetPieces(p => p.PieceOwner == this.NextMovePlayer);
 
             foreach (var piece in pieces)
-            {          
+            {
                 if (piece.GetMoves().Count > 0)
                 {
                     hasMoveAvailable = true;
                     break;
-                }             
+                }
             }
 
             if (!hasMoveAvailable)
@@ -193,7 +192,7 @@ namespace Chess
         }
 
         // may have to remove 2 as undoing a turn is undoing both black and white.
-        public void Undo(bool sw = true)
+        public void Undo()
         {
             if (History.Count == 0)return;
 
@@ -203,25 +202,28 @@ namespace Chess
 
             History.Remove(move);
 
-            if (sw) this.NextMovePlayer = _players[(_players.IndexOf(NextMovePlayer) - 1) % _players.Count];
+            var index = _players.IndexOf(NextMovePlayer);
+            if (index == 0)index = _players.Count - 1;
+            else index -= 1;
+            this.NextMovePlayer = _players[index];
 
             CalculatePieceMoves();
         }
 
         public bool AIMove()
         {
-            var move = AIHelpers.Minimax(this, 4);
+            var move = AIHelpers.Minimax(this, 1);
 
             return this.Move(move);
         }
-    
+
         public List<IMove> GetAllMoves(Player player)
         {
             var moves = new List<IMove>();
 
             var pieces = Board.GetPieces(p => p.PieceOwner == player);
 
-            foreach(var piece in pieces)
+            foreach (var piece in pieces)
             {
                 moves.AddRange(piece.GetMoves());
             }
@@ -246,7 +248,7 @@ namespace Chess
                 }
 
                 // if does not match all predicates, do not clear moves.
-                if (illegal) continue;
+                if (illegal)continue;
 
                 piece.ClearMoves();
             }
@@ -294,7 +296,7 @@ namespace Chess
                 if (Board[king.CurrentPosition].ThreateningPieces.Any(p => p.PieceOwner != king.PieceOwner))
                 {
                     return king;
-                }            
+                }
             }
 
             return null;

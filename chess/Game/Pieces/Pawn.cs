@@ -20,7 +20,15 @@ namespace Chess.Pieces
         protected override void GenBoardValueTable()
         {
             var boardValueTable = new float[8, 8]
-            { { 0, 0, 0, 0, 0, 0, 0, 0 }, { 5, 5, 5, 5, 5, 5, 5, 5 }, { 1, 1, 2, 3, 3, 2, 1, 1 }, { 0.5f, 0.5f, 1, 2.5f, 2.5f, 1, 0.5f, 0.5f }, { 0, 0, 0, 2, 2, 0, 0, 0 }, { 0.5f, -0.5f, -1, 0, 0, -1, -0.5f, 0.5f }, { 0.5f, 1, 1, -2, -2, 1, 1, 0.5f }, { 0, 0, 0, 0, 0, 0, 0, 0 }
+            { 
+                { 0, 0, 0, 0, 0, 0, 0, 0 }, 
+                { 5, 5, 5, 5, 5, 5, 5, 5 }, 
+                { 1, 1, 2, 3, 3, 2, 1, 1 }, 
+                { 0.5f, 0.5f, 1, 2.5f, 2.5f, 1, 0.5f, 0.5f }, 
+                { 0, 0, 0, 2, 2, 0, 0, 0 }, 
+                { 0.5f, -0.5f, -1, 0, 0, -1, -0.5f, 0.5f }, 
+                { 0.5f, 1, 1, -2, -2, 1, 1, 0.5f },
+                 { 0, 0, 0, 0, 0, 0, 0, 0 }
             };
 
             if (this.PieceOwner.Side == "top")
@@ -109,7 +117,7 @@ namespace Chess.Pieces
 
             pos.row += _direction;
 
-            if (_board[pos].OccupyingPiece == null)
+            if (pos.row < _board.RowColLen && _board[pos].OccupyingPiece == null)
             {
                 possibleMoves.Add(new NonTaking(_board[pos], this));
 
@@ -117,7 +125,7 @@ namespace Chess.Pieces
                 {
                     pos.row += _direction;
 
-                    if (_board[pos].OccupyingPiece == null)
+                    if (pos.row < _board.RowColLen && _board[pos].OccupyingPiece == null)
                     {
                         possibleMoves.Add(new NonTaking(_board[pos], this));
                     }

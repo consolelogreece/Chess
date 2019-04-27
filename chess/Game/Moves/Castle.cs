@@ -50,25 +50,6 @@ namespace Chess.Moves
             _castlingRook.CurrentPosition = newRookPos;
         }
 
-        public float MoveVal()
-        {
-            var _castlingRookPosOffset = OwningPiece.CurrentPosition.col < _castlingRook.CurrentPosition.col ? -1 : 1;
-
-            var newRookPos = new PiecePosition(_castlingRook.CurrentPosition.row, To.Position.col + _castlingRookPosOffset);
-
-            float val = 0;
-
-            val -= OwningPiece.BoardValueTable[OwningPiece.CurrentPosition.row, OwningPiece.CurrentPosition.col];
-
-            val += OwningPiece.BoardValueTable[To.Position.row, To.Position.col];
-
-            val -= _castlingRook.BoardValueTable[_castlingRook.CurrentPosition.row, _castlingRook.CurrentPosition.col];
-
-            val += _castlingRook.BoardValueTable[newRookPos.row, newRookPos.col];
-
-            return val;
-        }
-
         public void UndoMove()
         {
             _castlingRook.CurrentPosition = RookFrom.Position;

@@ -36,8 +36,8 @@ namespace Chess.Moves
 
         public void MakeMove()
         {
-            if (_pieceTaken != null) 
-            {   
+            if (_pieceTaken != null)
+            {
                 OwningPiece._board.DeRegisterPiece(_pieceTaken);
             }
 
@@ -46,17 +46,6 @@ namespace Chess.Moves
             OwningPiece.CurrentPosition = To.Position;
 
             OwningPiece.TimesMoved++;
-        }
-
-        public float MoveVal()
-        {
-            float val = To.OccupyingPiece?.PieceValue ?? 0;
-
-            val -= OwningPiece.BoardValueTable[OwningPiece.CurrentPosition.row, OwningPiece.CurrentPosition.col];
-
-            val += OwningPiece.BoardValueTable[To.Position.row, To.Position.col];
-
-            return val;
         }
 
         public void UndoMove()
@@ -68,7 +57,7 @@ namespace Chess.Moves
                 _pieceTaken.CurrentPosition = To.Position;
                 OwningPiece._board.RegisterPiece(_pieceTaken);
             }
-            
+
             OwningPiece.CurrentPosition = From.Position;
             OwningPiece._board[From.Position].OccupyingPiece = OwningPiece;
 
