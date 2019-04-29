@@ -140,7 +140,7 @@ namespace Chess.Pieces
 
         public override void EliminateIllegalMoves()
         {
-            PossibleMoves.RemoveAll(m => _board[m.GetMovePos().Position].ThreateningPieces.Any(p => p.PieceOwner.Id != this.PieceOwner.Id && !p.GetMoves().Any(pm => pm.GetMovePos() == m.GetMovePos() && pm.GetMoveMeta().Contains("NonTaking"))));
+            PossibleMoves.RemoveAll(m => m.GetMovePos().ThreateningPieces.Any(p => p.PieceOwner != this.PieceOwner));
 
             foreach (var threateningPiece in _board[this.CurrentPosition].ThreateningPieces)
             {
@@ -224,10 +224,22 @@ namespace Chess.Pieces
             return moves;
         }
 
-        public override void ClearMoves()
+        public override void ClearMoves(List<IMove> illegalMoves = null)
         {
-            PossibleMoves.Clear();
-            CastleMoves.Clear();
+            if (illegalMoves == null)
+            {
+                PossibleMoves.Clear();
+                CastleMoves.Clear();
+                return;
+            }
+
+            foreach(var move in illegalMoves)
+            {
+                if (move.GetMoveMeta().Contains("Castle"))
+                    CastleMoves.Remove((Castle) move);
+
+                else PossibleMoves.Remove(move);
+            }
         }
     }
 }

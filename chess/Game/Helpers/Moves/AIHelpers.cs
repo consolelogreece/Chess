@@ -32,7 +32,7 @@ namespace Chess.Helpers.Moves
         {
             if (depth == 0)
             {
-                var val = game.Board.EvaluateBoard(game.NextMovePlayer);
+                var val = game.Board.EvaluateBoard(game.NextMovePlayer, game.GetNextPlayer(game.NextMovePlayer));
 
                 return val;
             }

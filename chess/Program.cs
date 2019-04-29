@@ -32,14 +32,14 @@ namespace chess
                     Console.WriteLine("\"undo\" to undo, \"ai\" to make computer take turn, \"quit\" to quit, or");
                     Console.Write("Select piece to move(format: <row>,<col>): ");
 
-                    var move = ""; //Console.ReadLine();
+                    var move = Console.ReadLine();
 
                     if (move == "undo")
                     {
                         game.Undo();
                         continue;
                     }
-                    if (move == "ai" || true)
+                    if (move == "ai")
                     {
                         game.AIMove();
                         continue;

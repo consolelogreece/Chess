@@ -130,7 +130,7 @@ namespace Chess
             return _board.Cast<BoardTile>().GetEnumerator();
         }
 
-        public float EvaluateBoard(Player player)
+        public float EvaluateBoard(Player player, Player next)
         {
             var total = 0f;
 
@@ -146,7 +146,52 @@ namespace Chess
                 else total += val;
             }
 
+            if (IsCheckMate(next))
+            {
+                Console.WriteLine("steeeerike wunn");
+                return float.MaxValue;
+            }
+            else if(IsStalemate(next))
+            {
+                // if stalemate, this is good if losing, bad if not, so reverse score.
+                return total * -1;
+            }
+
             return total;
+        }
+
+        public bool IsCheckMate(Player next)
+        {
+            var kings = GetPieces(p => p.PieceName == "King", p => p.PieceOwner == next);
+
+            foreach (King king in kings)
+            {
+                if (this[king.CurrentPosition].ThreateningPieces.Any(p => p.PieceOwner != king.PieceOwner))
+                {
+                    return king.IsInCheckmate();
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsStalemate(Player next)
+        {
+            var hasMoveAvailable = false;
+
+            var pieces = GetPieces(p => p.PieceOwner == next);
+
+            foreach (var piece in pieces)
+            {
+                if (piece.GetMoves().Count > 0)
+                {
+                    hasMoveAvailable = true;
+
+                    break;
+                }
+            }
+
+            return !hasMoveAvailable;
         }
     }
 }

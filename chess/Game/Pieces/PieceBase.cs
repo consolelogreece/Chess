@@ -53,9 +53,18 @@ namespace Chess.Pieces
             this.BoardValueTable = boardValueTable;
         }
 
-        public virtual void ClearMoves()
+        public virtual void ClearMoves(List<IMove> illegalMoves = null)
         {
-            this.PossibleMoves.Clear();
+            if (illegalMoves == null) 
+            {
+                this.PossibleMoves.Clear();
+                return;
+            }
+
+            foreach(var move in illegalMoves)
+            {
+                PossibleMoves.Remove(move);
+            }
         }
 
         public float GetPosValue()
@@ -68,7 +77,7 @@ namespace Chess.Pieces
             // todo: move this out of calculating moves as this is not technically a part of the calculation bit.
             foreach (var m in PossibleMoves)
             {
-                _board[m.GetMovePos().Position].ThreateningPieces.Add(this);
+                m.GetMovePos().ThreateningPieces.Add(this);
             }
 
             return true;

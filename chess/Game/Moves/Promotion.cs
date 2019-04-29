@@ -1,23 +1,30 @@
 using System.Collections.Generic;
-using Chess.Helpers;
 using Chess.Pieces;
 
 namespace Chess.Moves
 {
-    public class Move : IMove
+    public class Promotion : IMove
     {
-        public readonly Piece OwningPiece;
+        public List<string> GetMoveMeta()
+        {
+            return new List<string>(){"Promotion"};
+        }
+
+         public readonly Piece OwningPiece;
         public readonly BoardTile To;
 
         private BoardTile From;
 
         private Piece _pieceTaken;
+        
+        private Piece _promotion;
 
-        public Move(BoardTile to, Piece owningPiece)
+        public Promotion(BoardTile to, Piece owningPiece, Piece promotion)
         {
             To = to;
             From = owningPiece._board[owningPiece.CurrentPosition];
             OwningPiece = owningPiece;
+            _promotion = promotion;
             _pieceTaken = To.OccupyingPiece;
         }
 
@@ -26,24 +33,17 @@ namespace Chess.Moves
             return To;
         }
 
-        public List<string> GetMoveMeta()
-        {
-            return new List<string>()
-            {
-                "Taking"
-            };
-        }
-
         public void MakeMove()
         {
             if (_pieceTaken != null)
             {
+                _pieceTaken.CurrentPosition = To.Position;
                 OwningPiece._board.DeRegisterPiece(_pieceTaken);
             }
 
-            OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
-            OwningPiece._board[To.Position].OccupyingPiece = OwningPiece;
-            OwningPiece.CurrentPosition = To.Position;
+            From.OccupyingPiece = null;
+            _promotion.CurrentPosition = To.Position;
+            OwningPiece._board.RegisterPiece(_promotion);
 
             OwningPiece.TimesMoved++;
         }
@@ -60,6 +60,8 @@ namespace Chess.Moves
 
             OwningPiece.CurrentPosition = From.Position;
             From.OccupyingPiece = OwningPiece;
+
+            OwningPiece._board.DeRegisterPiece(_promotion);
 
             OwningPiece.TimesMoved--;
         }

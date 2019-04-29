@@ -3,20 +3,28 @@ using Chess.Pieces;
 
 namespace Chess.Moves
 {
-    public class NonTaking : IMove
+    public class PromotionNonTaking : IMove
     {
-        public readonly Piece OwningPiece;
+        public List<string> GetMoveMeta()
+        {
+            return new List<string>(){"Promotion", "NonTaking"};
+        }
+
+         public readonly Piece OwningPiece;
         public readonly BoardTile To;
 
         private BoardTile From;
 
         private Piece _pieceTaken;
+        
+        private Piece _promotion;
 
-        public NonTaking(BoardTile to, Piece owningPiece)
+        public PromotionNonTaking(BoardTile to, Piece owningPiece, Piece promotion)
         {
             To = to;
             From = owningPiece._board[owningPiece.CurrentPosition];
             OwningPiece = owningPiece;
+            _promotion = promotion;
         }
 
         public BoardTile GetMovePos()
@@ -24,28 +32,21 @@ namespace Chess.Moves
             return To;
         }
 
-        public List<string> GetMoveMeta()
-        {
-            return new List<string>()
-            {
-                "NonTaking"
-            };
-        }
-
         public void MakeMove()
         {
-            OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
-            To.OccupyingPiece = OwningPiece;
-            OwningPiece.CurrentPosition = To.Position;
+            From.OccupyingPiece = null;
+            _promotion.CurrentPosition = To.Position;
+            _promotion._board.RegisterPiece(_promotion);
 
             OwningPiece.TimesMoved++;
         }
 
         public void UndoMove()
         {
-            OwningPiece._board[OwningPiece.CurrentPosition].OccupyingPiece = null;
+            From.OccupyingPiece = OwningPiece;
             OwningPiece.CurrentPosition = From.Position;
-            OwningPiece._board[From.Position].OccupyingPiece = OwningPiece;
+
+            To.OccupyingPiece = null;
 
             OwningPiece.TimesMoved--;
         }

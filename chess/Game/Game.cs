@@ -57,41 +57,41 @@ namespace Chess
 
             var owner2 = _players[1];
 
-            pieces.Add(new Rook(owner1, Board, new PiecePosition(0, 0)));
-            pieces.Add(new Knight(owner1, Board, new PiecePosition(0, 1)));
-            pieces.Add(new Bishop(owner1, Board, new PiecePosition(0, 2)));
-            pieces.Add(new King(owner1, Board, new PiecePosition(0, 3)));
+            // pieces.Add(new Rook(owner1, Board, new PiecePosition(0, 0)));
+            // pieces.Add(new Knight(owner1, Board, new PiecePosition(0, 1)));
+            // pieces.Add(new Bishop(owner1, Board, new PiecePosition(0, 2)));
+            // pieces.Add(new King(owner1, Board, new PiecePosition(0, 3)));
             pieces.Add(new Queen(owner1, Board, new PiecePosition(0, 4)));
-            pieces.Add(new Bishop(owner1, Board, new PiecePosition(0, 5)));
-            pieces.Add(new Knight(owner1, Board, new PiecePosition(0, 6)));
-            pieces.Add(new Rook(owner1, Board, new PiecePosition(0, 7)));
+            // // pieces.Add(new Bishop(owner1, Board, new PiecePosition(0, 5)));
+            // // pieces.Add(new Knight(owner1, Board, new PiecePosition(0, 6)));
+            // // pieces.Add(new Rook(owner1, Board, new PiecePosition(0, 7)));
 
-            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 0)));
-            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 1)));
-            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 2)));
+            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 0)));
+            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 1)));
+            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 2)));
             pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 3)));
-            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 4)));
-            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 5)));
-            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 6)));
-            pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 7)));
+            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 4)));
+            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 5)));
+            // pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 6)));
+            //pieces.Add(new Pawn(owner1, Board, new PiecePosition(1, 7)));
 
-            pieces.Add(new Rook(owner2, Board, new PiecePosition(7, 0)));
-            pieces.Add(new Knight(owner2, Board, new PiecePosition(7, 1)));
-            pieces.Add(new Bishop(owner2, Board, new PiecePosition(7, 2)));
+            // pieces.Add(new Rook(owner2, Board, new PiecePosition(7, 0)));
+            // pieces.Add(new Knight(owner2, Board, new PiecePosition(7, 1)));
+            // pieces.Add(new Bishop(owner2, Board, new PiecePosition(7, 2)));
             pieces.Add(new Queen(owner2, Board, new PiecePosition(7, 3)));
-            pieces.Add(new King(owner2, Board, new PiecePosition(7, 4)));
-            pieces.Add(new Bishop(owner2, Board, new PiecePosition(7, 5)));
-            pieces.Add(new Knight(owner2, Board, new PiecePosition(7, 6)));
-            pieces.Add(new Rook(owner2, Board, new PiecePosition(7, 7)));
+            pieces.Add(new King(owner2, Board, new PiecePosition(3, 4)));
+            // pieces.Add(new Bishop(owner2, Board, new PiecePosition(7, 5)));
+            // pieces.Add(new Knight(owner2, Board, new PiecePosition(7, 6)));
+            // pieces.Add(new Rook(owner2, Board, new PiecePosition(7, 7)));
 
-            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 0)));
-            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 1)));
-            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 2)));
-            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 3)));
-            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 4)));
-            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 5)));
-            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 6)));
-            pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 7)));
+            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 0)));
+            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 1)));
+            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 2)));
+            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 3)));
+            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 4)));
+            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 5)));
+            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 6)));
+            // pieces.Add(new Pawn(owner2, Board, new PiecePosition(6, 7)));
 
             this.Setup(pieces);
         }
@@ -109,14 +109,27 @@ namespace Chess
 
             CalculatePieceMoves();
 
-            this.NextMovePlayer = _players[(_players.IndexOf(NextMovePlayer) + 1) % _players.Count];
+            this.NextMovePlayer = GetNextPlayer(NextMovePlayer);
 
-            if (sw)HandleStalemateStuff();
+            if (sw)
+            {
+                if (Board.IsStalemate(this.NextMovePlayer))
+                {
+                    // TODO: FIGURE OUT WHY STALEMATE. I THINK IT IS CHECKING WRONG PLAYER
+                    var sm = Board.IsStalemate(this.NextMovePlayer);
+
+                    if (sm) {Console.WriteLine("stalemate"); Console.ReadLine();}
+                }
+
+                var cm = Board.IsCheckMate(NextMovePlayer);
+
+                if (cm) {Console.WriteLine("stalemate"); Console.ReadLine();}
+            }
 
             return true;
         }
 
-        public bool Move(PiecePosition from, PiecePosition to)
+        public bool Move(PiecePosition from, PiecePosition to, bool sw = true)
         {
             var selectedPiece = Board[from].OccupyingPiece;
 
@@ -131,7 +144,7 @@ namespace Chess
 
             if (move != null)
             {
-                Move(move);
+                Move(move, sw);
             }
 
             return move != null;
@@ -145,50 +158,44 @@ namespace Chess
 
             if (checkedPiece.IsInCheckmate())
             {
-                // Console.WriteLine("Game over, it's Checkmate!\nPress any key to exit...");
-                // Console.Read();
+                Console.WriteLine("Game over, it's Checkmate!\nPress any key to exit...");
+                Console.Read();
                 // Environment.Exit(0);
                 return;
             }
 
             var checkPath = checkedPiece.GetCheckPath();
 
-            // remove all current moves as you can't move if the kind is in check.
-            ClearPossibleMoves(new Predicate<Piece>(m => m != checkedPiece));
+            var pieces = Board.GetPieces(p => p.PieceOwner == checkedPiece.PieceOwner, p => p != checkedPiece);
 
-            // re-add moves that would block the check. may not work as intended as it might remove info to do with pinning. may need to rethink.
-            foreach (var tile in checkPath)
+            foreach(var piece in pieces)
             {
-                foreach (var piece in tile.ThreateningPieces)
-                {
-                    if (piece == checkedPiece)continue;
-
-                    piece.PossibleMoves.Add(new Move(tile, piece));
-                }
-            }
+                ClearPossibleMoves(piece, 
+                    new Predicate<IMove>(m => !checkPath.Contains(m.GetMovePos()))
+                );
+            } 
         }
 
-        public void HandleStalemateStuff()
+
+        public Player GetNextPlayer(Player player)
         {
-            var hasMoveAvailable = false;
+            var pIndex = _players.IndexOf(player);
 
-            var pieces = Board.GetPieces(p => p.PieceOwner == this.NextMovePlayer);
+            if (pIndex == -1) throw new InvalidOperationException("Player given doesn't exist.");
+            
+            return _players[(pIndex + 1) % _players.Count];
+        }
 
-            foreach (var piece in pieces)
-            {
-                if (piece.GetMoves().Count > 0)
-                {
-                    hasMoveAvailable = true;
-                    break;
-                }
-            }
+        public Player GetPrevPlayer(Player player)
+        {
+            var pIndex = _players.IndexOf(player);
+            
+            if (pIndex == -1) throw new InvalidOperationException("Player given doesn't exist.");
 
-            if (!hasMoveAvailable)
-            {
-                Console.WriteLine("Game over, it's a stalemate!\nPress any key to exit...");
-                Console.Read();
-                Environment.Exit(0);
-            }
+            if (pIndex == 0)pIndex = _players.Count - 1;
+            else pIndex -= 1;
+
+            return _players[pIndex];
         }
 
         // may have to remove 2 as undoing a turn is undoing both black and white.
@@ -202,10 +209,7 @@ namespace Chess
 
             History.Remove(move);
 
-            var index = _players.IndexOf(NextMovePlayer);
-            if (index == 0)index = _players.Count - 1;
-            else index -= 1;
-            this.NextMovePlayer = _players[index];
+            this.NextMovePlayer = GetPrevPlayer(NextMovePlayer);
 
             CalculatePieceMoves();
         }
@@ -231,27 +235,29 @@ namespace Chess
             return moves;
         }
 
-        public void ClearPossibleMoves(params Predicate<Piece>[] predicates)
+        public void ClearPossibleMoves(Piece piece, params Predicate<IMove>[] predicates)
         {
-            var pieces = Board.GetPieces();
+            var illegalMoves = new List<IMove>();
 
-            foreach (var piece in pieces)
+            var moves = piece.GetMoves();
+
+            foreach(var move in moves)
             {
                 var illegal = false;
 
                 foreach (var predicate in predicates)
                 {
-                    if (predicate(piece))continue;
+                    if (!predicate(move))continue;
 
                     illegal = true;
                     break;
                 }
-
-                // if does not match all predicates, do not clear moves.
-                if (illegal)continue;
-
-                piece.ClearMoves();
+                
+                if (illegal) illegalMoves.Add(move);
             }
+
+            piece.ClearMoves(illegalMoves);
+            
         }
 
         public void ClearMeta(params Predicate<BoardTile>[] predicates)
@@ -271,7 +277,7 @@ namespace Chess
         {
             ClearMeta();
 
-            ClearPossibleMoves();
+            ClearAllMoves();
 
             var pieces = Board.GetPieces();
 
@@ -286,6 +292,14 @@ namespace Chess
             }
 
             HandleCheckStuff();
+        }
+
+        private void ClearAllMoves()
+        {
+            foreach(var piece in Board.GetPieces())
+            {
+                piece.ClearMoves(piece.GetMoves());
+            }
         }
 
         private King DetectCheck()

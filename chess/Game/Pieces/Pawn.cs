@@ -59,54 +59,9 @@ namespace Chess.Pieces
             if (move != null)
             {
                 move.MakeMove();
-
-                Promote();
             }
 
             return move;
-        }
-
-        private bool Promote()
-        {
-            // added one to row to normalize position.
-            if (this.CurrentPosition.row != 0 && this.CurrentPosition.row + 1 != _board.RowColLen)
-            {
-                return false;
-            }
-
-            Console.WriteLine("Selecet piece to promote to (rook, knight, bishop, or queen):");
-
-            string piece = Console.ReadLine();
-
-            bool hasPromoted = false;
-
-            while (!hasPromoted)
-            {
-                switch (piece)
-                {
-                    case "rook":
-                        _board[this.CurrentPosition].OccupyingPiece = new Rook(this.PieceOwner, _board, this.CurrentPosition);
-                        hasPromoted = true;
-                        break;
-
-                    case "knight":
-                        _board[this.CurrentPosition].OccupyingPiece = new Knight(this.PieceOwner, _board, this.CurrentPosition);
-                        hasPromoted = true;
-                        break;
-
-                    case "bishop":
-                        _board[this.CurrentPosition].OccupyingPiece = new Bishop(this.PieceOwner, _board, this.CurrentPosition);
-                        hasPromoted = true;
-                        break;
-
-                    case "queen":
-                        _board[this.CurrentPosition].OccupyingPiece = new Queen(this.PieceOwner, _board, this.CurrentPosition);
-                        hasPromoted = true;
-                        break;
-                }
-            }
-
-            return true;
         }
 
         public override bool CalculateMoves()
@@ -119,15 +74,29 @@ namespace Chess.Pieces
 
             if (pos.row < _board.RowColLen && _board[pos].OccupyingPiece == null)
             {
-                possibleMoves.Add(new NonTaking(_board[pos], this));
-
+                if (pos.row == 0 || pos.row == _board.RowColLen - 1)
+                {
+                    possibleMoves.Add(new Promotion(_board[pos], this, new Queen(this.PieceOwner, this._board, pos)));
+                }
+                else
+                {
+                    possibleMoves.Add(new Move(_board[pos], this));   
+                }
+                
                 if (TimesMoved == 0)
                 {
                     pos.row += _direction;
 
                     if (pos.row < _board.RowColLen && _board[pos].OccupyingPiece == null)
                     {
-                        possibleMoves.Add(new NonTaking(_board[pos], this));
+                        if (pos.row == 0 || pos.row == _board.RowColLen - 1)
+                        {
+                            possibleMoves.Add(new Promotion(_board[pos], this, new Queen(this.PieceOwner, this._board, pos)));
+                        }
+                        else
+                        {
+                            possibleMoves.Add(new Move(_board[pos], this));   
+                        }
                     }
                 }
             }
@@ -139,16 +108,46 @@ namespace Chess.Pieces
 
             if (pos.row < _board.RowColLen)
             {
-                if (pos.col + 1 < _board.RowColLen && _board[new PiecePosition(pos.row, pos.col + 1)].OccupyingPiece != null && _board[new PiecePosition(pos.row, pos.col + 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                if (pos.col + 1 < _board.RowColLen)
                 {
                     var tempPos = new PiecePosition(pos.row, pos.col + 1);
-                    possibleMoves.Add(new Move(_board[tempPos], this));
+
+                    var tile = _board[tempPos];
+
+                    tile.ThreateningPieces.Add(this);
+
+                    if (tile.OccupyingPiece != null && tile.OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                    {
+                        if (tempPos.row == 0 || tempPos.row == _board.RowColLen - 1)
+                        {
+                            possibleMoves.Add(new Promotion(tile, this, new Queen(this.PieceOwner, this._board, tempPos)));
+                        }
+                        else
+                        {
+                            possibleMoves.Add(new Move(tile, this));
+                        }
+                    }
                 }
 
-                if (pos.col - 1 >= 0 && _board[new PiecePosition(pos.row, pos.col - 1)].OccupyingPiece != null && _board[new PiecePosition(pos.row, pos.col - 1)].OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                if (pos.col - 1 >= 0) 
                 {
                     var tempPos = new PiecePosition(pos.row, pos.col - 1);
-                    possibleMoves.Add(new Move(_board[tempPos], this));
+
+                    var tile = _board[tempPos];
+
+                    tile.ThreateningPieces.Add(this);
+
+                    if(tile.OccupyingPiece != null && tile.OccupyingPiece.PieceOwner.Id != this.PieceOwner.Id)
+                    {
+                        if (tempPos.row == 0 || tempPos.row == _board.RowColLen - 1)
+                        {
+                            possibleMoves.Add(new Promotion(tile, this, new Queen(this.PieceOwner, this._board, tempPos)));
+                        }
+                        else
+                        {
+                            possibleMoves.Add(new Move(tile, this));
+                        }
+                    }               
                 }
             }
 
@@ -174,7 +173,7 @@ namespace Chess.Pieces
 
             PossibleMoves = possibleMoves;
 
-            return base.CalculateMoves();
+            return true;
         }
     }
 }
