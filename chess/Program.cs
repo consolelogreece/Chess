@@ -74,5 +74,3 @@ namespace chess
         }
     }
 }
-
-// after every move, go to the opposite king and see there is an enemy rook, bishop, queen, pawn etc horizontally, veritically... same wit

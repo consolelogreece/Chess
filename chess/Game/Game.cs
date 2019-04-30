@@ -298,7 +298,7 @@ namespace Chess
         {
             foreach(var piece in Board.GetPieces())
             {
-                piece.ClearMoves(piece.GetMoves());
+                piece.ClearMoves();
             }
         }
 
