@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using chess.pieces;
+using Chess;
+using Chess.Pieces;
 using Xunit;
 
 namespace Test.Pieces
@@ -46,7 +47,7 @@ namespace Test.Pieces
 
             var move = new PiecePosition(2,0);
 
-            game.Move(pawn.CurrentPosition, move);
+            game.Move(pawn.CurrentPosition, move, false);
             
             //assert
             Assert.Equal(1, pawn.PossibleMoves.Count);
@@ -73,7 +74,7 @@ namespace Test.Pieces
 
             foreach(var move in pawn1.PossibleMoves)
             {
-                if (move.col != pawn1.CurrentPosition.col || move.row < pawn1.CurrentPosition.row)
+                if (move.GetMovePos().Position.col != pawn1.CurrentPosition.col || move.GetMovePos().Position.row < pawn1.CurrentPosition.row)
                 {
                     pawn1HasMoveThatIsntForward = true;
 
@@ -85,7 +86,7 @@ namespace Test.Pieces
 
             foreach(var move in pawn2.PossibleMoves)
             {
-                if (move.col != pawn2.CurrentPosition.col || move.row > pawn2.CurrentPosition.row)
+                if (move.GetMovePos().Position.col != pawn2.CurrentPosition.col || move.GetMovePos().Position.row > pawn2.CurrentPosition.row)
                 {
                     pawn2HasMoveThatIsntForward = true;
 
@@ -138,7 +139,7 @@ namespace Test.Pieces
 
             var move = new PiecePosition(2,0);
 
-            game.Move(pawn.CurrentPosition, move);            
+            game.Move(pawn.CurrentPosition, move, false);            
             
             //assert
             Assert.True(pawn.EnPassant);
@@ -162,7 +163,7 @@ namespace Test.Pieces
 
             var move = new PiecePosition(1,0);
 
-            game.Move(pawn.CurrentPosition, move);            
+            game.Move(pawn.CurrentPosition, move, false);            
             
             //assert
             Assert.False(pawn.EnPassant);
@@ -187,11 +188,11 @@ namespace Test.Pieces
 
             var move = new PiecePosition(4,0);
 
-            game.Move(pawn1.CurrentPosition, move);
+            game.Move(pawn1.CurrentPosition, move, false);
 
             //assert
             var enPassantPos = new PiecePosition(3,0);
-            var canTakeEnPassant = pawn2.PossibleMoves.Any(m => m == enPassantPos);
+            var canTakeEnPassant = pawn2.PossibleMoves.Any(m => m.GetMovePos().Position == enPassantPos);
 
             Assert.True(canTakeEnPassant);
         }
@@ -215,11 +216,11 @@ namespace Test.Pieces
 
             var move = new PiecePosition(4,0);
 
-            game.Move(pawn1.CurrentPosition, move);
+            game.Move(pawn1.CurrentPosition, move, false);
 
             var enPassantPos = new PiecePosition(3,0);
 
-            game.Move(pawn2.CurrentPosition, enPassantPos);
+            game.Move(pawn2.CurrentPosition, enPassantPos, false);
 
             //assert
             Assert.Null(game.Board[pawn1.CurrentPosition].OccupyingPiece);
@@ -257,9 +258,9 @@ namespace Test.Pieces
             //assert
             Assert.NotEmpty(p1Pawn1.PossibleMoves);
 
-            var pinnedPawn1CanOnlyMoveForward = !p1Pawn1.PossibleMoves.Any(m => m.col != p1Pawn1.CurrentPosition.col);
+            var pinnedPawn1CanOnlyMoveForward = !p1Pawn1.PossibleMoves.Any(m => m.GetMovePos().Position.col != p1Pawn1.CurrentPosition.col);
 
-            var pinnedPawn2CanOnlyMoveForward = !p1Pawn2.PossibleMoves.Any(m => m.col != p1Pawn2.CurrentPosition.col);
+            var pinnedPawn2CanOnlyMoveForward = !p1Pawn2.PossibleMoves.Any(m => m.GetMovePos().Position.col != p1Pawn2.CurrentPosition.col);
 
             Assert.True(pinnedPawn1CanOnlyMoveForward);
 

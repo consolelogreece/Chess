@@ -7,8 +7,6 @@ using Chess.Helpers.Moves;
 using Chess.Moves;
 using Chess.Pieces;
 
-// TODO: add undo method to each move. this will help us implement minimax and will be a nice feature to boot.
-// TODO: Have promoting as a valid move so ai can do it.
 namespace Chess
 {
     public class Game
