@@ -9,7 +9,7 @@ namespace Chess.Pieces
 {
     public class Rook : Piece
     {
-        public Rook(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "♜", "Rook", 50) { }
+        public Rook(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "R", "Rook", 50) { }
 
         protected override void GenBoardValueTable()
         {

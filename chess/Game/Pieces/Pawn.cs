@@ -12,9 +12,9 @@ namespace Chess.Pieces
 
         private int _direction;
 
-        public Pawn(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "♟", "Pawn", 10)
+        public Pawn(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "P", "Pawn", 10)
         {
-            _direction = pieceOwner.Side == "bottom" ? -1 : 1;
+            _direction = pieceOwner.Side == "top" ? -1 : 1;
         }
 
         protected override void GenBoardValueTable()

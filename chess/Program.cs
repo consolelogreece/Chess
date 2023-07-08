@@ -11,8 +11,8 @@ namespace chess
     {
         static void Main(string[] args)
         {
-            var player1 = new Player(Guid.NewGuid().ToString(), "top");
-            var player2 = new Player(Guid.NewGuid().ToString(), "bottom");
+            var player1 = new Player(Guid.NewGuid().ToString(), "bottom");
+            var player2 = new Player(Guid.NewGuid().ToString(), "top");
 
             var game = new Game(new List<Player>() { player1, player2 });
 
@@ -25,12 +25,8 @@ namespace chess
                     game.Board.PrintBoard();
 
                     Console.WriteLine(game.NextMovePlayer.Side);
-
-                    // game.AIMove();
-
-                    // Thread.Sleep(100);
-                    Console.WriteLine("\"undo\" to undo, \"ai\" to make computer take turn, \"quit\" to quit, or");
-                    Console.Write("Select piece to move(format: <row>,<col>): ");
+                    Console.Write("\"undo\" to undo, \"ai\" to make computer take turn (unfinished), \"quit\" to quit, or");
+                    Console.Write(" select piece to move(format: <row>,<col>): ");
 
                     var move = Console.ReadLine();
 

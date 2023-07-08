@@ -9,7 +9,7 @@ namespace Chess.Pieces
 {
     public class Queen : Piece
     {
-        public Queen(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "♛", "Queen", 90) { }
+        public Queen(Player pieceOwner, Board board, PiecePosition startingPosition) : base(pieceOwner, board, startingPosition, "Q", "Queen", 90) { }
 
         protected override void GenBoardValueTable()
         {
