@@ -26,7 +26,7 @@ dotnet run
 ```
 
 ## Gameplay
-Once the game is running, you will be presented with a chessboard representation in the console. The board is displayed using numbers, with ranks and files represented by numbers (0-7) (in future I plan update it to represent files as letters a-h).
+Once the game is running, you will be presented with a chessboard representation in the console. The board is displayed using numbers, with ranks and files represented by numbers (1-8) (in future I plan update it to represent files as letters a-h).
 
 All chess rules supported, including promotion, en passant, and castling. Moves can also be undone. There is also a primitive and presently incomplete AI (which is optional, at the moment it this application can only really be used by two users taking turns on the same device).
 
