@@ -1,6 +1,8 @@
 # Chess Console Game
 This is a chess game implemented in C# that can be played in the console. It provides all the standard mechanics of chess, including promotion, en passant, and castling. Additionally, it allows players to undo moves during the game.
 
+![screenshot](pics/chess.png)
+
 ## Prerequisites
 To run this project, you need to have the .NET Core SDK installed on your machine.
 
